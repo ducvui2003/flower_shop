@@ -1,4 +1,4 @@
-import AuthController from '@/controllers/auth.controller';
+import authController from '@/controllers/auth.controller';
 import {
   CreateUserReqSchema,
   LoginReqSchema,
@@ -8,11 +8,8 @@ import {
 import authMiddleware from '@/middlewares/auth.middleware';
 import validationBodyMiddleware from '@/middlewares/validate.middleware';
 import { Router } from 'express';
-import { container } from 'tsyringe';
 
 const authRouters = Router();
-
-const authController = container.resolve(AuthController);
 
 authRouters.post(
   '/register',

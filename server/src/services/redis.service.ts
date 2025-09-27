@@ -1,9 +1,7 @@
 import envConfig from '@/config/env.config';
 import logger from '@/utils/logger.util';
 import { createClient, RedisClientType } from 'redis';
-import { singleton } from 'tsyringe';
 
-@singleton()
 class RedisService {
   private client: RedisClientType;
 
@@ -52,4 +50,6 @@ class RedisService {
   }
 }
 
-export default RedisService;
+const redisService = new RedisService();
+
+export default redisService;

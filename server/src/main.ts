@@ -1,7 +1,4 @@
-import 'reflect-metadata'; // DI
 import 'module-alias/register';
-import registerDependencies from '@/config/di.config';
-registerDependencies();
 
 import envConfig from '@/config/env.config';
 import errorMiddleware from '@/middlewares/error.middleware';

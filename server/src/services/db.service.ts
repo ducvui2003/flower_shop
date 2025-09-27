@@ -1,8 +1,6 @@
 import { getUser } from '@/contexts/request.context';
 import { PrismaClient } from '@prisma/client';
-import { singleton } from 'tsyringe';
 
-@singleton()
 class PrismaService extends PrismaClient {
   constructor() {
     super({
@@ -40,4 +38,7 @@ class PrismaService extends PrismaClient {
     });
   }
 }
-export default PrismaService;
+
+const prismaService = new PrismaService();
+
+export default prismaService;
