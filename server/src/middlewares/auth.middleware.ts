@@ -1,12 +1,9 @@
-import APP_CONFIG from '@/config/app.config';
 import { runWithContext } from '@/contexts/request.context';
-import { AuthService } from '@/services/auth.service';
-import { AccessTokenPayload, TokenService } from '@/services/token.service';
+import authService from '@/services/auth.service';
 import { errorsApi } from '@/utils/error.util';
 import { isFree } from '@/utils/http.util';
 import logger from '@/utils/logger.util';
 import { NextFunction, Request, Response } from 'express';
-import { container } from 'tsyringe';
 
 const authMiddleware = () => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -21,9 +18,7 @@ const authMiddleware = () => {
       res.status(errorsApi.UNAUTHORIZED.code).json(errorsApi.UNAUTHORIZED);
       return;
     }
-    const authService = container.resolve<AuthService>(
-      APP_CONFIG.INJECT.SERVICE.AUTH,
-    );
+
     const payload = await authService.verifyATokenValid(bearer);
     if (!payload) {
       logger.warn('token not exist in redis');

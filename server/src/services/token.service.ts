@@ -29,7 +29,6 @@ interface TokenService<P> {
   verify(token: string): Promise<ExtendTokenPayload<P> | null>;
 }
 
-@injectable()
 class AccessTokenServiceImpl implements TokenService<AccessTokenPayload> {
   async create(payload: AccessTokenPayload): Promise<TokenResult> {
     const iat = Math.floor(Date.now() / 1000);
@@ -73,7 +72,6 @@ class AccessTokenServiceImpl implements TokenService<AccessTokenPayload> {
   }
 }
 
-@injectable()
 class RefreshTokenServiceImpl implements TokenService<RefreshTokenPayload> {
   async create(payload: RefreshTokenPayload): Promise<TokenResult> {
     const iat = Math.floor(Date.now() / 1000);
@@ -116,5 +114,9 @@ class RefreshTokenServiceImpl implements TokenService<RefreshTokenPayload> {
     }
   }
 }
-export { TokenService, AccessTokenServiceImpl, RefreshTokenServiceImpl };
+
+const accessTokenService = new AccessTokenServiceImpl();
+const refreshTokenService = new RefreshTokenServiceImpl();
+
+export { accessTokenService, refreshTokenService };
 export type { AccessTokenPayload, RefreshTokenPayload, TokenResult };

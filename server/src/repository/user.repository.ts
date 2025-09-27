@@ -1,6 +1,5 @@
 import { UserModelType } from '@/models/user.model';
-import PrismaService from '@/services/db.service';
-import { injectable } from 'tsyringe';
+import prismaService from '@/services/db.service';
 
 type CreateUserInType = Pick<UserModelType, 'email' | 'password' | 'name'>;
 type CreateUserOutType = UserModelType;
@@ -14,18 +13,16 @@ interface UserRepository {
   findByEmailWithLogin(email: string): Promise<FindByEmailWithLoginOutType>;
 }
 
-@injectable()
-class PrismaUserRepository implements UserRepository {
-  constructor(private prisma: PrismaService) {}
+const prismaUserRepository: UserRepository = {
   create(model: CreateUserInType): Promise<CreateUserOutType> {
-    return this.prisma.user.create({
+    return prismaService.user.create({
       data: {
         ...model,
       },
     });
-  }
+  },
   findByEmailWithLogin(email: string): Promise<FindByEmailWithLoginOutType> {
-    return this.prisma.user.findUniqueOrThrow({
+    return prismaService.user.findUniqueOrThrow({
       where: {
         email: email,
       },
@@ -36,7 +33,8 @@ class PrismaUserRepository implements UserRepository {
         email: true,
       },
     });
-  }
-}
-
-export { UserRepository, PrismaUserRepository };
+  },
+};
+const userRepository = prismaUserRepository;
+export default userRepository;
+export { UserRepository };
