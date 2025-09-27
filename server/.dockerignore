@@ -1,0 +1,30 @@
+
+# Ignore ESLint & Prettier files
+.eslint*
+.prettier*
+# Ignore node_modules (should be installed inside the container)
+node_modules/
+dist/
+# Ignore build artifacts
+*.log
+*.cache
+# Ignore environment variables and secrets
+.env
+.env.local
+.env.production
+.env.development
+.env.example
+# Ignore system and editor files
+.git/
+.gitignore
+Dockerfile
+.dockerignore
+.vscode/
+.idea/
+# Ignore dependencies lock files (optional, if using CI/CD with `npm ci`)
+yarn.lock
+# related project
+sql
+docs
+*.md
+test

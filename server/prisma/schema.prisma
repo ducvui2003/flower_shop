@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String @default("anonymous")
+  email    String @unique
+  password String
+
+  // ✅ Metadata fields
+  createdBy String?  @map("created_by") // Nullable, app sets this
+  createdAt DateTime @default(now()) @map("created_at") // DB sets automatically
+  updatedBy String?  @map("updated_by") // Nullable, app sets this
+  updatedAt DateTime @updatedAt @map("updated_at") // DB auto-updates
+
+  isDeleted Boolean   @default(false) @map("is_deleted") // Soft delete flag
+  deletedBy String?   @map("deleted_by") // Nullable
+  deletedAt DateTime? @map("deleted_at") // Nullable
+
+  @@map("users")
+}
