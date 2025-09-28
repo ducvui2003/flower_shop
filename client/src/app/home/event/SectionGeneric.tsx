@@ -1,5 +1,7 @@
 import Link from '@/components/Link';
 import ProductCard from '@/components/product/ProductCard';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { ProductCardType } from '@/types/product.type';
 import TEXT from '@/utils/text.util';
 
@@ -11,7 +13,7 @@ type SectionGenericProps = {
 
 const SectionGeneric = ({ title, products, href }: SectionGenericProps) => {
   return (
-    <section className="mt-12">
+    <section>
       <div className="pc:flex-row flex flex-col items-center justify-center">
         <img
           src="/vintage-flourish-divider.svg"
@@ -32,10 +34,17 @@ const SectionGeneric = ({ title, products, href }: SectionGenericProps) => {
       </div>
       <div className="pc:grid-cols-4 pc:gap-8 mt-8 grid grid-cols-2 gap-4">
         {products.map((item) => (
-          <ProductCard {...item} />
+          <ProductCard key={item.id} {...item} />
         ))}
       </div>
-      {href && <Link href={href}> {TEXT.PRODUCT_LIST.MORE}</Link>}
+      {href && (
+        <div className="mt-5 grid place-items-center">
+          <Link href={href}>
+            <Button>{TEXT.PRODUCT_LIST.MORE} </Button>
+          </Link>
+        </div>
+      )}
+      <Separator className="bg-primary pc:my-8 my-4 !h-[2px]" />
     </section>
   );
 };

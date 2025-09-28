@@ -44,7 +44,7 @@ const Card = ({ title, description, icon, highlight = false }: CardProps) => {
   return (
     <article
       className={cn(
-        'pc:px-5 pc:pt-8 pc:pb-12 border-primary flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 px-2 pt-4 pb-6 text-center transition-colors duration-300',
+        'pc:px-5 pc:pt-8 pc:pb-12 border-primary flex flex-col items-center justify-center rounded-xl border-2 px-2 pt-4 pb-6 text-center transition-colors duration-300',
         'group hover:bg-primary hover:text-white',
       )}
     >

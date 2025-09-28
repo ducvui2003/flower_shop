@@ -19,7 +19,7 @@ type ProductCardType = {
   name: string;
   basePrice: number;
   salePrice: number;
-  slug: string;
+  href: string;
   thumbnails?: string[] | string;
   view?: number;
   className?: string;

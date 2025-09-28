@@ -19,33 +19,33 @@ type NavigationType = {
 export const components: NavigationType[] = [
   {
     title: 'Hoa tươi',
-    href: '/product',
+    href: '/hoa-tuoi',
     child: [
       {
         title: 'Lãng hoa',
-        href: '/contact-us',
+        href: '/lang-hoa',
       },
     ],
   },
   {
     title: 'Lãng hoa',
-    href: '/contact-us',
+    href: '/lang-hoa',
   },
   {
     title: 'Giỏ hoa',
-    href: '/consultant',
+    href: '/gio-hoa',
   },
   {
     title: 'Chu de',
-    href: '/consultant',
+    href: '/chu-de',
   },
   {
-    title: 'Hoa Dam cuoi',
-    href: '/consultant',
+    title: 'Hoa Dam Cuoi',
+    href: '/hoa-dam-cuoi',
   },
   {
     title: 'Hoa Khai truong',
-    href: '/consultant',
+    href: '/hoa-khai-truong',
   },
 ];
 

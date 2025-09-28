@@ -1,10 +1,9 @@
 import TEXT from '@/utils/text.util';
-import { ReactNode } from 'react';
 
 const Hotline = () => {
   return (
     <h3 className="text-primary pc:border-none text-md pc:text-lg border-t-2 bg-white py-1 text-center uppercase">
-      {TEXT.HOTLINE}{' '}
+      {TEXT.HOTLINE}
     </h3>
   );
 };
