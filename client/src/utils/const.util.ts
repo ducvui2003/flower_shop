@@ -45,13 +45,3 @@ export const paymentProvider: Record<PaymentProvider, string> = {
   SEPAY: 'SEPAY',
   VNPAY: 'VNPAY',
 };
-
-export const BREAKPOINTS = {
-  mobile: 768, // width < 768px
-  tablet: 1024, // width >= 768px and < 1024px
-  pc: Infinity, // width >= 1024px
-};
-
-type BREAKPOINTSType = keyof typeof BREAKPOINTS;
-
-export type { BREAKPOINTSType };

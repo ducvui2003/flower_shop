@@ -25,7 +25,7 @@ const ProductCard = ({
   return (
     <article
       className={cn(
-        'border-primary hover:shadow-primary relative flex flex-col overflow-hidden rounded-lg border bg-white transition-all hover:shadow-2xl',
+        'border-primary group hover:shadow-primary relative flex flex-col overflow-hidden rounded-lg border bg-white transition-all hover:shadow-2xl',
         className,
       )}
     >
@@ -36,7 +36,7 @@ const ProductCard = ({
               src={thumbnails ?? DEFAULT_IMAGE}
               alt={name}
               fill
-              className="rounded-xl object-cover"
+              className="rounded-xl object-cover transition-all group-hover:scale-125"
             />
           )}
         </div>

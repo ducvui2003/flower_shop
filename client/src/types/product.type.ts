@@ -1,18 +1,12 @@
 import { boolean, z } from 'zod';
 import { CategoryType } from './category.type';
 import { SupplierType } from '@/types/supplier.type';
-
-type ProductSearchParams = {
-  minPrice?: number;
-  maxPrice?: number;
-  volume?: string;
-  origin?: string;
-  fragrance?: string;
-  categoryId?: number[] | number;
-  supplierId?: number[] | number;
-  name?: string;
-  isDeleted?: boolean;
+type ProductSearchParamsType = {
+  price?: string[];
+  category?: string[];
 };
+
+type ProductSearchParamsKeyType = keyof ProductSearchParamsType;
 
 type ProductCardType = {
   id: number;
@@ -215,7 +209,6 @@ export type {
   ProductCardType,
   ProductResType,
   ProductType,
-  ProductSearchParams as SearchParams,
   CreateProductBodyType,
   ProductManagerResType,
   CreateOptionBodyType,
@@ -225,6 +218,8 @@ export type {
   BaseProductFormType,
   UpdateProductBodyType,
   SearchProductResType,
+  ProductSearchParamsType,
+  ProductSearchParamsKeyType,
 };
 export {
   CreateProductBodySchema,

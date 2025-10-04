@@ -64,12 +64,6 @@ const currency = (currency: number): string => {
   return VietNamDong.format(currency);
 };
 
-const currencyFromString = (currency: string) => {
-  const num = parseFloat(currency.replace(/,/g, ''));
-  if (isNaN(num)) return '';
-  return VietNamDong.format(num);
-};
-
 const appendIfExist = (params: URLSearchParams, key: string, value: string) => {
   let alreadyExists = false;
 
@@ -150,6 +144,5 @@ export {
   normalizePath,
   uuid,
   setKey,
-  currencyFromString,
   filterFalsy,
 };

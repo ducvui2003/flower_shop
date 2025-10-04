@@ -39,6 +39,20 @@ const TEXT = {
   },
   PRODUCT_LIST: {
     MORE: 'Xem thêm',
+    EMPTY:
+      'Rất tiếc, chúng tôi không có sản phẩm nào phù hợp với bộ lọc của bạn',
+    FILTER: {
+      FILTER: 'Bộ lọc',
+      CATEGORY: 'Thể loại hoa',
+      PRICE: 'Mức giá',
+      PRICE_TEMPLATE: 'Từ {{from}} - {{to}}',
+      PRICE_MANUAL: 'Hoặc nhập khoảng giá phù hợp với bạn:',
+    },
+    SORT: {
+      QUANTITY: 'Tìm thấy {{quantity}} kết quả',
+      DESC: 'Giá giảm dần',
+      ASC: 'Giá tăng dần',
+    },
   },
 };
 

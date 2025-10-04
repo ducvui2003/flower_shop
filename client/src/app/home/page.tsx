@@ -5,11 +5,12 @@ import FeatureSection from '@/app/home/FeatureSection';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import pageService from '@/service/page.service';
+import React from 'react';
 
 const HomePage = async () => {
   const data = await pageService.getSectionHome();
   return (
-    <>
+    <React.Fragment>
       <Header />
       <Hotline />
       <Banner />
@@ -26,7 +27,7 @@ const HomePage = async () => {
       <span className="my-8 block"></span>
       <FeatureSection />
       <Footer />
-    </>
+    </React.Fragment>
   );
 };
 
