@@ -14,6 +14,7 @@ import httpServer from '@/lib/http.server';
 import { toQueryString } from '@/lib/utils';
 import { FilterDataType } from '@/types/page/product.page.type';
 import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { CategoryPageType } from '@/types/page/category.page.type';
 
 const productService = {
   getAllProducts: async (
@@ -47,16 +48,20 @@ const productService = {
   getFilterData: (): Promise<FilterDataType> => {
     const categories = [
       {
-        name: 'Hoa tuoi',
+        name: 'Bó hoa',
         value: 'hoa-tuoi',
       },
       {
-        name: 'Hoa tuoi',
-        value: 'hoa-tuoi1',
+        name: 'Lãng hoa',
+        value: 'lang-hoa',
       },
       {
-        name: 'Hoa tuoi',
-        value: 'hoa-tuoi2',
+        name: 'Giỏ trái cây',
+        value: 'gio-trai-cay',
+      },
+      {
+        name: 'Vòng hoa',
+        value: 'vong-hoa',
       },
     ];
 
@@ -105,6 +110,26 @@ const productService = {
     };
     return new Promise((resolve, reject) => {
       resolve(products);
+    });
+  },
+
+  getCategoryPage: (category: string): Promise<CategoryPageType> => {
+    return new Promise((resolve) => {
+      resolve({
+        title: 'Hoa tươi',
+        products: Array(8)
+          .fill(null)
+          .map((_, i) => ({
+            id: i,
+            basePrice: 10000,
+            salePrice: 8000,
+            name: 'hello123',
+            slug: '/123',
+            thumbnail: DEFAULT_IMAGE,
+            href: '',
+          })),
+        moreHref: `/${category}/xem-them`,
+      });
     });
   },
 };

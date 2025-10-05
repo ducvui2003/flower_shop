@@ -1,7 +1,11 @@
-import Filter from '@/app/[slug]/filter';
-import Sort from '@/app/[slug]/sort';
-import StackFilter from '@/app/[slug]/stack-filter';
-import { SEARCH_MAPPING, SearchParamsValueType } from '@/app/[slug]/type-const';
+import Filter from '@/app/[category]/[sub-category]/filter';
+import {
+  SEARCH_MAPPING,
+  SearchParamsValueType,
+} from '@/app/[category]/[sub-category]/type-const';
+import Sort from '@/app/[category]/[sub-category]/sort';
+import StackFilter from '@/app/[category]/[sub-category]/stack-filter';
+
 import PaginationProduct from '@/app/product/pagination';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
@@ -15,7 +19,7 @@ import { normalizeParam } from '@/utils/http.util';
 import React from 'react';
 
 type CategoryPageType = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ category: string; 'sub-category': string }>;
   searchParams: Promise<Record<SearchParamsValueType, string[]>>;
 };
 
@@ -23,12 +27,13 @@ const CategoryPage = async ({
   params,
   searchParams: searchParamsAsync,
 }: CategoryPageType) => {
-  const { slug } = await params;
+  const { category, 'sub-category': subCategory } = await params;
   const searchParams = await searchParamsAsync;
   const products = await productService.getProducts({});
   searchParams[SEARCH_MAPPING.category] = normalizeParam(
     searchParams[SEARCH_MAPPING.category],
   );
+  searchParams[SEARCH_MAPPING.category].push(category);
   searchParams[SEARCH_MAPPING.price] = normalizeParam(
     searchParams[SEARCH_MAPPING.price],
   );

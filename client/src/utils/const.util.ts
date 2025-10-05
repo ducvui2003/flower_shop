@@ -45,3 +45,5 @@ export const paymentProvider: Record<PaymentProvider, string> = {
   SEPAY: 'SEPAY',
   VNPAY: 'VNPAY',
 };
+
+export type BreakPointType = 'mobile' | 'pc' | 'tablet';

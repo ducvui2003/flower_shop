@@ -1,7 +1,7 @@
 import ClientIcon from '@/components/ClientIcon';
 import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { BREAKPOINTSType } from '@/utils/const.util';
+import { BreakPointType } from '@/utils/const.util';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
@@ -18,39 +18,43 @@ type NavigationType = {
 };
 export const components: NavigationType[] = [
   {
-    title: 'Hoa tươi',
-    href: '/hoa-tuoi',
+    title: 'Chủ đề',
+    href: '/chu-de',
     child: [
       {
-        title: 'Lãng hoa',
-        href: '/lang-hoa',
+        title: 'Hoa Sinh Nhật',
+        href: '/chu-de/sinh-nhat',
+      },
+      {
+        title: 'Hoa Khai Trương',
+        href: '/chu-de/khai-truong',
+      },
+      {
+        title: 'Hoa Chúc Mừng',
+        href: '/chu-de/chuc-mung',
       },
     ],
   },
   {
-    title: 'Lãng hoa',
-    href: '/lang-hoa',
+    title: 'Đối tượng',
+    href: '/doi-tuong',
   },
   {
-    title: 'Giỏ hoa',
-    href: '/gio-hoa',
+    title: 'Kiểu dáng',
+    href: '/kieu-dang',
   },
   {
-    title: 'Chu de',
-    href: '/chu-de',
+    title: 'Hoa tươi',
+    href: '/hoa-tuoi',
   },
   {
-    title: 'Hoa Dam Cuoi',
-    href: '/hoa-dam-cuoi',
-  },
-  {
-    title: 'Hoa Khai truong',
-    href: '/hoa-khai-truong',
+    title: 'Màu sắc',
+    href: '/mau-sac',
   },
 ];
 
 type NavigationProps = {
-  breakpoint: BREAKPOINTSType;
+  breakpoint: BreakPointType;
 };
 
 const Navigation = ({ breakpoint }: NavigationProps) => {

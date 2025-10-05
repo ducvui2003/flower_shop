@@ -1,5 +1,9 @@
 'use client';
-import { SEARCH_MAPPING, SearchParamsKeyType } from '@/app/[slug]/type-const';
+
+import {
+  SEARCH_MAPPING,
+  SearchParamsKeyType,
+} from '@/app/[category]/[sub-category]/type-const';
 import ClientIcon from '@/components/ClientIcon';
 import TextTemplate from '@/components/TextTemplate';
 import {
