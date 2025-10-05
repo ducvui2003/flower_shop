@@ -13,7 +13,7 @@ const ProductCard = ({
   name,
   basePrice,
   salePrice,
-  slug,
+  href,
   thumbnails,
   view = 0,
   numSell = 0,
@@ -25,18 +25,18 @@ const ProductCard = ({
   return (
     <article
       className={cn(
-        'border-primary relative flex flex-col overflow-hidden rounded-lg border bg-white hover:shadow-2xl',
+        'border-primary group hover:shadow-primary relative flex flex-col overflow-hidden rounded-lg border bg-white transition-all hover:shadow-2xl',
         className,
       )}
     >
-      <Link href={`/product/detail/${slug}`}>
+      <Link href={href}>
         <div className="pc:h-[200px] pc:mt-4 relative mt-2 h-[150px] overflow-hidden rounded-xl">
           {!Array.isArray(thumbnails) && (
             <Image
               src={thumbnails ?? DEFAULT_IMAGE}
               alt={name}
               fill
-              className="rounded-xl object-cover"
+              className="rounded-xl object-cover transition-all group-hover:scale-125"
             />
           )}
         </div>
@@ -47,7 +47,7 @@ const ProductCard = ({
         </span>
       )}
       <div className="pc:mt-4 pc:mb-4 mt-1 mb-2 flex flex-col items-center gap-2 px-2">
-        <Link href={`/product/detail/${slug}`} className="">
+        <Link href={href} className="">
           <h3 className="o hover:text-primary mt-4 line-clamp-3 text-center text-xl font-semibold tracking-tight text-slate-900">
             {name}
           </h3>

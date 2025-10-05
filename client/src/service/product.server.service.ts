@@ -1,8 +1,8 @@
 import {
+  ProductCardType,
   ProductDetailRespType,
   ProductResType,
   SearchParams,
-  SearchProductResType,
 } from '@/types/product.type';
 import {
   PageReq,
@@ -12,6 +12,12 @@ import {
 } from '@/types/api.type';
 import httpServer from '@/lib/http.server';
 import { toQueryString } from '@/lib/utils';
+import { FilterDataType } from '@/types/page/product.page.type';
+import { DEFAULT_IMAGE } from '@/utils/const.util';
+import {
+  CategoryPageType,
+  SubCategoryPageType,
+} from '@/types/page/category.page.type';
 
 const productService = {
   getAllProducts: async (
@@ -40,6 +46,110 @@ const productService = {
       ResponseApi<{ id: number; createdAt: Date }[]>
     >(`api/v1/products/metadata/sitemap`, undefined, false);
     return res.payload.data;
+  },
+
+  getFilterData: (): Promise<FilterDataType> => {
+    const categories = [
+      {
+        name: 'Bó hoa',
+        value: 'hoa-tuoi',
+      },
+      {
+        name: 'Lãng hoa',
+        value: 'lang-hoa',
+      },
+      {
+        name: 'Giỏ trái cây',
+        value: 'gio-trai-cay',
+      },
+      {
+        name: 'Vòng hoa',
+        value: 'vong-hoa',
+      },
+    ];
+
+    const prices = [
+      {
+        from: 0,
+        to: 10000,
+      },
+      {
+        from: 10000,
+        to: 20000,
+      },
+    ];
+
+    return new Promise((resolve, reject) => {
+      resolve({
+        categories,
+        prices,
+      });
+    });
+  },
+
+  getProducts: ({
+    category,
+    price,
+  }: {
+    category?: string[];
+    price?: [
+      {
+        from: number;
+        to: number;
+      },
+    ];
+  }): Promise<{
+    items: ProductCardType[];
+    paging: {
+      page: number;
+      total: number;
+    };
+  }> => {
+    const products = {
+      items: Array(8)
+        .fill(null)
+        .map((_, i) => ({
+          id: i,
+          basePrice: 10000,
+          salePrice: 8000,
+          name: 'hello123',
+          slug: '/123',
+          thumbnail: DEFAULT_IMAGE,
+          href: '',
+        })),
+      paging: {
+        page: 1,
+        total: 3,
+      },
+    };
+    return new Promise((resolve, reject) => {
+      resolve(products);
+    });
+  },
+
+  getCategoryPage: (category: string): Promise<CategoryPageType> => {
+    return new Promise((resolve) => {
+      resolve({
+        title: 'Hoa tươi',
+        thumbnail: DEFAULT_IMAGE,
+      });
+    });
+  },
+
+  getSubCategoryPage: (
+    category: string,
+    subCategory: string,
+  ): Promise<SubCategoryPageType> => {
+    return new Promise((resolve) => {
+      resolve({
+        title: 'Hoa sinh nhật',
+        thumbnail: DEFAULT_IMAGE,
+        parent: {
+          name: 'Chủ đề',
+          href: '/chu-de',
+        },
+      });
+    });
   },
 };
 

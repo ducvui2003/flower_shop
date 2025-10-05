@@ -4,50 +4,30 @@ import SectionGeneric from '@/app/home/event/SectionGeneric';
 import FeatureSection from '@/app/home/FeatureSection';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
-import HeaderWrapper from '@/components/common/HeaderWrapper';
-import { Separator } from '@/components/ui/separator';
+import pageService from '@/service/page.service';
+import React from 'react';
 
-const HomePage = () => {
-  const data = [
-    {
-      title: 'Hoa tươi giảm giá 30%',
-      products: Array(4)
-        .fill(null)
-        .map((_) => ({
-          id: 1,
-          basePrice: 10000,
-          salePrice: 8000,
-          name: 'hello123',
-          slug: '/123',
-        })),
-    },
-    {
-      title: 'HOA TẶNG TỐT NGHIỆP',
-      products: Array(4)
-        .fill(null)
-        .map((_) => ({
-          id: 1,
-          basePrice: 10000,
-          salePrice: 8000,
-          name: 'hello123',
-          slug: '/123',
-        })),
-    },
-  ];
+const HomePage = async () => {
+  const data = await pageService.getSectionHome();
   return (
-    <>
+    <React.Fragment>
       <Header />
       <Hotline />
       <Banner />
-      {data.map((item) => (
+      {data.map((item, i) => (
         <div className="container-p container">
-          <SectionGeneric {...item} />
+          <SectionGeneric
+            key={i}
+            title={item.title}
+            products={item.products}
+            href={item.listHref}
+          />
         </div>
       ))}
       <span className="my-8 block"></span>
       <FeatureSection />
       <Footer />
-    </>
+    </React.Fragment>
   );
 };
 

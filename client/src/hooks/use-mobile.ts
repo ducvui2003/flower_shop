@@ -1,5 +1,10 @@
-import { BREAKPOINTS } from '@/utils/const.util';
+'use client';
 import { useState, useEffect } from 'react';
+const BREAKPOINTS = {
+  mobile: 768, // width < 768px
+  tablet: 1024, // width >= 768px and < 1024px
+  pc: Infinity, // width >= 1024px
+};
 
 type ViewType = 'mobile' | 'tablet' | 'pc';
 

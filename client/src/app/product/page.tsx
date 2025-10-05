@@ -5,7 +5,7 @@ import ProductCard from '@/components/ProductCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import productService from '@/service/product.server.service';
 import { PageReq } from '@/types/api.type';
-import { ProductCardType, SearchParams } from '@/types/product.type';
+import { ProductCardType, ProductSearchParamsType } from '@/types/product.type';
 export const dynamic = 'force-dynamic';
 export async function generateMetadata() {
   return {
@@ -14,7 +14,7 @@ export async function generateMetadata() {
 }
 
 type ProductPageProps = {
-  searchParams: Promise<Partial<PageReq<SearchParams>>>;
+  searchParams: Promise<Partial<PageReq<ProductSearchParamsType>>>;
 };
 
 const ProductPage = async ({ searchParams }: ProductPageProps) => {
