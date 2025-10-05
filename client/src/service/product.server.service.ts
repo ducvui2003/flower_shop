@@ -14,7 +14,10 @@ import httpServer from '@/lib/http.server';
 import { toQueryString } from '@/lib/utils';
 import { FilterDataType } from '@/types/page/product.page.type';
 import { DEFAULT_IMAGE } from '@/utils/const.util';
-import { CategoryPageType } from '@/types/page/category.page.type';
+import {
+  CategoryPageType,
+  SubCategoryPageType,
+} from '@/types/page/category.page.type';
 
 const productService = {
   getAllProducts: async (
@@ -84,7 +87,18 @@ const productService = {
     });
   },
 
-  getProducts: ({}: {}): Promise<{
+  getProducts: ({
+    category,
+    price,
+  }: {
+    category?: string[];
+    price?: [
+      {
+        from: number;
+        to: number;
+      },
+    ];
+  }): Promise<{
     items: ProductCardType[];
     paging: {
       page: number;
@@ -117,18 +131,23 @@ const productService = {
     return new Promise((resolve) => {
       resolve({
         title: 'Hoa tươi',
-        products: Array(8)
-          .fill(null)
-          .map((_, i) => ({
-            id: i,
-            basePrice: 10000,
-            salePrice: 8000,
-            name: 'hello123',
-            slug: '/123',
-            thumbnail: DEFAULT_IMAGE,
-            href: '',
-          })),
-        moreHref: `/${category}/xem-them`,
+        thumbnail: DEFAULT_IMAGE,
+      });
+    });
+  },
+
+  getSubCategoryPage: (
+    category: string,
+    subCategory: string,
+  ): Promise<SubCategoryPageType> => {
+    return new Promise((resolve) => {
+      resolve({
+        title: 'Hoa sinh nhật',
+        thumbnail: DEFAULT_IMAGE,
+        parent: {
+          name: 'Chủ đề',
+          href: '/chu-de',
+        },
       });
     });
   },

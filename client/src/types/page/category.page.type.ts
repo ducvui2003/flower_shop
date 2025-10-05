@@ -2,8 +2,16 @@ import { ProductCardType } from '@/types/product.type';
 
 type CategoryPageType = {
   title: string;
-  products: ProductCardType[];
-  moreHref: string;
+  thumbnail: string;
 };
 
-export type { CategoryPageType };
+type SubCategoryPageType = {
+  title: string;
+  parent: {
+    name: string;
+    href: string;
+  };
+  thumbnail: string;
+};
+
+export type { CategoryPageType, SubCategoryPageType };

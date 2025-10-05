@@ -46,7 +46,7 @@ const StackFilter = ({
         <BadgeCustom
           key={item.value}
           onRemove={() => {
-            handleRemove('danh-muc', item.value);
+            handleRemove(SEARCH_MAPPING.category, item.value);
           }}
         >
           {item.name}
@@ -57,7 +57,7 @@ const StackFilter = ({
         <BadgeCustom
           key={item.from}
           onRemove={() => {
-            handleRemove('muc-gia', item.from + '_' + item.to);
+            handleRemove(SEARCH_MAPPING.price, item.from + '_' + item.to);
           }}
         >
           <TextTemplate

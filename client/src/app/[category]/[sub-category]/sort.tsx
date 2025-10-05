@@ -4,6 +4,7 @@ import {
   SORT_MAPPING,
 } from '@/app/[category]/[sub-category]/type-const';
 import TextTemplate from '@/components/TextTemplate';
+import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import TEXT from '@/utils/text.util';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -26,7 +27,7 @@ const Sort = ({ quantity = 0, sort }: SortProps) => {
 
   return (
     <div className="flex py-2">
-      <span>
+      <span className="hidden">
         <TextTemplate
           template={TEXT.PRODUCT_LIST.SORT.QUANTITY}
           values={{ quantity: <b>{quantity}</b> }}
@@ -43,9 +44,10 @@ const Sort = ({ quantity = 0, sort }: SortProps) => {
       >
         {TEXT.PRODUCT_LIST.SORT.ASC}
       </span>
+      <span className="mx-4 w-[1px] bg-gray-400"></span>
       <span
         className={cn(
-          'text-md ml-2',
+          'text-md',
           sort === SORT_MAPPING.desc
             ? 'text-primary'
             : 'hover:text-primary text-gray-500 hover:cursor-pointer',
