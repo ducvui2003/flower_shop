@@ -20,11 +20,13 @@ const PaginationProduct = ({ currentPage, totalPages }: PagingProductProps) => {
   };
 
   return (
-    <Pagination
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={handlePageChange}
-    />
+    <div className={cn(view === 'mobile' ? 'hidden' : '')}>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+    </div>
   );
 };
 
