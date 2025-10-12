@@ -1,11 +1,9 @@
 import Providers from '@/app/provider';
-import type { Metadata } from 'next';
-import './globals.css';
+import '@/app/globals.css';
 
 import { Inter } from 'next/font/google';
-import getServerSession from '@/components/auth/getServerSession';
 import envConfig from '@/config/env.config';
-import { DESCRIPTION, TITLE } from '@/utils/const.util';
+import { APP_INFO, DESCRIPTION } from '@/utils/const.util';
 import { headers } from 'next/headers';
 import Head from 'next/head';
 
@@ -21,7 +19,7 @@ export async function generateMetadata() {
   const baseUrl = `${protocol}://${host}`;
 
   return {
-    title: TITLE,
+    title: APP_INFO.NAME,
     description: DESCRIPTION,
     icons: {
       icon: '/favicon/favicon.ico',
@@ -29,11 +27,11 @@ export async function generateMetadata() {
       apple: '/favicon/apple-touch-icon.png',
     },
     openGraph: {
-      title: TITLE,
+      title: APP_INFO.NAME,
       description: DESCRIPTION,
       url: baseUrl,
       type: 'website',
-      siteName: TITLE,
+      siteName: APP_INFO.NAME,
       images: [
         {
           url: `${baseUrl}/images/logo-transparent.png`,

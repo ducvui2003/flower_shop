@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'www.flowercorner.vn',
       },
+      {
+        protocol: 'https',
+        hostname: 'flowercorner.b-cdn.net',
+      },
     ],
   },
   eslint: {

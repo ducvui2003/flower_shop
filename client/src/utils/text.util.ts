@@ -54,6 +54,13 @@ const TEXT = {
       ASC: 'Giá tăng dần',
     },
   },
+  PRODUCT_DETAIL: {
+    DESCRIPTION: 'Mô tả sản phẩm',
+    REVIEW: 'Đánh giá sản phẩm',
+    VAT: 'Giá đã bao gồm 8% VAT',
+    PHONE: 'Đặt nhanh',
+    ZALO_OA: 'Zalo OA',
+  },
 };
 
 export default TEXT;

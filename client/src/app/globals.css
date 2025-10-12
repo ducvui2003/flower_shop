@@ -216,7 +216,9 @@
     scrollbar-width: none;
   }
 }
-
+@utility product-image-selected {
+  @apply outline-primary rounded outline-2;
+}
 @utility container {
   margin-inline: auto;
   @media (width <= --theme(--breakpoint-tl)) {
