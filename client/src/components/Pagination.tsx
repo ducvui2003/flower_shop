@@ -1,5 +1,7 @@
 'use client';
 
+import { useViewport } from '@/hooks/use-mobile';
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -12,6 +14,7 @@ function Pagination({
   onPageChange,
 }: PaginationProps) {
   const MAX_VISIBLE_PAGES = 5;
+  const view = useViewport();
 
   const generatePages = () => {
     const pages: (number | string)[] = [];
@@ -66,19 +69,19 @@ function Pagination({
         className={`mx-1 rounded px-4 py-2 ${
           currentPage === 1
             ? 'cursor-not-allowed bg-gray-300'
-            : 'bg-black font-bold text-primary'
+            : 'text-primary bg-black font-bold'
         }`}
         disabled={currentPage === 1}
         onClick={() => onPageChange(1)}
       >
-        Trang đầu
+        {view == 'mobile' ? '‹‹' : 'Trang đầu'}
       </button>
 
       <button
         className={`mx-1 rounded px-4 py-2 ${
           currentPage === 1
             ? 'cursor-not-allowed bg-gray-300'
-            : 'bg-black font-bold text-primary'
+            : 'text-primary bg-black font-bold'
         }`}
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
@@ -92,7 +95,7 @@ function Pagination({
           className={`mx-1 rounded px-4 py-2 ${
             currentPage === page
               ? 'bg-primary font-bold text-black'
-              : 'bg-black text-white hover:bg-primary hover:text-black'
+              : 'hover:bg-primary bg-black text-white hover:text-black'
           }`}
           onClick={() => typeof page === 'number' && onPageChange(page)}
           disabled={typeof page !== 'number'}
@@ -105,7 +108,7 @@ function Pagination({
         className={`mx-1 rounded px-4 py-2 ${
           currentPage === totalPages
             ? 'cursor-not-allowed bg-gray-300'
-            : 'bg-black font-bold text-primary'
+            : 'text-primary bg-black font-bold'
         }`}
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
@@ -117,12 +120,12 @@ function Pagination({
         className={`mx-1 rounded px-4 py-2 ${
           currentPage === totalPages
             ? 'cursor-not-allowed bg-gray-300'
-            : 'bg-black font-bold text-primary'
+            : 'text-primary bg-black font-bold'
         }`}
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(totalPages)}
       >
-        Trang cuối
+        {view === 'mobile' ? '››' : 'Trang cuối'}
       </button>
     </div>
   );

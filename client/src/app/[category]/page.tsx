@@ -21,7 +21,7 @@ const CategoryPage = async ({ params }: CategoryPageType) => {
   return (
     <React.Fragment>
       <Header />
-      <section className="container">
+      <section className="container-p container">
         <div className="mt-2 mb-8 flex justify-center">
           <h2 className="before:bg-primary relative text-4xl before:absolute before:-right-1 before:-bottom-1 before:-left-1 before:h-[2px]">
             {page.title}
