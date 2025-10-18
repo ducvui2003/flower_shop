@@ -1,10 +1,8 @@
 import PaginationProduct from '@/app/product/pagination';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
-import Link from '@/components/Link';
 import ListView from '@/components/ListView';
 import ProductCard from '@/components/product/ProductCard';
-import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import productService from '@/service/product.server.service';
 import { ProductCardType } from '@/types/product.type';
@@ -34,7 +32,7 @@ const CategoryPage = async ({ params }: CategoryPageType) => {
             className="product pc:grid-cols-4 grid-cols-2 gap-5"
             emptyComponent={null}
             render={(item, index) => (
-              <ProductCard key={index} {...item} href="" />
+              <ProductCard key={index} {...item} href={item.href} />
             )}
           />
         </ScrollArea>

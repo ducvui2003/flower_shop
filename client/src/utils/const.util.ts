@@ -12,7 +12,6 @@ export const LOCAL_STORAGE = {
 } as const;
 
 export const ALT = 'An Nhien';
-export const TITLE = 'An Nhien';
 export const DESCRIPTION =
   'An Nhien - Cửa hàng nước hoa chính hãng, chất lượng cao, giá cả hợp lý. Đặt hàng ngay hôm nay để trải nghiệm hương thơm tuyệt vời!';
 export const DEFAULT_IMAGE = '/images/product.png';
@@ -47,3 +46,11 @@ export const paymentProvider: Record<PaymentProvider, string> = {
 };
 
 export type BreakPointType = 'mobile' | 'pc' | 'tablet';
+export const APP_INFO = {
+  NAME: 'Hoa Tươi Nhật Nam',
+  ZALO_OA: 'https://zalo.me/1057696361500855184',
+  PHONE: 'tel:+84965809127',
+  ADDRESS:
+    '208 Đ. 11, Linh Xuân, Thủ Đức, Thành phố Hồ Chí Minh 000000, Việt Nam',
+  MAP: 'https://maps.app.goo.gl/2f8PatDQDXmZuscV8',
+};

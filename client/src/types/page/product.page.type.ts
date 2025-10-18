@@ -9,4 +9,18 @@ type FilterDataType = {
   }[];
 };
 
-export type { FilterDataType };
+type ProductPageType = {
+  id: number;
+  name: string;
+  priceOld: number;
+  priceNew: number;
+  images: {
+    url: string;
+    alt: string;
+  }[];
+  description: string;
+  views: number;
+  avgRate: number;
+};
+
+export type { FilterDataType, ProductPageType };

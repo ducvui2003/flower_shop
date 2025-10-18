@@ -12,7 +12,10 @@ import {
 } from '@/types/api.type';
 import httpServer from '@/lib/http.server';
 import { toQueryString } from '@/lib/utils';
-import { FilterDataType } from '@/types/page/product.page.type';
+import {
+  FilterDataType,
+  ProductPageType,
+} from '@/types/page/product.page.type';
 import { DEFAULT_IMAGE } from '@/utils/const.util';
 import {
   CategoryPageType,
@@ -115,7 +118,7 @@ const productService = {
           name: 'hello123',
           slug: '/123',
           thumbnail: DEFAULT_IMAGE,
-          href: '',
+          href: '/hoa-tot-nghiep/tot-nghiep/hoa-hong',
         })),
       paging: {
         page: 1,
@@ -150,6 +153,31 @@ const productService = {
         },
       });
     });
+  },
+
+  getProductBySlug: (slug: string): Promise<ProductPageType> => {
+    const data: ProductPageType = {
+      id: 1,
+      name: 'Say Ánh Mắt',
+      priceOld: 200000,
+      priceNew: 190000,
+      images: [
+        {
+          url: 'https://flowercorner.b-cdn.net/image/cache/catalog/products/Winter_2024/say-anh-mat.jpg',
+          alt: 'say-anh-mat',
+        },
+        {
+          url: 'https://flowercorner.b-cdn.net/image/cache/catalog/products/August%202023/bo-hoa-hong-pastel-khoe-sac.jpg',
+          alt: 'say-anh-mat1',
+        },
+      ],
+      description:
+        '<p><strong>Bó hoa Say Ánh Mắt được thiết kế từ:</strong></p>\n<ul>\n<li>Hoa thạch thảo trắng: 1 bó</li>\n<li>Hoa hồng kem: 1 cành</li>\n<li>Các loại hoa lá phụ trang trí khác: Cỏ đồng tiền</li>\n</ul>\n<p>Lưu ý:</p>\n<p>**Do được làm thủ công, nên sản phẩm ngoài thực tế sẽ có đôi chút khác biệt so với hình ảnh trên website. Tuy nhiên, Flowercorner cam kết hoa sẽ giống khoảng 80% so với hình ảnh.</p>\n<p>** Vì các loại hoa lá phụ sẽ có tùy vào thời điểm trong năm, Flowercorner đảm bảo các loại hoa chính, các loại hoa lá phụ sẽ thay đổi phù hợp giá cả và thiết kế sản phẩm.</p>',
+      avgRate: 5,
+      views: 36,
+    };
+
+    return Promise.resolve(data);
   },
 };
 
