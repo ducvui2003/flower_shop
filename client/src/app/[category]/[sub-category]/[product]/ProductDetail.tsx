@@ -7,7 +7,6 @@ import { ProductPageType } from '@/types/page/product.page.type';
 import { APP_INFO } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import ProductImages from './ProductImages';
-import { Badge } from '@/components/ui/badge';
 
 type ProductDetailProps = {
   product: ProductPageType;
@@ -25,6 +24,7 @@ export default function ProductDetail({
     views,
   },
 }: ProductDetailProps) {
+  const percent = Math.round(((basePrice - salePrice) / basePrice) * 100);
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="pc:grid-cols-2 grid grid-cols-1 gap-10">
@@ -47,7 +47,8 @@ export default function ProductDetail({
           </span>
           <Separator className="my-4" />
           <p>
-            Loại sản phẩm: <span className="font-medium text-gray-800"></span>
+            {TEXT.PRODUCT_DETAIL.CATEGORY}
+            <span className="font-medium text-gray-800"></span>
           </p>
           <Separator className="my-4" />
           <div className="mt-4 lg:row-span-3 lg:mt-0">
@@ -61,7 +62,7 @@ export default function ProductDetail({
                     {currency(basePrice)}
                   </span>
                   <span className="order-2 ml-5 rounded-lg bg-green-600 px-3 font-medium text-white">
-                    -{Math.round(((basePrice - salePrice) / basePrice) * 100)}%
+                    -{percent}%
                   </span>
                 </>
               ) : (
@@ -93,11 +94,12 @@ export default function ProductDetail({
           </div>
           <Separator className="my-4" />
           <div>
-            <p>Đặt hàng tại</p>
+            <p>{TEXT.PRODUCT_DETAIL.ORDER_ADDRESS}</p>
             <div className="mt-2 max-w-[300px] rounded-md border-2 border-gray-300 p-2">
               <p className="text-[15px]">{APP_INFO.ADDRESS}</p>
               <Link
-                href={''}
+                href={APP_INFO.MAP}
+                target="_blank"
                 className="bg-primary mt-2 inline-flex items-center gap-2 rounded-md px-2 py-1 font-medium text-white"
               >
                 <ClientIcon icon={'mdi:location'} size={20} />

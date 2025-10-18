@@ -50,5 +50,7 @@ export const APP_INFO = {
   NAME: 'Hoa Tươi Nhật Nam',
   ZALO_OA: 'https://zalo.me/1057696361500855184',
   PHONE: 'tel:+84965809127',
-  ADDRESS: 'Linh Xuân, Thủ Đức, TP.Hồ Chí Minh',
+  ADDRESS:
+    '208 Đ. 11, Linh Xuân, Thủ Đức, Thành phố Hồ Chí Minh 000000, Việt Nam',
+  MAP: 'https://maps.app.goo.gl/2f8PatDQDXmZuscV8',
 };

@@ -21,8 +21,8 @@ const TEXT = {
     },
   ],
   COPYRIGHT: [
-    'Bản quyền © 2016 Annhien.vn',
-    'Công Ty cổ phần Tinh Dầu An Nhiên',
+    'Bản quyền © 2025 hoatuoinhatnam.com.vn',
+    'Shop Hoa Tươi Nhật Nam',
     'Hotline: 19001998',
     'Trụ sở: khu phố 6, phường Linh Trung, thành phố Thủ Đức, thành phố Hồ Chí Minh.',
   ],
@@ -60,6 +60,8 @@ const TEXT = {
     VAT: 'Giá đã bao gồm 8% VAT',
     PHONE: 'Đặt nhanh',
     ZALO_OA: 'Zalo OA',
+    CATEGORY: 'Loại sản phẩm:',
+    ORDER_ADDRESS: 'Đặt hàng tại',
   },
 };
 
