@@ -1,10 +1,10 @@
+import PaginationProduct from '@/app/[category]/[sub-category]/pagination';
 import Sort from '@/app/[category]/[sub-category]/sort';
 import {
   SEARCH_MAPPING,
   SearchParamsValueType,
 } from '@/app/[category]/[sub-category]/type-const';
 
-import PaginationProduct from '@/app/product/pagination';
 import ClientIcon from '@/components/ClientIcon';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';

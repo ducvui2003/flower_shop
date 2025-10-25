@@ -1,4 +1,4 @@
-import PaginationProduct from '@/app/product/pagination';
+import PaginationProduct from '@/app/[category]/[sub-category]/pagination';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import ListView from '@/components/ListView';
