@@ -3,6 +3,7 @@ import { SORT_MAPPING } from '@/app/[category]/[sub-category]/type-const';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import productService from '@/service/product.server.service';
+import { notFound } from 'next/navigation';
 import React from 'react';
 
 type CategoryPageType = {
@@ -12,7 +13,7 @@ type CategoryPageType = {
 const CategoryPage = async ({ params }: CategoryPageType) => {
   const { category } = await params;
   const page = await productService.getCategoryPage(category);
-
+  if (!page) notFound();
   return (
     <React.Fragment>
       <Header />
