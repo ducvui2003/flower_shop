@@ -9,7 +9,6 @@ import React from 'react';
 
 const HomePage = async () => {
   const data = await pageService.getSectionHome();
-  console.log(data);
 
   return (
     <React.Fragment>

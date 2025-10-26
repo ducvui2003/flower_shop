@@ -7,7 +7,7 @@ type LogoProps = ComponentProps<'a'>;
 
 const Logo = ({ className }: LogoProps) => {
   return (
-    <Link href="/" className={cn('', className)}>
+    <Link href="/" className={cn(className)}>
       <Image
         src={'/logo.jpg'}
         alt="logo"

@@ -130,7 +130,8 @@ const productService = {
     });
   },
 
-  getCategoryPage: (category: string): Promise<CategoryPageType> => {
+  getCategoryPage: (category: string): Promise<CategoryPageType | null> => {
+    if (category !== 'Hoa tươi') return Promise.resolve(null);
     return new Promise((resolve) => {
       resolve({
         title: 'Hoa tươi',
