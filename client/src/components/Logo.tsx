@@ -16,9 +16,7 @@ const Logo = ({ className }: LogoProps) => {
         priority
         placeholder="blur"
         blurDataURL={'/blur.jpg'}
-        objectFit={'contain'}
         className="overflow-hidden rounded-full"
-        objectPosition={'center'}
       />
     </Link>
   );

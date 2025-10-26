@@ -35,6 +35,7 @@ const TEXT = {
     CARD: {
       SALE: 'Giảm giá',
       BUY: 'Mua ngay',
+      SEE: 'Xem chi tiết',
     },
   },
   PRODUCT_LIST: {

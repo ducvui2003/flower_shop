@@ -4,17 +4,18 @@ import {
   SORT_MAPPING,
 } from '@/app/[category]/[sub-category]/type-const';
 import TextTemplate from '@/components/TextTemplate';
-import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import TEXT from '@/utils/text.util';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 type SortProps = {
   quantity?: number;
   sort?: string;
 };
 
-const Sort = ({ quantity = 0, sort }: SortProps) => {
+const Sort = ({ quantity = 0, sort: initialSort }: SortProps) => {
   const searchParams = useSearchParams();
+  const [sort, setSort] = useState<string>(initialSort ?? SORT_MAPPING.asc);
   const pathname = usePathname();
   const { replace } = useRouter();
 
@@ -23,6 +24,7 @@ const Sort = ({ quantity = 0, sort }: SortProps) => {
     params.delete(SEARCH_MAPPING.sort);
     params.append(SEARCH_MAPPING.sort, value);
     replace(`${pathname}?${params.toString()}`);
+    setSort(value);
   };
 
   return (
@@ -40,7 +42,7 @@ const Sort = ({ quantity = 0, sort }: SortProps) => {
             ? 'text-primary'
             : 'hover:text-primary text-gray-500 hover:cursor-pointer',
         )}
-        onClick={() => SORT_MAPPING.desc && handleClick(SORT_MAPPING.asc)}
+        onClick={() => handleClick(SORT_MAPPING.asc)}
       >
         {TEXT.PRODUCT_LIST.SORT.ASC}
       </span>
@@ -52,7 +54,7 @@ const Sort = ({ quantity = 0, sort }: SortProps) => {
             ? 'text-primary'
             : 'hover:text-primary text-gray-500 hover:cursor-pointer',
         )}
-        onClick={() => SORT_MAPPING.asc && handleClick(SORT_MAPPING.desc)}
+        onClick={() => handleClick(SORT_MAPPING.desc)}
       >
         {TEXT.PRODUCT_LIST.SORT.DESC}
       </span>

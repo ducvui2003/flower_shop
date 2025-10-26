@@ -47,7 +47,7 @@ const ProductCard = ({
         </span>
       )}
       <div className="pc:mt-4 pc:mb-4 mt-1 mb-2 flex flex-col items-center gap-2 px-2">
-        <Link href={href} className="">
+        <Link href={href}>
           <h3 className="o hover:text-primary mt-4 line-clamp-3 text-center text-xl font-semibold tracking-tight text-slate-900">
             {name}
           </h3>
@@ -61,7 +61,9 @@ const ProductCard = ({
             <p className="text-gray-400 line-through">{currency(basePrice)}</p>
           )}
         </div>
-        <Button className="max-w-4/5">{TEXT.PRODUCT.CARD.BUY}</Button>
+        <Link href={href} className="max-w-4/5">
+          <Button>{TEXT.PRODUCT.CARD.SEE}</Button>
+        </Link>
       </div>
     </article>
   );

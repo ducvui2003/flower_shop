@@ -27,7 +27,7 @@ const pageService = {
             name: 'hello123',
             slug: '/123',
             thumbnail: DEFAULT_IMAGE,
-            href: '',
+            href: '/hoa-tot-nghiep/tot-nghiep/hoa-hong',
           })),
         listHref: '/hoa-tuoi-giam-gia',
       },
