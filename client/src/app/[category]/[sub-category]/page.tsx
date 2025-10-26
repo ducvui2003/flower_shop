@@ -42,10 +42,6 @@ const CategoryPage = async ({
     SORT_MAPPING.asc,
   );
 
-  const page = parseInt(
-    normalizeSingleParam(searchParams[PAGE_MAPPING.page], '1'),
-  );
-
   const data = await productService.getSubCategoryPage(category, subCategory);
 
   return (
@@ -65,21 +61,12 @@ const CategoryPage = async ({
           </h2>
         </div>
         <section className="pc:mx-0 pc:relative pc:gap-x-4 mx-2 mt-4 gap-y-4">
-          <div className="col-span-3 flex flex-1 flex-col">
-            <Suspense fallback={<div>Loading products...</div>}>
-              <ProductList
-                filters={{
-                  category: searchParams['danh-muc'],
-                  sort: sort,
-                }}
-                page={{
-                  page: page,
-                  limit: 8,
-                  quantity: page * 8,
-                }}
-              />
-            </Suspense>
-          </div>
+          <ProductList
+            filters={{
+              category: searchParams[SEARCH_MAPPING.category],
+              sort: sort,
+            }}
+          />
         </section>
       </section>
       <Footer />

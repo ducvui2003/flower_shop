@@ -12,25 +12,21 @@ type ProductListProp = {
     sort: string;
     category: string[];
   };
-  page: {
-    page: number;
-    limit: number;
-    quantity: number;
-  };
 };
 
 export default async function ProductList({
   filters: { category, sort },
-  page,
 }: ProductListProp) {
-  // Simulate delay to see Suspense fallback in action
-  await sleep(2000);
-
   const products = await productService.getProducts({ category: category });
+
+  const {
+    paging: { page, total },
+  } = products;
+
   return (
     <>
       <div className="my-2 rounded-xl border-2 px-2">
-        <Sort quantity={page.quantity} sort={sort} />
+        <Sort quantity={page} sort={sort} />
       </div>
       <ScrollArea className="min-h-[50vh]">
         <ListView<ProductCardType>
@@ -40,14 +36,10 @@ export default async function ProductList({
           emptyComponent={null}
           render={(item, index) => <ProductCard key={index} {...item} />}
         />
+        {products.items.length !== 0 && (
+          <PaginationProduct page={products.paging.page} maxPage={total} />
+        )}
       </ScrollArea>
-
-      {products.items.length !== 0 && (
-        <PaginationProduct
-          currentPage={products.paging.page}
-          totalPages={products.paging.total}
-        />
-      )}
     </>
   );
 }
