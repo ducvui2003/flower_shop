@@ -32,16 +32,8 @@ const Footer = () => {
 const CopyRight = () => {
   return (
     <>
-      <span
-        className="relative block h-[var(--header-height)]"
-        style={{ '--header-height': '60px' } as any}
-      >
-        <Logo
-          className={cn(
-            'absolute top-1/2 left-1/2 h-[var(--header-height)] w-[70%] -translate-1/2',
-            'pc:',
-          )}
-        />
+      <span style={{ '--header-height': '60px' } as any}>
+        <Logo className={cn('w-[70%]')} />
       </span>
       <span className="mt-5 text-gray-500">{TEXT.COPYRIGHT[0]}</span>
       <span className="mt-4 text-xl font-semibold">{TEXT.COPYRIGHT[1]}</span>

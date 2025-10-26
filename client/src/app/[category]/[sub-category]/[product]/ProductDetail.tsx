@@ -7,6 +7,7 @@ import { ProductPageType } from '@/types/page/product.page.type';
 import { APP_INFO } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import ProductImages from './ProductImages';
+import ListView from '@/components/ListView';
 
 type ProductDetailProps = {
   product: ProductPageType;
@@ -22,6 +23,7 @@ export default function ProductDetail({
     priceNew: salePrice,
     priceOld: basePrice,
     views,
+    tag,
   },
 }: ProductDetailProps) {
   const percent = Math.round(((basePrice - salePrice) / basePrice) * 100);
@@ -46,10 +48,30 @@ export default function ProductDetail({
             <span>{views}</span>
           </span>
           <Separator className="my-4" />
-          <p>
+          <div>
             {TEXT.PRODUCT_DETAIL.CATEGORY}
-            <span className="font-medium text-gray-800"></span>
-          </p>
+            {tag && (
+              <ListView<{
+                id: string;
+                name: string;
+              }>
+                className="gap-2"
+                orientation="horizontal"
+                data={tag}
+                render={(item, index) => {
+                  return (
+                    <span
+                      key={index}
+                      data-id={item.id}
+                      className="bg-primary rounded-2xl px-2 py-1 text-sm font-medium text-white"
+                    >
+                      {item.name}
+                    </span>
+                  );
+                }}
+              />
+            )}
+          </div>
           <Separator className="my-4" />
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <div className="mt-2 flex items-baseline gap-x-4">
@@ -82,7 +104,7 @@ export default function ProductDetail({
               className="inline-flex w-[150px] justify-center gap-3 rounded-md border-2 border-green-600 px-3 py-2 text-green-600 transition-colors hover:bg-green-600 hover:text-white"
             >
               <ClientIcon icon={'ic:baseline-phone'} />
-              {TEXT.PRODUCT_DETAIL.PHONE}
+              {TEXT.PRODUCT_DETAIL.ORDER}
             </Link>
             <Link
               href={APP_INFO.ZALO_OA}
@@ -103,7 +125,15 @@ export default function ProductDetail({
                 className="bg-primary mt-2 inline-flex items-center gap-2 rounded-md px-2 py-1 font-medium text-white"
               >
                 <ClientIcon icon={'mdi:location'} size={20} />
-                Bản đồ
+                {TEXT.PRODUCT_DETAIL.MAP}
+              </Link>
+              <Link
+                href={APP_INFO.PHONE}
+                target="_blank"
+                className="bg-primary mt-2 ml-2 inline-flex items-center gap-2 rounded-md px-2 py-1 font-medium text-white"
+              >
+                <ClientIcon icon={'mdi:phone'} size={20} />
+                {TEXT.PRODUCT_DETAIL.PHONE}
               </Link>
             </div>
           </div>

@@ -14,12 +14,7 @@ const Header = async () => {
           <span className="pc:block hidden text-gray-500">
             {TEXT.HEADER.TOP}
           </span>
-          <Logo
-            className={cn(
-              'absolute top-1/2 left-1/2 h-[var(--header-height)] w-[70%] -translate-1/2',
-              'pc:',
-            )}
-          />
+          <Logo className={cn('absolute top-1/2 left-1/2 -translate-1/2')} />
           <div className="pc:flex hidden gap-3">
             <SearchBar className="w-[150px]" />
             <CartDropdown />

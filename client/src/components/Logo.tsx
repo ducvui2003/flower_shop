@@ -7,17 +7,16 @@ type LogoProps = ComponentProps<'a'>;
 
 const Logo = ({ className }: LogoProps) => {
   return (
-    <Link
-      href="/"
-      className={cn('relative block w-full overflow-hidden', className)}
-    >
+    <Link href="/" className={cn('', className)}>
       <Image
-        src={
-          'https://www.flowercorner.vn/image/catalog/common/shop-hoa-tuoi-flowercorner-logo.png.webp'
-        }
+        src={'/logo.jpg'}
         alt="logo"
-        fill
-        className="object-contain"
+        width={95}
+        height={95}
+        priority
+        placeholder="blur"
+        blurDataURL={'/blur.jpg'}
+        className="overflow-hidden rounded-full"
       />
     </Link>
   );

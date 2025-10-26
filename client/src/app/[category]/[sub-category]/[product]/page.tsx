@@ -24,6 +24,7 @@ const getProduct = cache(async (slug: string) => {
 
 export async function generateMetadata({ params }: ProductPage) {
   const { product: slug } = await params;
+
   const product = await getProduct(slug);
 
   const headersList = await headers();
@@ -54,6 +55,7 @@ export async function generateMetadata({ params }: ProductPage) {
 
 export default async function ProductPage({ params }: ProductPage) {
   const { product: slug } = await params;
+
   const product = await getProduct(slug);
   const jsonLd = {
     '@context': 'https://schema.org',

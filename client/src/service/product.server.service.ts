@@ -175,6 +175,16 @@ const productService = {
         '<p><strong>Bó hoa Say Ánh Mắt được thiết kế từ:</strong></p>\n<ul>\n<li>Hoa thạch thảo trắng: 1 bó</li>\n<li>Hoa hồng kem: 1 cành</li>\n<li>Các loại hoa lá phụ trang trí khác: Cỏ đồng tiền</li>\n</ul>\n<p>Lưu ý:</p>\n<p>**Do được làm thủ công, nên sản phẩm ngoài thực tế sẽ có đôi chút khác biệt so với hình ảnh trên website. Tuy nhiên, Flowercorner cam kết hoa sẽ giống khoảng 80% so với hình ảnh.</p>\n<p>** Vì các loại hoa lá phụ sẽ có tùy vào thời điểm trong năm, Flowercorner đảm bảo các loại hoa chính, các loại hoa lá phụ sẽ thay đổi phù hợp giá cả và thiết kế sản phẩm.</p>',
       avgRate: 5,
       views: 36,
+      tag: [
+        {
+          id: '1A',
+          name: 'Hoa tuoi dam cuoi',
+        },
+        {
+          id: '2A',
+          name: 'Hoa tuoi dam cuoi',
+        },
+      ],
     };
 
     return Promise.resolve(data);

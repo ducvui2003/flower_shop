@@ -35,6 +35,7 @@ const TEXT = {
     CARD: {
       SALE: 'Giảm giá',
       BUY: 'Mua ngay',
+      SEE: 'Xem chi tiết',
     },
   },
   PRODUCT_LIST: {
@@ -58,10 +59,12 @@ const TEXT = {
     DESCRIPTION: 'Mô tả sản phẩm',
     REVIEW: 'Đánh giá sản phẩm',
     VAT: 'Giá đã bao gồm 8% VAT',
-    PHONE: 'Đặt nhanh',
+    ORDER: 'Đặt nhanh',
     ZALO_OA: 'Zalo OA',
     CATEGORY: 'Loại sản phẩm:',
     ORDER_ADDRESS: 'Đặt hàng tại',
+    MAP: 'Bản đồ',
+    PHONE: 'SĐT',
   },
 };
 

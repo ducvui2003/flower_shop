@@ -9,15 +9,16 @@ import React from 'react';
 
 const HomePage = async () => {
   const data = await pageService.getSectionHome();
+  console.log(data);
+
   return (
     <React.Fragment>
       <Header />
       <Hotline />
       <Banner />
       {data.map((item, i) => (
-        <div className="container-p container">
+        <div className="container-p container" key={i}>
           <SectionGeneric
-            key={i}
             title={item.title}
             products={item.products}
             href={item.listHref}
