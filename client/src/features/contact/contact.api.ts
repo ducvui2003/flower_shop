@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ContactTypeResponse, FormContactType } from '@/types/form-contact.type';
+import { FormContactType } from '@/types/form-contact.type';
 import { contactService } from '@/service/contact.service';
 
 export const contactApi = createApi({

@@ -11,8 +11,8 @@ const Logo = ({ className }: LogoProps) => {
       <Image
         src={'/logo.jpg'}
         alt="logo"
-        width={95}
-        height={95}
+        width={100}
+        height={100}
         priority
         placeholder="blur"
         blurDataURL={'/blur.jpg'}

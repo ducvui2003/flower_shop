@@ -23,7 +23,6 @@ export const useProductComment = (productId: number, size = 5) => {
   const [createComment] = useCreateCommentMutation();
   const [likeComment] = useLikeCommentMutation();
 
-
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };

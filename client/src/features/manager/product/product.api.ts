@@ -158,7 +158,7 @@ export const productManagerApi = createApi({
           { type: 'ProductManager', id: id },
           {
             type: 'ProductDetailManager',
-            id: id
+            id: id,
           },
         ];
       },

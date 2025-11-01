@@ -6,10 +6,7 @@ type ProductDescriptionProps = {
   productId: number;
 };
 
-function ProductDescription({
-  description,
-  productId,
-}: ProductDescriptionProps) {
+function ProductDescription({ description }: ProductDescriptionProps) {
   return (
     <Tabs defaultValue="desc" className="w-full">
       <TabsList className="grid w-full grid-cols-2">

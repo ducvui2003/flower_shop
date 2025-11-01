@@ -12,7 +12,7 @@ export const promotionApi = createApi({
         try {
           const data = await promotionService.getActivePromotions();
           return { data };
-        }catch (error: any) {
+        } catch (error: any) {
           return {
             error: {
               status: error?.status || 500,
@@ -21,9 +21,9 @@ export const promotionApi = createApi({
           };
         }
       },
-      providesTags: ['ActivePromotion']
-    })
-  })
-})
+      providesTags: ['ActivePromotion'],
+    }),
+  }),
+});
 
-export const {useGetActivePromotionsQuery} = promotionApi;
+export const { useGetActivePromotionsQuery } = promotionApi;

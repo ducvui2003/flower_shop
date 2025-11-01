@@ -48,6 +48,10 @@ const nextConfig: NextConfig = {
         hostname: 'qr.sepay.vn',
         protocol: 'https',
       },
+      {
+        hostname: 'flowercorner.b-cdn.net',
+        protocol: 'https',
+      },
     ],
   },
   eslint: {

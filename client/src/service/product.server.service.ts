@@ -2,7 +2,6 @@ import {
   ProductCardType,
   ProductDetailRespType,
   ProductResType,
-  SearchParams,
 } from '@/types/product.type';
 import {
   PageReq,
@@ -23,18 +22,6 @@ import {
 } from '@/types/page/category.page.type';
 
 const productService = {
-  getAllProducts: async (
-    req: PageReq<SearchParams>,
-  ): Promise<Paging<ProductResType>> => {
-    const params = toQueryString(req);
-    const res = await httpServer.get<ResponseApiPaging<ProductResType>>(
-      `api/v1/products/search?${params}`,
-      undefined,
-      false,
-    );
-    return res.payload.data;
-  },
-
   getProductById: async (id: number): Promise<ProductDetailRespType> => {
     const res = await httpServer.get<ResponseApi<ProductDetailRespType>>(
       `api/v1/products/${id}`,
@@ -92,15 +79,22 @@ const productService = {
 
   getProducts: ({
     category,
+    categoryId,
     price,
+    paging,
   }: {
     category?: string[];
+    categoryId?: number[];
     price?: [
       {
         from: number;
         to: number;
       },
     ];
+    paging?: {
+      page: number;
+      size: number;
+    };
   }): Promise<{
     items: ProductCardType[];
     paging: {
@@ -131,7 +125,7 @@ const productService = {
   },
 
   getCategoryPage: (category: string): Promise<CategoryPageType | null> => {
-    if (category !== 'Hoa tươi') return Promise.resolve(null);
+    if (category !== 'hoa-tuoi') return Promise.resolve(null);
     return new Promise((resolve) => {
       resolve({
         title: 'Hoa tươi',
@@ -178,12 +172,14 @@ const productService = {
       views: 36,
       tag: [
         {
-          id: '1A',
+          id: 1,
           name: 'Hoa tuoi dam cuoi',
+          href: '/hoa-tuoi-dam-cuoi',
         },
         {
-          id: '2A',
+          id: 2,
           name: 'Hoa tuoi dam cuoi',
+          href: '/hoa-tuoi-dam-cuoi',
         },
       ],
     };

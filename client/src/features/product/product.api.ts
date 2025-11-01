@@ -13,7 +13,7 @@ export const productApi = createApi({
   reducerPath: 'productApi',
   baseQuery: () => ({ data: {} }),
   endpoints: (builder) => ({
-    searchProduct: builder.query<SearchProductResType, String>({
+    searchProduct: builder.query<SearchProductResType, string>({
       async queryFn(name: string) {
         try {
           const params = toQueryString({ name: name });

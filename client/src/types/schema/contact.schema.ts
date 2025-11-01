@@ -14,7 +14,7 @@ const SendContactSchema = z.object({
     .email('Email không hợp lệ'),
   message: z
     .string()
-    .min(messageMinLength, `Nội dung liên hệ phải ít nhất ${messageMinLength}` ),
+    .min(messageMinLength, `Nội dung liên hệ phải ít nhất ${messageMinLength}`),
 });
 
 export { SendContactSchema };

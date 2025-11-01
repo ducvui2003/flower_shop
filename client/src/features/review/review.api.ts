@@ -20,11 +20,14 @@ export const reviewApi = createApi({
             },
           };
         }
-      }
+      },
     }),
 
-    editReview: builder.mutation<void, {reviewId: number, body: SendReviewReqType}>({
-      async queryFn({reviewId, body}) {
+    editReview: builder.mutation<
+      void,
+      { reviewId: number; body: SendReviewReqType }
+    >({
+      async queryFn({ reviewId, body }) {
         try {
           const result = await reviewService.editReview(reviewId, body);
           return { data: result.payload };
@@ -33,15 +36,12 @@ export const reviewApi = createApi({
             error: {
               status: error?.status || 500,
               data: error?.message || 'Unknown error',
-            }
+            },
           };
         }
-      }
+      },
     }),
   }),
 });
 
-export const {
-  useCreateReviewMutation,
-  useEditReviewMutation
-} = reviewApi
+export const { useCreateReviewMutation, useEditReviewMutation } = reviewApi;
