@@ -99,7 +99,9 @@ export const orderApi = createApi({
           };
         }
       },
-      providesTags: (result, error, orderItemId) => [{ type: 'OrderItem', id: orderItemId }],
+      providesTags: (result, error, orderItemId) => [
+        { type: 'OrderItem', id: orderItemId },
+      ],
     }),
   }),
 });
@@ -108,5 +110,5 @@ export const {
   useGetOrderTableQuery,
   useGetOrderDetailQuery,
   useGetReviewOfOrderItemQuery,
-  useCancelOrderMutation
+  useCancelOrderMutation,
 } = orderApi;

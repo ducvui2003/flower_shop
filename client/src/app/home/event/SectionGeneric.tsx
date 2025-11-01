@@ -44,7 +44,6 @@ const SectionGeneric = ({ title, products, href }: SectionGenericProps) => {
           </Link>
         </div>
       )}
-      <Separator className="bg-primary pc:my-8 my-4 !h-[2px]" />
     </section>
   );
 };

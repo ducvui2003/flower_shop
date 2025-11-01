@@ -1,5 +1,9 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { CommentRequest, CommentResponse, CommentUpdateRequest } from '@/types/comment.type';
+import {
+  CommentRequest,
+  CommentResponse,
+  CommentUpdateRequest,
+} from '@/types/comment.type';
 import commentService from '@/service/comment.service';
 import { PageReq, Paging } from '@/types/api.type';
 
@@ -8,10 +12,16 @@ export const commentApi = createApi({
   tagTypes: ['Comment'],
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    getCommentsByProduct: builder.query<Paging<CommentResponse>, { productId: number; req: PageReq<{}> }>({
+    getCommentsByProduct: builder.query<
+      Paging<CommentResponse>,
+      { productId: number; req: PageReq<object> }
+    >({
       async queryFn({ productId, req }) {
         try {
-          const comments = await commentService.getCommentsByProduct(productId, req);
+          const comments = await commentService.getCommentsByProduct(
+            productId,
+            req,
+          );
           return { data: comments };
         } catch (error: any) {
           return {
@@ -42,7 +52,7 @@ export const commentApi = createApi({
       invalidatesTags: ['Comment'],
     }),
     updateComment: builder.mutation<CommentResponse, CommentUpdateRequest>({
-      async queryFn(body:CommentUpdateRequest) {
+      async queryFn(body: CommentUpdateRequest) {
         try {
           const comment = await commentService.updateComment(body);
           return { data: comment };
@@ -73,7 +83,6 @@ export const commentApi = createApi({
       },
       invalidatesTags: ['Comment'],
     }),
-
   }),
 });
 

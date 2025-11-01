@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { store } from '@/app/provider/StoreProvider';
 import envConfig from '@/config/env.config';
 import { HTTP_STATUS_CODE } from '@/utils/const.util';
@@ -81,7 +82,7 @@ const request = async <Response>(
   });
 
   const payload: Response = await res.json();
-  let data = {
+  const data = {
     status: res.status,
     payload,
   };

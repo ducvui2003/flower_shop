@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusOrderType } from '@/utils/const.util';
 import { z } from 'zod';
 

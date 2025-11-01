@@ -40,18 +40,18 @@ const orderService = {
   },
 
   cancelOrder: async (id: number): Promise<void> => {
-    const response = await http.put<ResponseApi<void>>(
-      `/api/v1/orders/${id}`,
-    );
+    const response = await http.put<ResponseApi<void>>(`/api/v1/orders/${id}`);
     return response.payload.data;
   },
 
-  getReviewOfOrderItem: async (orderItemId: number): Promise<GetReviewOfOrderItemResType> => {
+  getReviewOfOrderItem: async (
+    orderItemId: number,
+  ): Promise<GetReviewOfOrderItemResType> => {
     const response = await http.get<ResponseApi<GetReviewOfOrderItemResType>>(
       `/api/v1/order-items/${orderItemId}/reviews`,
-    )
+    );
     return response.payload.data;
-  }
+  },
 };
 
 export default orderService;

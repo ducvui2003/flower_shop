@@ -22,7 +22,7 @@ const GET = async (request: NextRequest) => {
   const { origin } = await getServerSideProps(request);
 
   const accessTokenUrl = 'https://graph.facebook.com/v22.0/oauth/access_token';
-  let params = new URLSearchParams();
+  const params = new URLSearchParams();
   params.append('client_id', envConfig.NEXT_PUBLIC_FACEBOOK_CLIENT_ID);
   params.append('client_secret', envConfig.NEXT_PUBLIC_FACEBOOK_CLIENT_SECRET);
   params.append('code', code);

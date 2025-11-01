@@ -74,7 +74,7 @@ const PcNav = () => {
     );
   };
   return (
-    <div className="pc:block hidden shadow-md">
+    <div id="nav-pc" className="pc:block hidden bg-white shadow-md">
       <div className="container flex">
         {components.map((item, i) => {
           return (
