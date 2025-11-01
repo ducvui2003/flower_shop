@@ -1,9 +1,10 @@
 import Banner from '@/app/home/Banner';
-import Hotline from '@/app/home/event/Hotline';
 import SectionGeneric from '@/app/home/event/SectionGeneric';
 import FeatureSection from '@/app/home/FeatureSection';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
+import HeaderSticky from '@/components/common/HeaderSticky';
+import { Separator } from '@/components/ui/separator';
 import pageService from '@/service/page.service';
 import React from 'react';
 
@@ -12,9 +13,10 @@ const HomePage = async () => {
 
   return (
     <React.Fragment>
-      <Header />
-      <Hotline />
       <Banner />
+      <span className="my-8 block"></span>
+      <FeatureSection />
+      <span className="block pt-14"></span>
       {data.map((item, i) => (
         <div className="container-p container" key={i}>
           <SectionGeneric
@@ -22,10 +24,12 @@ const HomePage = async () => {
             products={item.products}
             href={item.listHref}
           />
+          {i != data.length - 1 && (
+            <Separator className="bg-primary pc:my-8 my-4 !h-[2px]" />
+          )}
         </div>
       ))}
-      <span className="my-8 block"></span>
-      <FeatureSection />
+
       <Footer />
     </React.Fragment>
   );

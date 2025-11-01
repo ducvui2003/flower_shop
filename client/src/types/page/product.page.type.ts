@@ -21,7 +21,7 @@ type ProductPageType = {
   description: string;
   views: number;
   avgRate: number;
-  tag?: { id: string; name: string }[];
+  tag?: { id: number; name: string; href?: string }[];
 };
 
 export type { FilterDataType, ProductPageType };

@@ -6,6 +6,10 @@ import envConfig from '@/config/env.config';
 import { APP_INFO, DESCRIPTION } from '@/utils/const.util';
 import { headers } from 'next/headers';
 import Head from 'next/head';
+import Header from '@/components/common/Header';
+import HeaderSticky from '@/components/common/HeaderSticky';
+import Footer from '@/components/common/Footer';
+import { Separator } from '@/components/ui/separator';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -57,7 +61,13 @@ export default async function RootLayout({
         />
       </Head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          <HeaderSticky />
+          <Separator />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

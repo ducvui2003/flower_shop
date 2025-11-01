@@ -72,9 +72,7 @@ export default async function ProductPage({ params }: ProductPage) {
           __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
         }}
       />
-      <Header />
       <ProductDetail product={product} />
-      <Footer />
     </>
   );
 }
