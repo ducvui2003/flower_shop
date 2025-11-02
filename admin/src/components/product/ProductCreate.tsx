@@ -25,16 +25,15 @@ const productSchema = z.object({
 type ProductType = z.infer<typeof productSchema>;
 
 const ProductCreate = () => {
-  const [create] = useCreate();
-
   const form = useForm<ProductType>({
     mode: "onSubmit",
     resolver: zodResolver(productSchema),
   });
 
-  const handleSubmit = async (e) => {
-    console.log("submit");
+  const handleSubmit = async (data: ProductType) => {
+    console.log(data);
   };
+
   return (
     <Create>
       <SimpleForm
@@ -64,7 +63,6 @@ const ProductCreate = () => {
         <div>
           <Editor label={"Description"} source="description" />
         </div>
-        <Button className="submit">Submit</Button>
       </SimpleForm>
     </Create>
   );
