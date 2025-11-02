@@ -23,7 +23,9 @@ const Editor = ({ className, source, label, resource }: EditorProps) => {
           </FormLabel>
         )}
         <FormControl>
-          <SimpleEditor />
+          <div className="border-[1px] focus:ring-1 rounded-2xl overflow-hidden">
+            <SimpleEditor />
+          </div>
         </FormControl>
       </FormField>
     </div>

@@ -18,7 +18,7 @@ export const Layout = (props: CoreLayoutProps) => {
     setErrorInfo(info);
   };
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <AppSidebar />
       <main
         className={cn(
@@ -28,7 +28,7 @@ export const Layout = (props: CoreLayoutProps) => {
           "sm:transition-[width] sm:duration-200 sm:ease-linear",
           "flex h-svh flex-col",
           "group-data-[scroll-locked=1]/body:h-full",
-          "has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh",
+          "has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh"
         )}
       >
         <header className="flex h-16 md:h-12 shrink-0 items-center gap-2 px-4">

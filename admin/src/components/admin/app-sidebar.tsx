@@ -43,7 +43,9 @@ export function AppSidebar() {
             >
               <Link to="/">
                 <Shell className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">
+                  Hoa Tuoi Nhat Nam
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
