@@ -13,7 +13,8 @@ export const LOCAL_STORAGE = {
 
 export const ALT = 'Hoa Tươi Nhật Nam';
 export const DESCRIPTION = '';
-export const DEFAULT_IMAGE = '/images/product.png';
+export const DEFAULT_IMAGE = '/images/product.jpg';
+export const DEFAULT_CATEGORY = '/images/category.jpg';
 export const PAYMENT_COOKIE = 'payment';
 
 export type StatusOrderType =

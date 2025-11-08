@@ -2,7 +2,6 @@ import Sort from '@/app/[category]/[sub-category]/sort';
 import ListView from '@/components/ListView';
 import ProductCard from '@/components/product/ProductCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { sleep } from '@/lib/utils.server';
 import productService from '@/service/product.server.service';
 import { ProductCardType } from '@/types/product.type';
 import PaginationProduct from './pagination';
@@ -25,10 +24,10 @@ export default async function ProductList({
 
   return (
     <>
-      <div className="my-2 rounded-xl border-2 px-2">
+      <div className="rounded-xl border-2 px-2 py-1">
         <Sort quantity={page} sort={sort} />
       </div>
-      <ScrollArea className="min-h-[50vh]">
+      <ScrollArea className="mt-5 min-h-[50vh]">
         <ListView<ProductCardType>
           display="grid"
           data={products.items}

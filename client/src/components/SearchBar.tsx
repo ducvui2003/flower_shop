@@ -12,16 +12,13 @@ const SearchBar = ({
   return (
     <div
       {...props}
-      className={cn(
-        'outline-primary flex items-stretch border pl-2',
-        className,
-      )}
+      className={cn('outline-primary flex items-stretch border', className)}
     >
       <Input
         placeholder="Tìm kiếm sản phẩm..."
         className="flex-1 rounded-none border-none p-0 shadow-none outline-none placeholder:text-gray-400 focus-visible:ring-0"
       />
-      <div className="bg-primary hover-transition hover-opacity grid basis-[100px] place-items-center text-white hover:cursor-pointer">
+      <div className="bg-primary hover-transition hover-opacity pc:basis-[100px] grid basis-[50px] place-items-center text-white hover:cursor-pointer">
         <Search />
       </div>
     </div>

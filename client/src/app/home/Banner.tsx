@@ -26,6 +26,7 @@ const Banner = () => {
               fill
               className="h-full w-auto object-contain object-top"
               placeholder="blur"
+              loading="lazy"
             />
           </AspectRatio>
         </CarouselItem>
@@ -52,9 +53,9 @@ const Banner = () => {
           </AspectRatio>
         </CarouselItem>
       </CarouselContent>
-      <CarouselPrevious className="hover:bg-primary absolute top-1/2 left-4 translate-y-1/2 hover:text-white" />
-      <CarouselNext className="hover:bg-primary absolute top-1/2 right-4 translate-y-1/2 hover:text-white" />
-      <div className="pc:justify-center absolute bottom-5 left-1/2 flex -translate-x-1/2 justify-end">
+      <CarouselPrevious className="hover:bg-primary absolute top-1/2 left-4 -translate-y-1/2 hover:text-white" />
+      <CarouselNext className="hover:bg-primary absolute top-1/2 right-4 -translate-y-1/2 hover:text-white" />
+      <div className="pc:justify-center pc:bottom-5 absolute bottom-1 left-1/2 flex -translate-x-1/2 justify-end">
         <CarouselDot />
       </div>
     </Carousel>

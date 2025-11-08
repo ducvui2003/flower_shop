@@ -1,6 +1,7 @@
+import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 
-export async function getServerSideProps(req: NextRequest) {
+const getServerSideProps = async (req: NextRequest) => {
   const { headers } = req;
 
   const protocol = headers.get('x-forwarded-proto') || 'http';
@@ -10,4 +11,17 @@ export async function getServerSideProps(req: NextRequest) {
   return {
     origin: origin,
   };
-}
+};
+
+const getDeviceServer = async (): Promise<'pc' | 'mobile' | 'tablet'> => {
+  const headersList = await headers();
+  const ua = headersList.get('user-agent') || '';
+
+  let device: 'pc' | 'mobile' | 'tablet' = 'pc';
+  if (/mobile/i.test(ua)) device = 'mobile';
+  else if (/tablet/i.test(ua)) device = 'tablet';
+
+  return device;
+};
+
+export { getDeviceServer, getServerSideProps };

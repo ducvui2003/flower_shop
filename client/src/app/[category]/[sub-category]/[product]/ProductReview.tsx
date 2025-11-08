@@ -104,7 +104,7 @@ export default function ProductReview({
 
   const averageRatingDisplay = () => {
     return ((averageRating / 5) * 100).toFixed(0);
-  }
+  };
 
   const onSubmitForm = (data: FilterReviewQueryType) => {
     setRatings(data.ratings);
@@ -353,10 +353,18 @@ export default function ProductReview({
                                 <RatingButton className="p-0" key={index} />
                               ))}
                             </Rating>
-                            <span className="text-sm text-primary font-semibold">{feeling[item.rating]}</span>
-                            {
-                              item.options && <div className="flex items-center space-x-1.5"><Separator orientation="vertical" className="!h-4"/> <strong>Dung tích:</strong> {item.options.name}</div>
-                            }
+                            <span className="text-primary text-sm font-semibold">
+                              {feeling[item.rating]}
+                            </span>
+                            {item.options && (
+                              <div className="flex items-center space-x-1.5">
+                                <Separator
+                                  orientation="vertical"
+                                  className="!h-4"
+                                />{' '}
+                                <strong>Dung tích:</strong> {item.options.name}
+                              </div>
+                            )}
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
