@@ -12,8 +12,6 @@ const HomePage = async () => {
     <React.Fragment>
       <Banner />
       <Spacing />
-      <FeatureSection />
-      <Spacing />
       <div className="container-p container my-4">
         <CategorySection
           title={dataCategory.title}
@@ -33,6 +31,8 @@ const HomePage = async () => {
           {i < data.length - 1 && <Spacing />}
         </React.Fragment>
       ))}
+      <Spacing />
+      <FeatureSection />
     </React.Fragment>
   );
 };

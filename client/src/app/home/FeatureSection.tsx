@@ -1,4 +1,5 @@
 import ClientIcon from '@/components/ClientIcon';
+import { getDeviceServer } from '@/lib/server.helper';
 import { cn, uuid } from '@/lib/utils';
 import React from 'react';
 
@@ -38,17 +39,19 @@ type CardProps = {
   description: string;
   icon: string;
 };
-const Card = ({ title, description, icon }: CardProps) => {
+const Card = async ({ title, description, icon }: CardProps) => {
+  const isMobile = (await getDeviceServer()) == 'mobile';
   return (
     <article
       className={cn(
-        'pc:px-3 pc:py-4 border-primary flex items-center justify-center gap-2 rounded-xl border-2 p-2 transition-colors duration-300',
+        'pc:px-3 border-primary pc:gap-3 flex items-center justify-center gap-2 rounded-xl border-2 p-2 transition-colors duration-300',
         'group hover:bg-primary hover:text-white',
       )}
     >
       <ClientIcon
         icon={icon}
-        className="text-primary pc:text-[60px] text-[30px] group-hover:text-white"
+        height={isMobile ? 80 : 50}
+        className="text-primary group-hover:text-white"
       />
       <div className="flex-1 text-left">
         <h3 className="inline-block text-lg font-bold">{title}</h3>

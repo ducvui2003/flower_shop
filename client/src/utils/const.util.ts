@@ -49,7 +49,7 @@ export type BreakPointType = 'mobile' | 'pc' | 'tablet';
 export const APP_INFO = {
   NAME: 'Hoa Tươi Nhật Nam',
   ZALO_OA: 'https://zalo.me/1057696361500855184',
-  PHONE: 'tel:+84965809127',
+  PHONE: '+84965809127',
   ADDRESS: '208 Đ. 11, Linh Xuân, Thủ Đức, Thành phố Hồ Chí Minh, Việt Nam',
   MAP: 'https://maps.app.goo.gl/2f8PatDQDXmZuscV8',
 };
