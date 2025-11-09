@@ -1,7 +1,6 @@
 import wishlistService from '@/service/wishlist.service';
 import { CreateWishlistReqType, WishlistResType } from '@/types/wishlist.type';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { s } from 'node_modules/framer-motion/dist/types.d-CtuPurYT';
 
 export const wishlistApi = createApi({
   reducerPath: 'wishlistApi',

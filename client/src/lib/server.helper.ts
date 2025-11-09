@@ -1,3 +1,4 @@
+import { BreakPointType } from '@/utils/const.util';
 import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 
@@ -13,7 +14,7 @@ const getServerSideProps = async (req: NextRequest) => {
   };
 };
 
-const getDeviceServer = async (): Promise<'pc' | 'mobile' | 'tablet'> => {
+const getDeviceServer = async (): Promise<BreakPointType> => {
   const headersList = await headers();
   const ua = headersList.get('user-agent') || '';
 

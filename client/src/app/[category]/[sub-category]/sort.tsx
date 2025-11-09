@@ -4,10 +4,17 @@ import {
   SORT_MAPPING,
 } from '@/app/[category]/[sub-category]/type-const';
 import TextTemplate from '@/components/TextTemplate';
-import { cn } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import TEXT from '@/utils/text.util';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+
 type SortProps = {
   quantity?: number;
   sort?: string;
@@ -28,36 +35,26 @@ const Sort = ({ quantity = 0, sort: initialSort }: SortProps) => {
   };
 
   return (
-    <div className="flex py-2">
+    <div className="pc:justify-end flex py-2">
       <span className="hidden">
         <TextTemplate
           template={TEXT.PRODUCT_LIST.SORT.QUANTITY}
           values={{ quantity: <b>{quantity}</b> }}
         />
       </span>
-      <span
-        className={cn(
-          'text-md ml-auto',
-          sort === SORT_MAPPING.asc
-            ? 'text-primary'
-            : 'hover:text-primary text-gray-500 hover:cursor-pointer',
-        )}
-        onClick={() => handleClick(SORT_MAPPING.asc)}
-      >
-        {TEXT.PRODUCT_LIST.SORT.ASC}
-      </span>
-      <span className="mx-4 w-[1px] bg-gray-400"></span>
-      <span
-        className={cn(
-          'text-md',
-          sort === SORT_MAPPING.desc
-            ? 'text-primary'
-            : 'hover:text-primary text-gray-500 hover:cursor-pointer',
-        )}
-        onClick={() => handleClick(SORT_MAPPING.desc)}
-      >
-        {TEXT.PRODUCT_LIST.SORT.DESC}
-      </span>
+      <Select value={sort} onValueChange={(value) => handleClick(value)}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Sắp xếp theo" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={SORT_MAPPING.asc}>
+            {TEXT.PRODUCT_LIST.SORT.ASC}
+          </SelectItem>
+          <SelectItem value={SORT_MAPPING.desc}>
+            {TEXT.PRODUCT_LIST.SORT.DESC}
+          </SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 };

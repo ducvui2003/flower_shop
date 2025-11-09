@@ -1,6 +1,5 @@
 import ProductList from '@/app/[category]/[sub-category]/list';
 import {
-  PAGE_MAPPING,
   PageParamsValueType,
   SEARCH_MAPPING,
   SearchParamsValueType,
@@ -8,12 +7,9 @@ import {
 } from '@/app/[category]/[sub-category]/type-const';
 
 import ClientIcon from '@/components/ClientIcon';
-import Footer from '@/components/common/Footer';
-import Header from '@/components/common/Header';
 import Link from '@/components/Link';
 import productService from '@/service/product.server.service';
 import { normalizeParam, normalizeSingleParam } from '@/utils/http.util';
-import React, { Suspense } from 'react';
 
 type SearchParams = Promise<
   Record<SearchParamsValueType, string[]> & Record<PageParamsValueType, string>
@@ -46,7 +42,7 @@ const CategoryPage = async ({
 
   return (
     <section className="container">
-      <div className="pc:mx-0 relative mx-2 mt-2 mb-8 flex items-center justify-center">
+      <div className="pc:mx-0 relative mx-2 my-8 flex items-center justify-center">
         <Link
           href={data.parent.href}
           className="text-md bg-primary absolute bottom-0 left-0 flex items-center gap-2 rounded-lg p-2 text-white hover:opacity-65"

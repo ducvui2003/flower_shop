@@ -1,6 +1,4 @@
 import { Session } from '@/app/api/auth/session/type';
-import getServerSession from '@/components/auth/getServerSession';
-import middlewares from '@/middlewares';
 import { Middleware } from '@/types/middleware.type';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 
