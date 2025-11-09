@@ -1,4 +1,4 @@
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { DEFAULT_CATEGORY, DEFAULT_IMAGE } from '@/utils/const.util';
 
 type SectionRes = {
   title: string;
@@ -11,6 +11,16 @@ type SectionRes = {
     thumbnail: string;
   }[];
   listHref: string;
+};
+
+type SectionHomeCategoryRes = {
+  title: string;
+  categories: {
+    id: number;
+    name: string;
+    thumbnail: string;
+    href: string;
+  }[];
 };
 
 const pageService = {
@@ -47,6 +57,23 @@ const pageService = {
         listHref: '/hoa-tuoi-tot-nghiep',
       },
     ];
+    return new Promise((resolve) => {
+      resolve(data);
+    });
+  },
+  getSectionCategory: (): Promise<SectionHomeCategoryRes> => {
+    const data: SectionHomeCategoryRes = {
+      title: 'Danh sách các thể loại hoa tươi',
+      categories: Array(6)
+        .fill(false)
+        .map((_, i) => ({
+          id: i,
+          name: 'Hoa Tuoi',
+          thumbnail: DEFAULT_CATEGORY,
+          href: '/hoa-tuoi',
+        })),
+    };
+
     return new Promise((resolve) => {
       resolve(data);
     });

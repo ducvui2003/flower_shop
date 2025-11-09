@@ -1,25 +1,15 @@
-import {
-  ProductCardType,
-  ProductDetailRespType,
-  ProductResType,
-} from '@/types/product.type';
-import {
-  PageReq,
-  Paging,
-  ResponseApi,
-  ResponseApiPaging,
-} from '@/types/api.type';
 import httpServer from '@/lib/http.server';
-import { toQueryString } from '@/lib/utils';
-import {
-  FilterDataType,
-  ProductPageType,
-} from '@/types/page/product.page.type';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { ResponseApi } from '@/types/api.type';
 import {
   CategoryPageType,
   SubCategoryPageType,
 } from '@/types/page/category.page.type';
+import {
+  FilterDataType,
+  ProductPageType,
+} from '@/types/page/product.page.type';
+import { ProductCardType, ProductDetailRespType } from '@/types/product.type';
+import { DEFAULT_IMAGE } from '@/utils/const.util';
 
 const productService = {
   getProductById: async (id: number): Promise<ProductDetailRespType> => {
@@ -69,7 +59,7 @@ const productService = {
       },
     ];
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       resolve({
         categories,
         prices,
@@ -119,7 +109,7 @@ const productService = {
         total: 3,
       },
     };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       resolve(products);
     });
   },

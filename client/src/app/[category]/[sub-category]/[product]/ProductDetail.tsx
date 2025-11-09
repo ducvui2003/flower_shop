@@ -42,18 +42,18 @@ export default function ProductDetail({
             >
               {name}
             </h2>
-            <div className="text-md mt-3 flex gap-2 text-yellow-400">
+            <div className="text-md mt-3 flex items-center gap-1 text-yellow-400">
               <span>{avgRate}</span>
               {Array(avgRate)
                 .fill(null)
-                .map(() => (
-                  <ClientIcon icon={'material-symbols:star'} />
+                .map((_, i) => (
+                  <ClientIcon key={i} icon={'material-symbols:star'} />
                 ))}
             </div>
           </div>
           <span
             title={'Người xem'}
-            className="absolute top-0 right-0 flex gap-2 text-gray-500"
+            className="absolute top-0 right-0 flex items-center gap-2 text-gray-500"
           >
             <ClientIcon icon={'mdi:eye'} />
             <span>{views}</span>
@@ -116,14 +116,14 @@ export default function ProductDetail({
           <div className="flex gap-3">
             <Link
               href={APP_INFO.PHONE}
-              className="inline-flex w-[150px] justify-center gap-3 rounded-md border-2 border-green-600 px-3 py-2 text-green-600 transition-colors hover:bg-green-600 hover:text-white"
+              className="inline-flex w-[150px] items-center justify-center gap-3 rounded-md border-2 border-green-600 px-3 py-2 text-green-600 transition-colors hover:bg-green-600 hover:text-white"
             >
               <ClientIcon icon={'ic:baseline-phone'} />
               {TEXT.PRODUCT_DETAIL.ORDER}
             </Link>
             <Link
               href={APP_INFO.ZALO_OA}
-              className="inline-flex w-[150px] justify-center gap-3 rounded-md border-2 border-blue-600 px-3 py-2 text-blue-600 transition-colors hover:bg-blue-600 hover:text-white"
+              className="inline-flex w-[150px] items-center justify-center gap-3 rounded-md border-2 border-blue-600 px-3 py-2 text-blue-600 transition-colors hover:bg-blue-600 hover:text-white"
             >
               <ClientIcon icon={'simple-icons:zalo'} />
               {TEXT.PRODUCT_DETAIL.ZALO_OA}
@@ -143,7 +143,7 @@ export default function ProductDetail({
                 {TEXT.PRODUCT_DETAIL.MAP}
               </Link>
               <Link
-                href={APP_INFO.PHONE}
+                href={`tel:${APP_INFO.PHONE}`}
                 target="_blank"
                 className="bg-primary mt-2 ml-2 inline-flex items-center gap-2 rounded-md px-2 py-1 font-medium text-white"
               >

@@ -13,7 +13,8 @@ export const LOCAL_STORAGE = {
 
 export const ALT = 'Hoa Tươi Nhật Nam';
 export const DESCRIPTION = '';
-export const DEFAULT_IMAGE = '/images/product.png';
+export const DEFAULT_IMAGE = '/images/product.jpg';
+export const DEFAULT_CATEGORY = '/images/category.jpg';
 export const PAYMENT_COOKIE = 'payment';
 
 export type StatusOrderType =
@@ -45,10 +46,13 @@ export const paymentProvider: Record<PaymentProvider, string> = {
 };
 
 export type BreakPointType = 'mobile' | 'pc' | 'tablet';
+
 export const APP_INFO = {
   NAME: 'Hoa Tươi Nhật Nam',
   ZALO_OA: 'https://zalo.me/1057696361500855184',
-  PHONE: 'tel:+84965809127',
+  PHONE: '+84965809127',
   ADDRESS: '208 Đ. 11, Linh Xuân, Thủ Đức, Thành phố Hồ Chí Minh, Việt Nam',
   MAP: 'https://maps.app.goo.gl/2f8PatDQDXmZuscV8',
+  MAP_EMBED:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d244.87221464334579!2d106.76815359896673!3d10.89099155221682!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174d96004948bfd%3A0xf9f6092a6c7a60f5!2zU2hvcCBob2EgdMawxqFpIE5o4bqtdCBOYW0!5e0!3m2!1sen!2s!4v1761979990779!5m2!1sen!2s',
 };

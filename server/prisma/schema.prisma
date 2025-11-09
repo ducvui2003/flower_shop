@@ -25,3 +25,35 @@ model User {
 
   @@map("users")
 }
+
+model Category {
+  id       Int        @id @default(autoincrement())
+  name     String     @default("anonymous")
+  parentId Int?
+  parent   Category?  @relation("CategoryChild", fields: [parentId], references: [id])
+  Category Category[] @relation("CategoryChild")
+  products Product[]  @relation("CategoryProducts")
+
+  @@map("categories")
+}
+
+model Product {
+  id          Int        @id @default(autoincrement())
+  name        String     @default("anonymous")
+  description String     @db.LongText
+  price_new   Float
+  price_old   Float?     @default(0)
+  categories  Category[] @relation("CategoryProducts")
+
+  // ✅ Metadata fields
+  createdBy String?  @map("created_by") // Nullable, app sets this
+  createdAt DateTime @default(now()) @map("created_at") // DB sets automatically
+  updatedBy String?  @map("updated_by") // Nullable, app sets this
+  updatedAt DateTime @updatedAt @map("updated_at") // DB auto-updates
+
+  isDeleted Boolean   @default(false) @map("is_deleted") // Soft delete flag
+  deletedBy String?   @map("deleted_by") // Nullable
+  deletedAt DateTime? @map("deleted_at") // Nullable
+
+  @@map("products")
+}

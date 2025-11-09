@@ -1,8 +1,14 @@
+import { APP_INFO } from '@/utils/const.util';
+
 const TEXT = {
   HEADER: {
     TOP: 'SDT: 0965809127',
   },
   FOOTER: [
+    {
+      title: APP_INFO.NAME,
+      li: [APP_INFO.ADDRESS, `SĐT: ${APP_INFO.PHONE}`],
+    },
     {
       title: 'Chính sách',
       li: [
@@ -12,7 +18,6 @@ const TEXT = {
       ],
     },
   ],
-
   HOTLINE: 'Hotline đặt hàng nhanh 0965809127',
   SHOP: {
     NAME: 'Hoa tuoi Nhat Nam',

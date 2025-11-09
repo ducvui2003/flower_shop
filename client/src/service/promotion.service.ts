@@ -1,7 +1,6 @@
 import http from '@/lib/http.client';
-import { GetCartResType } from '@/types/cart.type';
-import { GetActivePromotionsResType } from '@/types/promotion.type';
 import { ResponseApi } from '@/types/api.type';
+import { GetActivePromotionsResType } from '@/types/promotion.type';
 
 const promotionService = {
   getActivePromotions: async (): Promise<GetActivePromotionsResType> => {

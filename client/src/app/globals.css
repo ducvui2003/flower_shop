@@ -8,6 +8,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-heading: var(--font-playfair), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
   --breakpoint-tl: 40rem; /*640px*/
   --breakpoint-lp: 64rem; /*1024px*/
   --breakpoint-pc: 80rem; /*1280px*/
@@ -220,6 +222,9 @@
   }
   .hover-transition {
     @apply transition-all duration-300 ease-in-out;
+  }
+  .title-section {
+    @apply pc:text-4xl text-center text-2xl font-light;
   }
 }
 @utility product-image-selected {

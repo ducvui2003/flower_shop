@@ -1,5 +1,5 @@
 import userManagerService from '@/service/manager/user-manager.service';
-import { Paging, ResponseApiPaging } from '@/types/api.type';
+import { Paging } from '@/types/api.type';
 import {
   GetUserDetailResType,
   GetUserQueryReqType,
