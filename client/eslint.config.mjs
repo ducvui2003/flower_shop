@@ -19,7 +19,15 @@ const eslintConfig = [
   {
     plugins: { prettier }, // Add Prettier plugin
     rules: {
-      'prettier/prettier': 'error', // Enforce Prettier formatting as ESLint errors
+      'prettier/prettier': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 ];

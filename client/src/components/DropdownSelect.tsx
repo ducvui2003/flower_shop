@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 type DropdownSelectProps<
   ID,
   T extends {

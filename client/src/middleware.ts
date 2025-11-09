@@ -1,4 +1,5 @@
 import { Session } from '@/app/api/auth/session/type';
+import middlewares from '@/middlewares';
 import { Middleware } from '@/types/middleware.type';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 
@@ -21,22 +22,11 @@ export default async function middleware(
   req: NextRequest,
   event: NextFetchEvent,
 ) {
-  //   const session = await getServerSession();
-  //   const res = await middlewareChain(req, event, middlewares, session);
-  //   if (res) return res;
+  const res = await middlewareChain(req, event, middlewares, null);
+  if (res) return res;
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/',
-    '/login',
-    '/register',
-    '/forgot-password',
-    '/user/info',
-    '/admin/:path*',
-    '/seller/:path*',
-    '/order',
-    '/payment',
-  ],
+  matcher: ['/'],
 };
