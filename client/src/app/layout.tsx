@@ -1,15 +1,26 @@
 import Providers from '@/app/provider';
 import '@/app/globals.css';
 
-import { Inter } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 import envConfig from '@/config/env.config';
 import { APP_INFO, DESCRIPTION } from '@/utils/const.util';
 import { headers } from 'next/headers';
 import Head from 'next/head';
+import Header from '@/components/common/Header';
+import HeaderSticky from '@/components/common/HeaderSticky';
+import Footer from '@/components/common/Footer';
+import { Separator } from '@/components/ui/separator';
+
+const playfair = Playfair_Display({
+  subsets: ['vietnamese'],
+  weight: ['400', '700'],
+  variable: '--font-playfair',
+});
 
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ['latin', 'vietnamese'],
   display: 'swap',
+  variable: '--font-inter',
 });
 
 export async function generateMetadata() {
@@ -49,7 +60,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="vi" className={`${inter.className} ${playfair.className}`}>
       <Head>
         <meta
           property="fb:app_id"
@@ -57,7 +68,13 @@ export default async function RootLayout({
         />
       </Head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          <HeaderSticky />
+          <Separator />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

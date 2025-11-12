@@ -1,6 +1,6 @@
-import { boolean, z } from 'zod';
-import { CategoryType } from './category.type';
 import { SupplierType } from '@/types/supplier.type';
+import { z } from 'zod';
+import { CategoryType } from './category.type';
 type ProductSearchParamsType = {
   price?: string[];
   category?: string[];
@@ -205,25 +205,25 @@ type SearchProductResType = {
   items: Pick<ProductResType, 'id' | 'name'>[];
 };
 
-export type {
-  ProductCardType,
-  ProductResType,
-  ProductType,
-  CreateProductBodyType,
-  ProductManagerResType,
-  CreateOptionBodyType,
-  CreateProductResType,
-  ProductDetailRespType,
-  ProductDetailManagerResType,
-  BaseProductFormType,
-  UpdateProductBodyType,
-  SearchProductResType,
-  ProductSearchParamsType,
-  ProductSearchParamsKeyType,
-};
 export {
-  CreateProductBodySchema,
-  CreateOptionBodySchema,
   BaseProductFormSchema,
+  CreateOptionBodySchema,
+  CreateProductBodySchema,
   UpdateProductBodySchema,
+};
+export type {
+  BaseProductFormType,
+  CreateOptionBodyType,
+  CreateProductBodyType,
+  CreateProductResType,
+  ProductCardType,
+  ProductDetailManagerResType,
+  ProductDetailRespType,
+  ProductManagerResType,
+  ProductResType,
+  ProductSearchParamsKeyType,
+  ProductSearchParamsType,
+  ProductType,
+  SearchProductResType,
+  UpdateProductBodyType,
 };

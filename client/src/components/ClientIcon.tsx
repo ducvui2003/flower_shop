@@ -1,7 +1,7 @@
 'use client';
 import { Icon, IconifyIconProps } from '@iconify-icon/react';
 
-export interface ClientIconProps extends Omit<IconifyIconProps, 'ref'> {}
+export type ClientIconProps = object & Omit<IconifyIconProps, 'ref'>;
 
 export default function ClientIcon({
   icon,
@@ -11,13 +11,6 @@ export default function ClientIcon({
   ...props
 }: ClientIconProps) {
   return (
-    <Icon
-      icon={icon}
-      width={size}
-      height={size}
-      color={color}
-      {...props}
-      onClick={onClick}
-    />
+    <Icon icon={icon} color={color} size={size} {...props} onClick={onClick} />
   );
 }

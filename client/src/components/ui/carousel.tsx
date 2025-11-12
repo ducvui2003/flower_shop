@@ -244,7 +244,7 @@ const CarouselDot = () => {
           <span
             key={i}
             className={cn(
-              'pc:size-4 inline-block size-3 rounded-full border-1 bg-gray-200',
+              'pc:size-2 inline-block size-2 rounded-full border-1 bg-gray-200',
               i === selected && 'bg-primary',
             )}
           ></span>

@@ -1,4 +1,6 @@
 import ClientIcon from '@/components/ClientIcon';
+import Logo from '@/components/Logo';
+import SearchBar from '@/components/SearchBar';
 import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { BreakPointType } from '@/utils/const.util';
@@ -66,7 +68,7 @@ const Navigation = ({ breakpoint }: NavigationProps) => {
 const PcNav = () => {
   const LinkRender = (i: number, item: NavigationType) => {
     return (
-      <Link key={i} href={item.href!!} passHref>
+      <Link key={i} href={item.href!} passHref>
         <span className="hover:bg-primary text-primary inline-block max-w-[250px] min-w-[200px] bg-white px-4 py-2 transition hover:text-white">
           {item.title}
         </span>
@@ -74,7 +76,7 @@ const PcNav = () => {
     );
   };
   return (
-    <div className="pc:block hidden shadow-md">
+    <div id="nav-pc" className="pc:block hidden bg-white shadow-md">
       <div className="container flex">
         {components.map((item, i) => {
           return (
@@ -102,21 +104,25 @@ const MobileNav = () => {
     return components.map((component, index) => {
       return (
         <Link key={index} href={component.href!} legacyBehavior passHref>
-          {component.title}
+          <span className="hover:bg-primary text-primary border-primary inline-block max-w-[250px] min-w-[200px] border-b-1 bg-white p-2 transition hover:text-white">
+            {component.title}
+          </span>
         </Link>
       );
     });
-  }, [components]);
+  }, []);
 
   return (
     <Sheet>
       <SheetTrigger className="pc:hidden p-2">
-        <ClientIcon icon="lucide:menu" />
+        <ClientIcon height={25} icon="lucide:menu" />
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="min-w-[80vw] p-4">
         <DialogTitle />
         <DialogDescription />
-        <ul className="grid w-[400px] flex-col gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+        <Logo className="grid place-items-center" />
+        <SearchBar className="pl-2" />
+        <ul className="grid flex-col gap-3 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
           {renderComponents}
         </ul>
       </SheetContent>

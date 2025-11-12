@@ -1,30 +1,22 @@
+import { APP_INFO } from '@/utils/const.util';
+
 const TEXT = {
   HEADER: {
     TOP: 'SDT: 0965809127',
   },
   FOOTER: [
     {
-      title: 'Về Annhien.vn',
+      title: APP_INFO.NAME,
+      li: [APP_INFO.ADDRESS, `SĐT: ${APP_INFO.PHONE}`],
+    },
+    {
+      title: 'Chính sách',
       li: [
         'Giới thiệu annhien.vn',
         'Điều khoản dịch vụ',
         'Chính sách vận chuyển',
       ],
     },
-    {
-      title: 'Hỗ trợ khách hàng',
-      li: ['Hỏi đáp'],
-    },
-    {
-      title: 'Sản phẩm',
-      li: ['Sản phẩm mới', 'Chương trình giảm giá', 'Sản phẩm nổi bật'],
-    },
-  ],
-  COPYRIGHT: [
-    'Bản quyền © 2025 hoatuoinhatnam.com.vn',
-    'Shop Hoa Tươi Nhật Nam',
-    'Hotline: 19001998',
-    'Trụ sở: khu phố 6, phường Linh Trung, thành phố Thủ Đức, thành phố Hồ Chí Minh.',
   ],
   HOTLINE: 'Hotline đặt hàng nhanh 0965809127',
   SHOP: {
@@ -61,7 +53,7 @@ const TEXT = {
     VAT: 'Giá đã bao gồm 8% VAT',
     ORDER: 'Đặt nhanh',
     ZALO_OA: 'Zalo OA',
-    CATEGORY: 'Loại sản phẩm:',
+    CATEGORY: 'Danh mục:',
     ORDER_ADDRESS: 'Đặt hàng tại',
     MAP: 'Bản đồ',
     PHONE: 'SĐT',

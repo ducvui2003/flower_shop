@@ -1,40 +1,17 @@
-import {
-  ProductCardType,
-  ProductDetailRespType,
-  ProductResType,
-  SearchParams,
-} from '@/types/product.type';
-import {
-  PageReq,
-  Paging,
-  ResponseApi,
-  ResponseApiPaging,
-} from '@/types/api.type';
 import httpServer from '@/lib/http.server';
-import { toQueryString } from '@/lib/utils';
-import {
-  FilterDataType,
-  ProductPageType,
-} from '@/types/page/product.page.type';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { ResponseApi } from '@/types/api.type';
 import {
   CategoryPageType,
   SubCategoryPageType,
 } from '@/types/page/category.page.type';
+import {
+  FilterDataType,
+  ProductPageType,
+} from '@/types/page/product.page.type';
+import { ProductCardType, ProductDetailRespType } from '@/types/product.type';
+import { DEFAULT_IMAGE } from '@/utils/const.util';
 
 const productService = {
-  getAllProducts: async (
-    req: PageReq<SearchParams>,
-  ): Promise<Paging<ProductResType>> => {
-    const params = toQueryString(req);
-    const res = await httpServer.get<ResponseApiPaging<ProductResType>>(
-      `api/v1/products/search?${params}`,
-      undefined,
-      false,
-    );
-    return res.payload.data;
-  },
-
   getProductById: async (id: number): Promise<ProductDetailRespType> => {
     const res = await httpServer.get<ResponseApi<ProductDetailRespType>>(
       `api/v1/products/${id}`,
@@ -82,7 +59,7 @@ const productService = {
       },
     ];
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       resolve({
         categories,
         prices,
@@ -92,15 +69,22 @@ const productService = {
 
   getProducts: ({
     category,
+    categoryId,
     price,
+    paging,
   }: {
     category?: string[];
+    categoryId?: number[];
     price?: [
       {
         from: number;
         to: number;
       },
     ];
+    paging?: {
+      page: number;
+      size: number;
+    };
   }): Promise<{
     items: ProductCardType[];
     paging: {
@@ -125,13 +109,13 @@ const productService = {
         total: 3,
       },
     };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       resolve(products);
     });
   },
 
   getCategoryPage: (category: string): Promise<CategoryPageType | null> => {
-    if (category !== 'Hoa tươi') return Promise.resolve(null);
+    if (category !== 'hoa-tuoi') return Promise.resolve(null);
     return new Promise((resolve) => {
       resolve({
         title: 'Hoa tươi',
@@ -178,12 +162,14 @@ const productService = {
       views: 36,
       tag: [
         {
-          id: '1A',
+          id: 1,
           name: 'Hoa tuoi dam cuoi',
+          href: '/hoa-tuoi-dam-cuoi',
         },
         {
-          id: '2A',
+          id: 2,
           name: 'Hoa tuoi dam cuoi',
+          href: '/hoa-tuoi-dam-cuoi',
         },
       ],
     };

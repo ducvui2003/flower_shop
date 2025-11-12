@@ -14,7 +14,7 @@ const POST = async (req: NextRequest) => {
     .split(',')[0]
     .trim();
 
-  let formData = new FormData();
+  const formData = new FormData();
   formData.append('secret', envConfig.NEXT_PUBLIC_CLOUDFLARE_SECRET_KEY);
   formData.append('response', token);
   formData.append('remoteip', ip);

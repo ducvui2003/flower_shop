@@ -1,26 +1,44 @@
-import ListView from '@/components/ListView';
-import ProductCard from '@/components/ProductCard';
+import ProductCard from '@/components/product/ProductCard';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import productService from '@/service/product.server.service';
-import { ProductCardType } from '@/types/product.type';
+
 type ProductRelatedProps = {
-  categoryId: number;
+  categoryId?: number[];
+  category?: string[];
 };
 
-const ProductRelated = async ({ categoryId }: ProductRelatedProps) => {
-  const response = await productService.getAllProducts({
-    size: 4,
-    page: 1,
+const ProductRelated = async ({
+  categoryId,
+  category,
+}: ProductRelatedProps) => {
+  const response = await productService.getProducts({
     categoryId: categoryId,
+    category: category,
   });
   if (response.items.length == 0) return null;
   return (
-    <ListView<ProductCardType>
-      display="flex"
-      orientation="horizontal"
-      data={response.items}
-      className="product gap-5"
-      render={(item, index) => <ProductCard key={index} {...item} />}
-    />
+    <>
+      <h2 className="pb-3 text-2xl">Sản phẩm liên quan</h2>
+      <Carousel className="relative overflow-x-hidden">
+        <CarouselContent>
+          {response.items.splice(4, 4).map((item, index) => {
+            return (
+              <CarouselItem key={index} className="pc:basis-1/4 basis-1/2">
+                <ProductCard {...item} />
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+        <CarouselPrevious className="hover:bg-primary absolute top-1/2 left-4 -translate-y-1/2 hover:text-white" />
+        <CarouselNext className="hover:bg-primary absolute top-1/2 right-4 -translate-y-1/2 hover:text-white" />
+      </Carousel>
+    </>
   );
 };
 

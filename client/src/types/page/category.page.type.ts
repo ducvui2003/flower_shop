@@ -1,5 +1,3 @@
-import { ProductCardType } from '@/types/product.type';
-
 type CategoryPageType = {
   title: string;
   thumbnail: string;

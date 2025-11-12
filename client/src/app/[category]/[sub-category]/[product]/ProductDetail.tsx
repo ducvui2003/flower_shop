@@ -1,13 +1,14 @@
 import ProductDescription from '@/app/[category]/[sub-category]/[product]/ProductDescription';
 import ClientIcon from '@/components/ClientIcon';
 import Link from '@/components/Link';
+import ListView from '@/components/ListView';
 import { Separator } from '@/components/ui/separator';
 import { currency } from '@/lib/utils';
 import { ProductPageType } from '@/types/page/product.page.type';
 import { APP_INFO } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import ProductImages from './ProductImages';
-import ListView from '@/components/ListView';
+import ProductRelated from '@/app/[category]/[sub-category]/[product]/ProductRelated';
 
 type ProductDetailProps = {
   product: ProductPageType;
@@ -15,7 +16,7 @@ type ProductDetailProps = {
 
 export default function ProductDetail({
   product: {
-    avgRate,
+    avgRate = 5,
     description,
     id,
     images,
@@ -34,45 +35,59 @@ export default function ProductDetail({
           <ProductImages images={[...(images ?? [])]} />
         </div>
         <div className="relative lg:border-gray-200">
-          <h2
-            title={name}
-            className="text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl"
-          >
-            {name}
-          </h2>
+          <div>
+            <h2
+              title={name}
+              className="text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl"
+            >
+              {name}
+            </h2>
+            <div className="text-md mt-3 flex items-center gap-1 text-yellow-400">
+              <span>{avgRate}</span>
+              {Array(avgRate)
+                .fill(null)
+                .map((_, i) => (
+                  <ClientIcon key={i} icon={'material-symbols:star'} />
+                ))}
+            </div>
+          </div>
           <span
             title={'Người xem'}
-            className="absolute top-0 right-0 flex gap-2 text-gray-500"
+            className="absolute top-0 right-0 flex items-center gap-2 text-gray-500"
           >
             <ClientIcon icon={'mdi:eye'} />
             <span>{views}</span>
           </span>
-          <Separator className="my-4" />
+          <Separator className="my-2" />
           <div>
             {TEXT.PRODUCT_DETAIL.CATEGORY}
             {tag && (
               <ListView<{
-                id: string;
+                id: number;
                 name: string;
+                href?: string;
               }>
-                className="gap-2"
+                className="text-primary ml-2 inline-block gap-2 text-sm font-medium"
                 orientation="horizontal"
                 data={tag}
                 render={(item, index) => {
                   return (
-                    <span
-                      key={index}
-                      data-id={item.id}
-                      className="bg-primary rounded-2xl px-2 py-1 text-sm font-medium text-white"
-                    >
-                      {item.name}
-                    </span>
+                    <>
+                      <Link
+                        href={item.href ?? '/'}
+                        key={index}
+                        data-id={item.id}
+                      >
+                        {item.name}
+                      </Link>
+                      {index !== tag?.length - 1 && <span>, </span>}
+                    </>
                   );
                 }}
               />
             )}
           </div>
-          <Separator className="my-4" />
+          <Separator className="my-2" />
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <div className="mt-2 flex items-baseline gap-x-4">
               {salePrice ? (
@@ -97,18 +112,18 @@ export default function ProductDetail({
               {TEXT.PRODUCT_DETAIL.VAT}
             </span>
           </div>
-          <Separator className="my-4" />
+          <Separator className="my-2" />
           <div className="flex gap-3">
             <Link
               href={APP_INFO.PHONE}
-              className="inline-flex w-[150px] justify-center gap-3 rounded-md border-2 border-green-600 px-3 py-2 text-green-600 transition-colors hover:bg-green-600 hover:text-white"
+              className="inline-flex w-[150px] items-center justify-center gap-3 rounded-md border-2 border-green-600 px-3 py-2 text-green-600 transition-colors hover:bg-green-600 hover:text-white"
             >
               <ClientIcon icon={'ic:baseline-phone'} />
               {TEXT.PRODUCT_DETAIL.ORDER}
             </Link>
             <Link
               href={APP_INFO.ZALO_OA}
-              className="inline-flex w-[150px] justify-center gap-3 rounded-md border-2 border-blue-600 px-3 py-2 text-blue-600 transition-colors hover:bg-blue-600 hover:text-white"
+              className="inline-flex w-[150px] items-center justify-center gap-3 rounded-md border-2 border-blue-600 px-3 py-2 text-blue-600 transition-colors hover:bg-blue-600 hover:text-white"
             >
               <ClientIcon icon={'simple-icons:zalo'} />
               {TEXT.PRODUCT_DETAIL.ZALO_OA}
@@ -128,7 +143,7 @@ export default function ProductDetail({
                 {TEXT.PRODUCT_DETAIL.MAP}
               </Link>
               <Link
-                href={APP_INFO.PHONE}
+                href={`tel:${APP_INFO.PHONE}`}
                 target="_blank"
                 className="bg-primary mt-2 ml-2 inline-flex items-center gap-2 rounded-md px-2 py-1 font-medium text-white"
               >
@@ -141,6 +156,14 @@ export default function ProductDetail({
       </div>
       <div className="mt-5 lg:mt-10">
         <ProductDescription description={description} productId={id} />
+      </div>
+      <div className="mt-5 lg:mt-10">
+        {tag && (
+          <ProductRelated
+            categoryId={tag.map((i) => i.id)}
+            category={tag.map((i) => i.name)}
+          />
+        )}
       </div>
     </div>
   );

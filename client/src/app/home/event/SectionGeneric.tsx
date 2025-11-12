@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ProductCardType } from '@/types/product.type';
 import TEXT from '@/utils/text.util';
+import Image from 'next/image';
 
 type SectionGenericProps = {
   title: string;
@@ -15,22 +16,30 @@ const SectionGeneric = ({ title, products, href }: SectionGenericProps) => {
   return (
     <section>
       <div className="pc:flex-row flex flex-col items-center justify-center">
-        <img
+        <Separator className="pc:block bg-primary hidden flex-1" />
+        <Image
           src="/vintage-flourish-divider.svg"
-          className="pc:hidden w-[100px]"
+          className="pc:hidden"
+          width={100}
+          height={50}
           alt=""
         />
-        <img
+        <Image
           src="/decorator-florist.svg"
-          className="pc:h-[30px] pc:block hidden"
+          className="pc:block hidden"
           alt=""
+          width={100}
+          height={30}
         />
-        <h3 className="pc:text-3xl text-center text-2xl font-light">{title}</h3>
-        <img
+        <h3 className="title-section">{title}</h3>
+        <Image
           src="/decorator-florist.svg"
-          className="pc:block hidden h-[30px] -rotate-180"
+          className="pc:block hidden -rotate-180"
           alt=""
+          width={100}
+          height={50}
         />
+        <Separator className="pc:block bg-primary hidden flex-1" />
       </div>
       <div className="pc:grid-cols-4 pc:gap-8 mt-8 grid grid-cols-2 gap-4">
         {products.map((item) => (
@@ -38,13 +47,10 @@ const SectionGeneric = ({ title, products, href }: SectionGenericProps) => {
         ))}
       </div>
       {href && (
-        <div className="mt-5 grid place-items-center">
-          <Link href={href}>
-            <Button>{TEXT.PRODUCT_LIST.MORE} </Button>
-          </Link>
-        </div>
+        <Link href={href} className="mt-5 block">
+          <Button className="w-full py-1">{TEXT.PRODUCT_LIST.MORE} </Button>
+        </Link>
       )}
-      <Separator className="bg-primary pc:my-8 my-4 !h-[2px]" />
     </section>
   );
 };

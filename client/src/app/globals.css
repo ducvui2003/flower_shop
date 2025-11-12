@@ -8,6 +8,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-heading: var(--font-playfair), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
   --breakpoint-tl: 40rem; /*640px*/
   --breakpoint-lp: 64rem; /*1024px*/
   --breakpoint-pc: 80rem; /*1280px*/
@@ -215,6 +217,15 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .hover-opacity {
+    @apply opacity-100 hover:opacity-80;
+  }
+  .hover-transition {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  .title-section {
+    @apply pc:text-4xl text-center text-2xl font-light;
+  }
 }
 @utility product-image-selected {
   @apply outline-primary rounded outline-2;
@@ -234,6 +245,22 @@
 
 .container-p {
   padding-inline: 1rem;
+}
+
+#nav-pc {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+#nav-pc.is-sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /*

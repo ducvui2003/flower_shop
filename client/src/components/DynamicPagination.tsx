@@ -5,7 +5,12 @@ import {
   PaginationItem,
   PaginationLink,
 } from '@/components/ui/pagination';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'; // Hoặc từ thư viện icon bạn đang dùng
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from 'lucide-react';
 
 interface DynamicPaginationProps {
   totalPages: number;

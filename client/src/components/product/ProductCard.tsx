@@ -6,37 +6,36 @@ import { DEFAULT_IMAGE } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import Image from 'next/image';
 
-type ProductCardProps = ProductCardType & {};
+type ProductCardProps = ProductCardType & {
+  clickButton?: boolean;
+};
 
 const ProductCard = ({
-  id,
   name,
   basePrice,
   salePrice,
   href,
   thumbnails,
-  view = 0,
-  numSell = 0,
-  avgStar = 0,
   className,
+  clickButton = false,
 }: ProductCardProps) => {
   const percentSale =
     salePrice && (((basePrice - salePrice) / basePrice) * 100).toFixed(0);
   return (
     <article
       className={cn(
-        'border-primary group hover:shadow-primary relative flex flex-col overflow-hidden rounded-lg border bg-white transition-all hover:shadow-2xl',
+        'border-primary group hover:shadow-primary relative flex flex-col overflow-hidden rounded-lg border bg-white shadow transition-all hover:shadow-2xl',
         className,
       )}
     >
       <Link href={href}>
-        <div className="pc:h-[200px] pc:mt-4 relative mt-2 h-[150px] overflow-hidden rounded-xl">
+        <div className="pc:h-[250px] relative h-[150px] overflow-hidden rounded-t-lg">
           {!Array.isArray(thumbnails) && (
             <Image
               src={thumbnails ?? DEFAULT_IMAGE}
               alt={name}
               fill
-              className="rounded-xl object-cover transition-all group-hover:scale-125"
+              className="object-cover transition-all group-hover:scale-110"
             />
           )}
         </div>
@@ -46,14 +45,14 @@ const ProductCard = ({
           {TEXT.PRODUCT.CARD.SALE} {percentSale}%
         </span>
       )}
-      <div className="pc:mt-4 pc:mb-4 mt-1 mb-2 flex flex-col items-center gap-2 px-2">
+      <div className="pc:py-2 mt-1 mb-2 flex flex-col items-center gap-2 px-2">
         <Link href={href}>
-          <h3 className="o hover:text-primary mt-4 line-clamp-3 text-center text-xl font-semibold tracking-tight text-slate-900">
+          <h3 className="hover:text-primary line-clamp-3 text-center text-xl font-semibold tracking-tight text-slate-900">
             {name}
           </h3>
         </Link>
 
-        <div className="text-md pc:text-lg pc:flex-row pc:my-2 pc:gap-2 flex flex-col items-center justify-center gap-1">
+        <div className="pc:text-lg pc:flex-row pc:gap-2 flex flex-col items-center justify-center gap-1 text-lg">
           <p className="text-primary font-bold">
             {currency(salePrice || basePrice)}
           </p>
@@ -61,9 +60,11 @@ const ProductCard = ({
             <p className="text-gray-400 line-through">{currency(basePrice)}</p>
           )}
         </div>
-        <Link href={href} className="max-w-4/5">
-          <Button>{TEXT.PRODUCT.CARD.SEE}</Button>
-        </Link>
+        {clickButton && (
+          <Link href={href} className="max-w-4/5">
+            <Button>{TEXT.PRODUCT.CARD.SEE}</Button>
+          </Link>
+        )}
       </div>
     </article>
   );

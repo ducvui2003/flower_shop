@@ -3,27 +3,34 @@ import Logo from '@/components/Logo';
 import Navigation from '@/components/Navigation';
 import SearchBar from '@/components/SearchBar';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
-import TEXT from '@/utils/text.util';
+import { APP_INFO } from '@/utils/const.util';
+import Image from 'next/image';
+import hotline from '/public/images/hotline-header.jpg';
+import { getDeviceServer } from '@/lib/server.helper';
 
 const Header = async () => {
+  const device = await getDeviceServer();
   return (
-    <header className="py-3" style={{ '--header-height': '60px' } as any}>
-      <div className="container">
-        <div className="relative my-2 flex h-[80px] items-center justify-between">
-          <span className="pc:block hidden text-gray-500">
-            {TEXT.HEADER.TOP}
-          </span>
-          <Logo className={cn('absolute top-1/2 left-1/2 -translate-1/2')} />
-          <div className="pc:flex hidden gap-3">
-            <SearchBar className="w-[150px]" />
+    <header className="pt-3">
+      <div id="header" className="container">
+        <div className="pc:my-2 my-3 flex h-[80px] items-center justify-between gap-5">
+          <Logo className="pc:order-0 order-1" />
+          <SearchBar className="pc:flex pc:flex-1 hidden pl-2" />
+          {device == 'mobile' && <Navigation breakpoint="mobile" />}
+          <Image
+            className="pc:block hidden"
+            width={280}
+            height={100}
+            src={hotline}
+            alt={APP_INFO.NAME}
+          />
+          <span className="pc:hidden order-2">
             <CartDropdown />
-          </div>
-          <Navigation breakpoint="mobile" />
+          </span>
         </div>
       </div>
       <Separator className="pc:block hidden" />
-      <Navigation breakpoint="pc" />
+      {device == 'pc' && <Navigation breakpoint="pc" />}
     </header>
   );
 };

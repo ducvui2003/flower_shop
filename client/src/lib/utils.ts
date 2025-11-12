@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { EntityError } from '@/lib/http.client';
 import { clsx, type ClassValue } from 'clsx';
 import { UseFormSetError } from 'react-hook-form';

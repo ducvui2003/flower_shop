@@ -1,7 +1,6 @@
 'use client';
 import signInFacebook from '@/components/auth/signInFacebook';
 import ClientIcon from '@/components/ClientIcon';
-import { HOME_PAGE } from '@/utils/const.util';
 import React from 'react';
 
 const FacebookButton = () => {
