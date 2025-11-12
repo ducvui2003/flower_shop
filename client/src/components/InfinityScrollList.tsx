@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import React, {
-  HTMLElementType,
   ReactElement,
   RefObject,
   useEffect,
@@ -37,7 +36,7 @@ export default function InfiniteScrollList<T>({
   loading,
   refViewport,
 }: InfiniteScrollListProps<T>) {
-  const [items, setItems] = useState<any[]>(initialValue);
+  const [items, setItems] = useState<T[]>(initialValue);
   const [page, setPage] = useState(pageStart);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
