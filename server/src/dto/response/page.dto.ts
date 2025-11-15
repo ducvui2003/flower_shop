@@ -1,4 +1,4 @@
-import { Link, Source } from '@/types/common.type';
+import { Link, Source } from '@/types/common';
 
 type PageResponse<T = string> = {
   title: string;
@@ -47,7 +47,13 @@ type HomePageContent = {
   sections: Array<SectionGeneric<keyof ContentMap>>;
 };
 
-type PageHomeResponse = PageResponse<HomePageContent>;
+type HomePageResponse = PageResponse<HomePageContent>;
+
+type CategoryPageContent = {
+  items: Product[];
+};
+
+type CategoryPageResponse = PageResponse<CategoryPageContent>;
 
 type NavigateItem = {
   title: string;
@@ -60,9 +66,4 @@ type NavigateResponse = Array<{
   child?: Array<NavigateItem>;
 }>;
 
-export type {
-  PageHomeResponse,
-  CategorySlider,
-  CategoryProduct,
-  NavigateResponse,
-};
+export type { HomePageResponse, CategoryPageResponse, NavigateResponse };

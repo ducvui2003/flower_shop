@@ -1,6 +1,5 @@
 import envConfig from '@/config/env.config';
 import * as jose from 'jose';
-import { injectable } from 'tsyringe';
 
 type ExtendTokenPayload<T> = T & {
   exp: number;

@@ -35,6 +35,4 @@ authRouters.post(
   authController.logout,
 );
 
-authRouters.post('/test', authMiddleware(), authController.login);
-
 export default authRouters;

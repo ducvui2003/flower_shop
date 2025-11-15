@@ -1,5 +1,4 @@
 import 'module-alias/register';
-
 import envConfig from '@/config/env.config';
 import errorMiddleware from '@/middlewares/error.middleware';
 import routers from '@/routes/index';

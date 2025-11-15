@@ -3,57 +3,9 @@ import Logo from '@/components/Logo';
 import SearchBar from '@/components/SearchBar';
 import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import pageService from '@/service/page.service';
 import { BreakPointType } from '@/utils/const.util';
 import Link from 'next/link';
-import { useMemo } from 'react';
-
-type NavigationLinkType = {
-  title: string;
-  href: string;
-  description?: string;
-};
-
-type NavigationType = {
-  title: string;
-  href?: string;
-  child?: NavigationLinkType[];
-};
-export const components: NavigationType[] = [
-  {
-    title: 'Chủ đề',
-    href: '/chu-de',
-    child: [
-      {
-        title: 'Hoa Sinh Nhật',
-        href: '/chu-de/sinh-nhat',
-      },
-      {
-        title: 'Hoa Khai Trương',
-        href: '/chu-de/khai-truong',
-      },
-      {
-        title: 'Hoa Chúc Mừng',
-        href: '/chu-de/chuc-mung',
-      },
-    ],
-  },
-  {
-    title: 'Đối tượng',
-    href: '/doi-tuong',
-  },
-  {
-    title: 'Kiểu dáng',
-    href: '/kieu-dang',
-  },
-  {
-    title: 'Hoa tươi',
-    href: '/hoa-tuoi',
-  },
-  {
-    title: 'Màu sắc',
-    href: '/mau-sac',
-  },
-];
 
 type NavigationProps = {
   breakpoint: BreakPointType;
@@ -65,10 +17,12 @@ const Navigation = ({ breakpoint }: NavigationProps) => {
   return null;
 };
 
-const PcNav = () => {
-  const LinkRender = (i: number, item: NavigationType) => {
+const PcNav = async () => {
+  const data = await pageService.getNavigateStructure();
+  if (data?.length === 0) return null;
+  const LinkRender = (i: number, item: { title: string; link?: string }) => {
     return (
-      <Link key={i} href={item.href!} passHref>
+      <Link key={i} href={item.link!} passHref>
         <span className="hover:bg-primary text-primary inline-block max-w-[250px] min-w-[200px] bg-white px-4 py-2 transition hover:text-white">
           {item.title}
         </span>
@@ -78,7 +32,7 @@ const PcNav = () => {
   return (
     <div id="nav-pc" className="pc:block hidden bg-white shadow-md">
       <div className="container flex">
-        {components.map((item, i) => {
+        {data.map((item, i) => {
           return (
             <div key={i} className="group relative">
               {LinkRender(i, item)}
@@ -99,18 +53,9 @@ const PcNav = () => {
   );
 };
 
-const MobileNav = () => {
-  const renderComponents = useMemo(() => {
-    return components.map((component, index) => {
-      return (
-        <Link key={index} href={component.href!} legacyBehavior passHref>
-          <span className="hover:bg-primary text-primary border-primary inline-block max-w-[250px] min-w-[200px] border-b-1 bg-white p-2 transition hover:text-white">
-            {component.title}
-          </span>
-        </Link>
-      );
-    });
-  }, []);
+const MobileNav = async () => {
+  const data = await pageService.getNavigateStructure();
+  if (data?.length === 0) return null;
 
   return (
     <Sheet>
@@ -123,7 +68,15 @@ const MobileNav = () => {
         <Logo className="grid place-items-center" />
         <SearchBar className="pl-2" />
         <ul className="grid flex-col gap-3 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-          {renderComponents}
+          {data.map((component, index) => {
+            return (
+              <Link key={index} href={component.link} legacyBehavior passHref>
+                <span className="hover:bg-primary text-primary border-primary inline-block max-w-[250px] min-w-[200px] border-b-1 bg-white p-2 transition hover:text-white">
+                  {component.title}
+                </span>
+              </Link>
+            );
+          })}
         </ul>
       </SheetContent>
     </Sheet>

@@ -6,36 +6,36 @@ class PrismaService extends PrismaClient {
     super({
       log: ['query', 'error', 'warn'],
     });
-    this.$extends({
-      query: {
-        $allModels: {
-          create: ({ args, query }) => {
-            const email = getUser()?.email ?? 'anonymous';
+    // this.$extends({
+    //   query: {
+    //     $allModels: {
+    //       create: ({ args, query }) => {
+    //         const email = getUser()?.email ?? 'anonymous';
 
-            if ('createdAt' in (args.data ?? {})) {
-              args.data.createdAt = new Date();
-            }
-            if ('createdBy' in (args.data ?? {})) {
-              args.data.createdBy = email;
-            }
+    //         if ('createdAt' in (args.data ?? {})) {
+    //           args.data.createdAt = new Date();
+    //         }
+    //         if ('createdBy' in (args.data ?? {})) {
+    //           args.data.createdBy = email;
+    //         }
 
-            return query(args);
-          },
-          async update({ args, query }) {
-            const email = getUser()?.email ?? 'anonymous';
+    //         return query(args);
+    //       },
+    //       async update({ args, query }) {
+    //         const email = getUser()?.email ?? 'anonymous';
 
-            if ('updatedAt' in (args.data ?? {})) {
-              args.data.updatedAt = new Date();
-            }
-            if ('updatedBy' in (args.data ?? {})) {
-              args.data.updatedBy = email;
-            }
+    //         if ('updatedAt' in (args.data ?? {})) {
+    //           args.data.updatedAt = new Date();
+    //         }
+    //         if ('updatedBy' in (args.data ?? {})) {
+    //           args.data.updatedBy = email;
+    //         }
 
-            return query(args);
-          },
-        },
-      },
-    });
+    //         return query(args);
+    //       },
+    //     },
+    //   },
+    // });
   }
 }
 
