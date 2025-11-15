@@ -1,10 +1,10 @@
-import Sort from '@/app/[category]/[sub-category]/sort';
+import PaginationProduct from '@/app/[...category]/pagination';
+import Sort from '@/app/[...category]/sort';
 import ListView from '@/components/ListView';
 import ProductCard from '@/components/product/ProductCard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import productService from '@/service/product.server.service';
 import { ProductCardType } from '@/types/product.type';
-import PaginationProduct from './pagination';
 
 type ProductListProp = {
   filters: {
@@ -33,7 +33,9 @@ export default async function ProductList({
           data={products.items}
           className="product pc:grid-cols-4 grid-cols-2 gap-5"
           emptyComponent={null}
-          render={(item, index) => <ProductCard key={index} {...item} />}
+          render={(item, index) => (
+            <ProductCard key={index} {...item} link={item.link} />
+          )}
         />
         {products.items.length !== 0 && (
           <PaginationProduct page={products.paging.page} maxPage={total} />

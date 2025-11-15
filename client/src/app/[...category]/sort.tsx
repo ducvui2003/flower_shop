@@ -1,8 +1,5 @@
 'use client';
-import {
-  SEARCH_MAPPING,
-  SORT_MAPPING,
-} from '@/app/[category]/[sub-category]/type-const';
+import { SEARCH_MAPPING, SORT_MAPPING } from '@/app/[...category]/type-const';
 import TextTemplate from '@/components/TextTemplate';
 import {
   Select,

@@ -1,3 +1,6 @@
+import httpServer from '@/lib/http.server';
+import { ResponseApi } from '@/types/api.type';
+import { PageHomeResponse } from '@/types/page.type';
 import { DEFAULT_CATEGORY, DEFAULT_IMAGE } from '@/utils/const.util';
 
 type SectionRes = {
@@ -24,6 +27,12 @@ type SectionHomeCategoryRes = {
 };
 
 const pageService = {
+  getHomeStructure: async (): Promise<PageHomeResponse> => {
+    const data =
+      await httpServer.get<ResponseApi<PageHomeResponse>>('/api/page/home');
+    return data.payload.data;
+  },
+
   getSectionHome: async (): Promise<SectionRes[]> => {
     const data: SectionRes[] = [
       {

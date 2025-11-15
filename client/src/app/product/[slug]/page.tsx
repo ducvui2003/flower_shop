@@ -3,10 +3,8 @@ import productService from '@/service/product.server.service';
 import { notFound } from 'next/navigation';
 import { DEFAULT_IMAGE } from '@/utils/const.util';
 import { headers } from 'next/headers';
-import ProductDetail from '@/app/[category]/[sub-category]/[product]/ProductDetail';
-import Header from '@/components/common/Header';
-import Footer from '@/components/common/Footer';
 import Script from 'next/script';
+import ProductDetail from '@/app/product/[slug]/ProductDetail';
 
 type ProductPage = {
   params: Promise<{ product: string }>;
@@ -66,12 +64,6 @@ export default async function ProductPage({ params }: ProductPage) {
   };
   return (
     <>
-      <Script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
-        }}
-      />
       <ProductDetail product={product} />
     </>
   );

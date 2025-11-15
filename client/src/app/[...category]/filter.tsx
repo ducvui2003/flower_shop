@@ -3,7 +3,7 @@
 import {
   SEARCH_MAPPING,
   SearchParamsKeyType,
-} from '@/app/[category]/[sub-category]/type-const';
+} from '@/app/[...category]/type-const';
 import ClientIcon from '@/components/ClientIcon';
 import TextTemplate from '@/components/TextTemplate';
 import {

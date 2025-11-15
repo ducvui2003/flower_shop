@@ -1,4 +1,3 @@
-import ProductDescription from '@/app/[category]/[sub-category]/[product]/ProductDescription';
 import ClientIcon from '@/components/ClientIcon';
 import Link from '@/components/Link';
 import ListView from '@/components/ListView';
@@ -8,7 +7,9 @@ import { ProductPageType } from '@/types/page/product.page.type';
 import { APP_INFO } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import ProductImages from './ProductImages';
-import ProductRelated from '@/app/[category]/[sub-category]/[product]/ProductRelated';
+import ProductDescription from '@/app/product/[slug]/ProductDescription';
+import ProductRelated from '@/app/product/[slug]/ProductRelated';
+import React from 'react';
 
 type ProductDetailProps = {
   product: ProductPageType;
@@ -72,7 +73,7 @@ export default function ProductDetail({
                 data={tag}
                 render={(item, index) => {
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       <Link
                         href={item.href ?? '/'}
                         key={index}
@@ -81,7 +82,7 @@ export default function ProductDetail({
                         {item.name}
                       </Link>
                       {index !== tag?.length - 1 && <span>, </span>}
-                    </>
+                    </React.Fragment>
                   );
                 }}
               />

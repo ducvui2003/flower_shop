@@ -14,7 +14,7 @@ const ProductCard = ({
   name,
   basePrice,
   salePrice,
-  href,
+  link: href,
   thumbnails,
   className,
   clickButton = false,

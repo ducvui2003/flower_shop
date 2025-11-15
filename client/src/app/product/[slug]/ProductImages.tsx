@@ -1,4 +1,4 @@
-import ProductImagesInteract from '@/app/[category]/[sub-category]/[product]/ProductImages.client';
+import ProductImagesInteract from '@/app/product/[slug]/ProductImages.client';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 

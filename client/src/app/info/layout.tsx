@@ -1,4 +1,4 @@
-import Hotline from '@/app/home/event/Hotline';
+import Hotline from '@/components/event/Hotline';
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import React, { ReactNode } from 'react';

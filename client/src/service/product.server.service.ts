@@ -102,7 +102,7 @@ const productService = {
           name: 'hello123',
           slug: '/123',
           thumbnail: DEFAULT_IMAGE,
-          href: '/hoa-tot-nghiep/tot-nghiep/hoa-hong',
+          link: '/hoa-tot-nghiep/tot-nghiep/hoa-hong',
         })),
       paging: {
         page: 1,
@@ -115,27 +115,17 @@ const productService = {
   },
 
   getCategoryPage: (category: string): Promise<CategoryPageType | null> => {
+    if (category === 'sinh-nhat') {
+      return Promise.resolve({
+        title: 'Hoa sinh nhật',
+        thumbnail: DEFAULT_IMAGE,
+      });
+    }
     if (category !== 'hoa-tuoi') return Promise.resolve(null);
     return new Promise((resolve) => {
       resolve({
         title: 'Hoa tươi',
         thumbnail: DEFAULT_IMAGE,
-      });
-    });
-  },
-
-  getSubCategoryPage: (
-    category: string,
-    subCategory: string,
-  ): Promise<SubCategoryPageType> => {
-    return new Promise((resolve) => {
-      resolve({
-        title: 'Hoa sinh nhật',
-        thumbnail: DEFAULT_IMAGE,
-        parent: {
-          name: 'Chủ đề',
-          href: '/chu-de',
-        },
       });
     });
   },
