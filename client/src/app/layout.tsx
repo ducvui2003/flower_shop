@@ -56,9 +56,9 @@ export async function generateMetadata() {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="vi" className={`${inter.className} ${playfair.className}`}>
       <Head>

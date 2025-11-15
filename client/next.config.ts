@@ -20,7 +20,11 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/trang-chu',
-        destination: '/',
+        destination: '/home',
+      },
+      {
+        source: '/san-pham/:slug',
+        destination: '/product/:slug',
       },
     ];
   },

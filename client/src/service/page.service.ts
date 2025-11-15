@@ -1,4 +1,7 @@
-import { DEFAULT_CATEGORY, DEFAULT_IMAGE } from '@/utils/const.util';
+import httpServer from '@/lib/http.server';
+import { ResponseApi } from '@/types/api.type';
+import { NavigateResponse, PageHomeResponse } from '@/types/page.type';
+import { DEFAULT_IMAGE } from '@/utils/const.util';
 
 type SectionRes = {
   title: string;
@@ -12,18 +15,13 @@ type SectionRes = {
   }[];
   listHref: string;
 };
-
-type SectionHomeCategoryRes = {
-  title: string;
-  categories: {
-    id: number;
-    name: string;
-    thumbnail: string;
-    href: string;
-  }[];
-};
-
 const pageService = {
+  getHomeStructure: async (): Promise<PageHomeResponse> => {
+    const data =
+      await httpServer.get<ResponseApi<PageHomeResponse>>('/api/page/home');
+    return data.payload.data;
+  },
+
   getSectionHome: async (): Promise<SectionRes[]> => {
     const data: SectionRes[] = [
       {
@@ -61,22 +59,11 @@ const pageService = {
       resolve(data);
     });
   },
-  getSectionCategory: (): Promise<SectionHomeCategoryRes> => {
-    const data: SectionHomeCategoryRes = {
-      title: 'Danh sách các thể loại hoa tươi',
-      categories: Array(6)
-        .fill(false)
-        .map((_, i) => ({
-          id: i,
-          name: 'Hoa Tuoi',
-          thumbnail: DEFAULT_CATEGORY,
-          href: '/hoa-tuoi',
-        })),
-    };
 
-    return new Promise((resolve) => {
-      resolve(data);
-    });
+  getNavigateStructure: async (): Promise<NavigateResponse> => {
+    const data =
+      await httpServer.get<ResponseApi<NavigateResponse>>('/api/page/navigate');
+    return data.payload.data;
   },
 };
 

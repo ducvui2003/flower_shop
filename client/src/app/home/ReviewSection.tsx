@@ -47,12 +47,12 @@ const ReviewSection = () => {
             })}
           </CarouselContent>
         </Carousel>
-        <div className="mx-auto flex w-fit gap-3 pb-2 pt-4">
+        <div className="mx-auto flex w-fit gap-3 pt-4 pb-2">
           {Array.from({ length: count }).map((_, index) => (
             <span
               key={index}
               className={cn(
-                'border-1 inline-block size-2.5 rounded-full',
+                'inline-block size-2.5 rounded-full border-1',
                 current - 1 == index ? 'bg-[#FFC382]' : 'bg-[#D9D9D9]',
               )}
             ></span>
