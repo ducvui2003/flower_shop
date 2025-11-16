@@ -1,9 +1,12 @@
+import { ID_HOME_PAGE } from '@/config/database.config';
 import {
   HomePageResponse,
   CategoryPageResponse,
   NavigateResponse,
 } from '@/dto/response/page.dto';
+import prismaPageRepository from '@/repository/page.repository';
 import { AppResponse } from '@/types/app-response';
+import { HomePageContent } from '@/types/page';
 import { StatusCodes } from 'http-status-codes';
 
 interface PageService {
@@ -11,8 +14,9 @@ interface PageService {
   getCategoryPageStructure: (
     slug: string,
   ) => Promise<AppResponse<CategoryPageResponse>>;
-
   getNavigateStructure: () => Promise<AppResponse<NavigateResponse>>;
+
+  updateHomePageContent: (body: HomePageContent) => Promise<AppResponse<void>>;
 }
 
 const pageService: PageService = {
@@ -150,6 +154,15 @@ const pageService: PageService = {
     return Promise.resolve({
       code: StatusCodes.OK,
       data,
+    });
+  },
+
+  updateHomePageContent: async (
+    content: HomePageContent,
+  ): Promise<AppResponse<void>> => {
+    await prismaPageRepository.updatePageContent(ID_HOME_PAGE, content);
+    return Promise.resolve({
+      code: StatusCodes.ACCEPTED,
     });
   },
 };

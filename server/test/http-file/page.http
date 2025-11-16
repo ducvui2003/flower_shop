@@ -6,3 +6,51 @@ GET http://localhost:8081/api/page/category?name=hoa-tuoi
 
 ### Get navigate
 GET http://localhost:8081/api/page/navigate
+
+### Update body content
+PUT  http://localhost:8081/api/page/home
+Content-Type: application/json
+
+{
+    "banners": [1,2,3],
+    "categories": {
+        "ids": [1,2,3],
+        "showItems": 5
+    },
+    "navigator":[
+        {
+            "title": "Chủ đề",
+            "link": "/chu-de",
+            "child": [
+                {
+                "title": "Hoa Sinh Nhật",
+                "link": "/chu-de/sinh-nhat"
+                },
+                {
+                "title": "Hoa Khai Trương",
+                "link": "/chu-de/khai-truong"
+                },
+                {
+                "title": "Hoa Chúc Mừng",
+                "link": "/chu-de/chuc-mung"
+                }
+            ]
+        },
+        {
+            "title": "Đối tượng",
+            "link": "/doi-tuong"
+        },
+        {
+            "title": "Kiểu dáng",
+            "link": "/kieu-dang"
+        },
+        {
+            "title": "Hoa tươi",
+            "link": "/hoa-tuoi"
+        },
+        {
+            "title": "Màu sắc",
+            "link": "/mau-sac"
+        }
+    ]
+}
