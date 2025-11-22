@@ -8,6 +8,7 @@ import pageRepository from '@/modules/page/page.repository';
 import { AppResponse } from '@/types/app-response';
 import { HomePageContentType } from '@/modules/page/page.model';
 import { StatusCodes } from 'http-status-codes';
+import { createUrl } from '@/shared/utils/media.util';
 
 interface PageService {
   getHomePageStructure: () => Promise<AppResponse<HomePageResponse>>;
@@ -27,7 +28,7 @@ const pageService: PageService = {
     const mediaIds = content.banners.map((id) => id);
     const mediaModels = await pageRepository.getMedias(mediaIds);
     const banners = mediaModels.map((item) => ({
-      href: item.url,
+      href: createUrl(item.key),
       alt: item.alt ?? '',
     }));
     const categoriesData = await pageRepository.getCategories(
@@ -38,7 +39,7 @@ const pageService: PageService = {
       name: item.name,
       thumbnail: item.thumbnail
         ? {
-            href: item.thumbnail.url,
+            href: createUrl(item.thumbnail.key),
             alt: item.thumbnail.alt ?? undefined,
           }
         : undefined,

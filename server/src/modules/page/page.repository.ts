@@ -73,7 +73,7 @@ const pageRepository: PageRepository = {
         thumbnail: {
           select: {
             id: true,
-            url: true,
+            key: true,
             alt: true,
             metadata: true,
           },

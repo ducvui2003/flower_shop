@@ -20,8 +20,13 @@ const envSchema = z.object({
   RT_SECRET: z.string(),
   RT_EXPIRIES: z.coerce.number(), //second
   ALLOW_ORIGINS: z.coerce.string().transform((val) => val.split(',')),
-
   REDIS_URL: z.string(),
+
+  R2_ENDPOINT: z.string(),
+  R2_BUCKET: z.string(),
+  R2_PUBLIC_DOMAIN: z.string(),
+  R2_ACCESS_KEY: z.string(),
+  R2_SECRET_KEY: z.string(),
 });
 
 const configServer = envSchema.safeParse(process.env);
