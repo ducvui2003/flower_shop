@@ -1,12 +1,12 @@
 import 'module-alias/register';
-import envConfig from '@/config/env.config';
-import errorMiddleware from '@/middlewares/error.middleware';
-import routers from '@/routes/index';
+import envConfig from '@/shared/config/env.config';
+import corsMiddleware from '@/shared/middlewares/cors.middleware';
+import errorMiddleware from '@/shared/middlewares/error.middleware';
+import loggingMiddleware from '@/shared/middlewares/logging.middleware';
+import serializeMiddleware from '@/shared/middlewares/serialize.middleware';
+import routers from '@/shared/router';
+import logger from '@/shared/utils/logger.util';
 import express from 'express';
-import serializeMiddleware from '@/middlewares/serialize.middleware';
-import logger from '@/utils/logger.util';
-import loggingMiddleware from '@/middlewares/logging.middleware';
-import corsMiddleware from '@/middlewares/cors.middleware';
 
 const bootstrap = () => {
   const app = express();
