@@ -1,10 +1,15 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator json {
+  provider = "prisma-json-types-generator"
 }
 
 model User {
@@ -13,47 +18,93 @@ model User {
   email    String @unique
   password String
 
-  // ✅ Metadata fields
-  createdBy String?  @map("created_by") // Nullable, app sets this
-  createdAt DateTime @default(now()) @map("created_at") // DB sets automatically
-  updatedBy String?  @map("updated_by") // Nullable, app sets this
-  updatedAt DateTime @updatedAt @map("updated_at") // DB auto-updates
-
-  isDeleted Boolean   @default(false) @map("is_deleted") // Soft delete flag
-  deletedBy String?   @map("deleted_by") // Nullable
-  deletedAt DateTime? @map("deleted_at") // Nullable
+  createdBy String?   @map("created_by")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedBy String?   @map("updated_by")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedBy String?   @map("deleted_by")
+  deletedAt DateTime? @map("deleted_at")
 
   @@map("users")
 }
 
 model Category {
-  id       Int        @id @default(autoincrement())
-  name     String     @default("anonymous")
-  parentId Int?
-  parent   Category?  @relation("CategoryChild", fields: [parentId], references: [id])
-  Category Category[] @relation("CategoryChild")
-  products Product[]  @relation("CategoryProducts")
+  id             Int               @id @default(autoincrement())
+  name           String            @default("anonymous")
+  parentId       Int?
+  products       ProductCategory[]
+  slugRegistryId Int               @map("slug_registry_id")
+  slug           SlugRegistry      @relation(fields: [slugRegistryId], references: [id])
 
   @@map("categories")
 }
 
+model ProductCategory {
+  productId  Int
+  categoryId Int
+  product    Product  @relation(fields: [productId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@id([productId, categoryId])
+  @@map("product_categories")
+}
+
 model Product {
-  id          Int        @id @default(autoincrement())
-  name        String     @default("anonymous")
-  description String     @db.LongText
-  price_new   Float
-  price_old   Float?     @default(0)
-  categories  Category[] @relation("CategoryProducts")
+  id          Int    @id @default(autoincrement())
+  name        String @default("anonymous")
+  description String
+  price       Float
+  priceSale   Float? @map("price_sale")
 
-  // ✅ Metadata fields
-  createdBy String?  @map("created_by") // Nullable, app sets this
-  createdAt DateTime @default(now()) @map("created_at") // DB sets automatically
-  updatedBy String?  @map("updated_by") // Nullable, app sets this
-  updatedAt DateTime @updatedAt @map("updated_at") // DB auto-updates
+  slugRegistryId Int          @map("slug_registry_id")
+  slug           SlugRegistry @relation(fields: [slugRegistryId], references: [id])
 
-  isDeleted Boolean   @default(false) @map("is_deleted") // Soft delete flag
-  deletedBy String?   @map("deleted_by") // Nullable
-  deletedAt DateTime? @map("deleted_at") // Nullable
+  categories ProductCategory[]
+
+  createdBy String?   @map("created_by")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedBy String?   @map("updated_by")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedBy String?   @map("deleted_by")
+  deletedAt DateTime? @map("deleted_at")
 
   @@map("products")
+}
+
+enum PageType {
+  HOME
+  CATEGORY
+  ABOUT
+}
+
+// Expect category and product page
+model Page {
+  id             Int          @id @default(autoincrement())
+  title          String
+  type           PageType
+  /// [PageContent]
+  content        Json
+  slugRegistryId Int          @map("slug_registry_id")
+  slug           SlugRegistry @relation(fields: [slugRegistryId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  isDeleted Boolean?  @default(false) @map("is_deleted")
+
+  @@map("pages")
+}
+
+model SlugRegistry {
+  id         Int        @id @default(autoincrement())
+  slug       String     @unique
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime?  @updatedAt @map("updated_at")
+  products   Product[]
+  categories Category[]
+  pages      Page[]
+
+  @@map("slug_registries")
 }

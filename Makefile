@@ -2,14 +2,14 @@
 up: 
 	( \
 		cd ~ && \
-		make mysql_up \
+		make postgres_up \
 		make redis_up \
 	)
 
 down:
 	( \
 		cd ~ && \
-		make mysql_stop \
+		make postgres_stop \
 		make redis_stop \
 	)
 
