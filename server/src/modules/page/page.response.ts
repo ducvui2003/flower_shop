@@ -26,7 +26,7 @@ type CategorySlider = {
   items: Array<{
     id: number;
     name: string;
-    thumbnail: Source;
+    thumbnail?: Source;
     link: Link;
   }>;
 };

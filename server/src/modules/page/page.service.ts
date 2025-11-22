@@ -4,9 +4,9 @@ import {
   CategoryPageResponse,
   NavigateResponse,
 } from '@/modules/page/page.response';
-import prismaPageRepository from '@/modules/page/page.repository';
+import pageRepository from '@/modules/page/page.repository';
 import { AppResponse } from '@/types/app-response';
-import { HomePageContent } from '@/modules/page/page';
+import { HomePageContentType } from '@/modules/page/page.model';
 import { StatusCodes } from 'http-status-codes';
 
 interface PageService {
@@ -16,45 +16,45 @@ interface PageService {
   ) => Promise<AppResponse<CategoryPageResponse>>;
   getNavigateStructure: () => Promise<AppResponse<NavigateResponse>>;
 
-  updateHomePageContent: (body: HomePageContent) => Promise<AppResponse<void>>;
+  updateHomePageContent: (
+    body: HomePageContentType,
+  ) => Promise<AppResponse<void>>;
 }
 
 const pageService: PageService = {
   getHomePageStructure: async () => {
+    const { content, title, slug } = await pageRepository.getPageHome();
+    const mediaIds = content.banners.map((id) => id);
+    const mediaModels = await pageRepository.getMedias(mediaIds);
+    const banners = mediaModels.map((item) => ({
+      href: item.url,
+      alt: item.alt ?? '',
+    }));
+    const categoriesData = await pageRepository.getCategories(
+      content.categories.ids,
+    );
+    const itemsCategories = categoriesData.map((item) => ({
+      id: item.id,
+      name: item.name,
+      thumbnail: item.thumbnail
+        ? {
+            href: item.thumbnail.url,
+            alt: item.thumbnail.alt ?? undefined,
+          }
+        : undefined,
+      link: item.slugRegistry.slug,
+    }));
     const data: HomePageResponse = {
-      title: 'Hoa Tươi Nhật Nam',
-      slug: '/',
+      title: title,
+      slug: slug.slug,
       content: {
-        banners: [
-          {
-            href: 'https://res.cloudinary.com/djav4pzzw/image/upload/v1763169698/slider-02_rdd2tf.jpg',
-            alt: 'hoa tuoi nhat nam',
-          },
-          {
-            href: 'https://res.cloudinary.com/djav4pzzw/image/upload/v1763169697/slider-01_va8bfg.jpg',
-            alt: 'hoa tuoi nhat nam',
-          },
-          {
-            href: 'https://res.cloudinary.com/djav4pzzw/image/upload/v1763169696/slider-03_glag06.jpg',
-            alt: 'hoa tuoi nhat nam',
-          },
-        ],
+        banners,
         sections: [
           {
-            title: 'Danh sách các thể loại hoa tươi',
+            title: content.sliders.title,
             type: 'slider',
             content: {
-              items: [
-                {
-                  id: 1,
-                  name: 'Hoa',
-                  thumbnail: {
-                    href: 'https://res.cloudinary.com/djav4pzzw/image/upload/v1763174654/category_pvduzs.jpg',
-                    alt: 'hoa-sinh-nhat',
-                  },
-                  link: '/hoa-sinh nhat',
-                },
-              ],
+              items: itemsCategories,
             },
           },
           {
@@ -113,43 +113,11 @@ const pageService: PageService = {
     });
   },
 
-  getNavigateStructure: (): Promise<AppResponse<NavigateResponse>> => {
-    const data: NavigateResponse = [
-      {
-        title: 'Chủ đề',
-        link: '/chu-de',
-        child: [
-          {
-            title: 'Hoa Sinh Nhật',
-            link: '/chu-de/sinh-nhat',
-          },
-          {
-            title: 'Hoa Khai Trương',
-            link: '/chu-de/khai-truong',
-          },
-          {
-            title: 'Hoa Chúc Mừng',
-            link: '/chu-de/chuc-mung',
-          },
-        ],
-      },
-      {
-        title: 'Đối tượng',
-        link: '/doi-tuong',
-      },
-      {
-        title: 'Kiểu dáng',
-        link: '/kieu-dang',
-      },
-      {
-        title: 'Hoa tươi',
-        link: '/hoa-tuoi',
-      },
-      {
-        title: 'Màu sắc',
-        link: '/mau-sac',
-      },
-    ];
+  getNavigateStructure: async (): Promise<AppResponse<NavigateResponse>> => {
+    const homeData = await pageRepository.getPageHome();
+    const data: NavigateResponse = homeData.content.navigator.map(
+      (item) => item,
+    );
 
     return Promise.resolve({
       code: StatusCodes.OK,
@@ -158,9 +126,9 @@ const pageService: PageService = {
   },
 
   updateHomePageContent: async (
-    content: HomePageContent,
+    content: HomePageContentType,
   ): Promise<AppResponse<void>> => {
-    await prismaPageRepository.updatePageContent(ID_HOME_PAGE, content);
+    await pageRepository.updatePageContent(ID_HOME_PAGE, content);
     return Promise.resolve({
       code: StatusCodes.ACCEPTED,
     });

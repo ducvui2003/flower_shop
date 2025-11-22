@@ -1,4 +1,4 @@
-import { PageContent as PageContentApp } from '@/modules/page/page';
+import { PageContent as PageContentApp } from '@/modules/page/page.model';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

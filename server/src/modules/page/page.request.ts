@@ -1,4 +1,4 @@
-import { PageContent } from '@/modules/page/page';
+import { PageContent } from '@/modules/page/page.model';
 import z from 'zod';
 
 type CategoryPageRequest = {
