@@ -35,7 +35,9 @@ model Category {
   parentId       Int?
   products       ProductCategory[]
   slugRegistryId Int               @map("slug_registry_id")
-  slug           SlugRegistry      @relation(fields: [slugRegistryId], references: [id])
+  slugRegistry   SlugRegistry      @relation(fields: [slugRegistryId], references: [id])
+  thumbnail      Media?            @relation(fields: [thumbnailId], references: [id])
+  thumbnailId    Int?              @map("thumbnail_id")
 
   @@map("categories")
 }
@@ -58,10 +60,9 @@ model Product {
   price       Float
   priceSale   Float? @map("price_sale")
 
-  slugRegistryId Int          @map("slug_registry_id")
-  slug           SlugRegistry @relation(fields: [slugRegistryId], references: [id])
-
-  categories ProductCategory[]
+  slugRegistryId Int               @map("slug_registry_id")
+  slug           SlugRegistry      @relation(fields: [slugRegistryId], references: [id])
+  categories     ProductCategory[]
 
   createdBy String?   @map("created_by")
   createdAt DateTime  @default(now()) @map("created_at")
@@ -107,4 +108,16 @@ model SlugRegistry {
   pages      Page[]
 
   @@map("slug_registries")
+}
+
+model Media {
+  id         Int        @id @default(autoincrement())
+  key        String
+  alt        String?
+  /// [MediaMetadata]
+  metadata   Json       @default("{}")
+  provider   String?
+  categories Category[]
+
+  @@map("medias")
 }

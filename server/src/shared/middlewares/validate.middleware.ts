@@ -1,4 +1,4 @@
-import { AppResponseWrapper } from '@/types/app-response';
+import { AppResponseWrapper } from '@/types/app';
 import MESSAGE from '@/shared/utils/message.util';
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';

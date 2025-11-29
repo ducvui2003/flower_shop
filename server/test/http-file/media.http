@@ -1,0 +1,19 @@
+### Upload a single image to R2
+POST http://localhost:8081/api/media/upload
+Content-Type: multipart/form-data; boundary=--------------------------boundary123
+
+----------------------------boundary123
+Content-Disposition: form-data; name="image"; filename="blur.jpg"
+Content-Type: image/jpeg
+
+< ../test-file/blur.jpg
+----------------------------boundary123--
+
+
+### Upload a single image to R2
+GET http://localhost:8081/api/media/sign-url
+Content-Type: application/json
+
+{
+    "key":"123.png"
+}

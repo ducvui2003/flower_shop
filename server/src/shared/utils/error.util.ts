@@ -1,5 +1,5 @@
 import { AppError, AppErrorBuilder } from '@/shared/errors/app-error';
-import { AppErrorResponse } from '@/types/app-response';
+import { AppErrorResponse } from '@/types/app';
 import { Prisma } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 

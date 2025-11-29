@@ -1,5 +1,8 @@
-import { Link, Source } from '@/types/common';
-
+type Link = string;
+type Source = {
+  href: string;
+  alt?: string;
+};
 type PageResponse<T = string> = {
   title: string;
   slug: string;
@@ -26,7 +29,7 @@ type CategorySlider = {
   items: Array<{
     id: number;
     name: string;
-    thumbnail: Source;
+    thumbnail?: Source;
     link: Link;
   }>;
 };
@@ -66,4 +69,11 @@ type NavigateResponse = Array<{
   child?: Array<NavigateItem>;
 }>;
 
-export type { HomePageResponse, CategoryPageResponse, NavigateResponse };
+type SectionCategory = SectionGeneric<'category-product'>;
+
+export type {
+  HomePageResponse,
+  CategoryPageResponse,
+  NavigateResponse,
+  SectionCategory,
+};
