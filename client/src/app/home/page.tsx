@@ -6,6 +6,7 @@ import pageService from '@/service/page.service';
 import { CategoryProduct, CategorySlider } from '@/types/page.type';
 import React from 'react';
 import { notFound } from 'next/navigation';
+import { DEFAULT_IMAGE } from '@/utils/const.util';
 
 const getData = async () => {
   try {
@@ -34,6 +35,7 @@ const getData = async () => {
       categories,
     };
   } catch (e) {
+    console.log(e);
     return null;
   }
 };
@@ -43,6 +45,7 @@ export default async function HomePage() {
   if (response == null) notFound();
   const { banners, categories, categoryProductData, categorySliderData } =
     response;
+
   return (
     <>
       <Banner data={banners} />
@@ -60,10 +63,12 @@ export default async function HomePage() {
             <SectionGeneric
               title={item.title}
               products={(item.content as CategoryProduct).items.map((item) => ({
-                ...item,
                 id: item.id,
                 name: item.title,
                 basePrice: item.price,
+                salePrice: item.salePrice,
+                link: item.link,
+                thumbnails: item?.thumbnail?.href ?? DEFAULT_IMAGE,
               }))}
               link={(item.content as CategoryProduct).link}
             />

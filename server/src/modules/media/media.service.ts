@@ -1,12 +1,8 @@
 import { MediaModelType } from '@/modules/media/media.model';
 import mediaRepository from '@/modules/media/media.repository';
 import envConfig from '@/shared/config/env.config';
-import { AppResponse } from '@/types/app-response';
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
+import { AppResponse } from '@/types/app';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { StatusCodes } from 'http-status-codes';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { createUrl } from '@/shared/utils/media.util';
@@ -48,9 +44,9 @@ const mediaService: MediaService = {
   ) => {
     try {
       if (file) {
-        await uploadToR2(file, key, metadata);
+        await uploadToS3(file, key, metadata);
       }
-      const data = await mediaRepository.createMedia(key, metadata);
+      const data = await mediaRepository.createMedia(key, 'r2', metadata);
       return {
         code: StatusCodes.CREATED,
         data: {
@@ -77,7 +73,7 @@ const mediaService: MediaService = {
     };
   },
 };
-const uploadToR2 = async (
+const uploadToS3 = async (
   file: FileMulter,
   key: string,
   metadata?: Record<string, string>,

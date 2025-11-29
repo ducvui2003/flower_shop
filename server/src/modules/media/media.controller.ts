@@ -26,7 +26,7 @@ const mediaController = {
       );
       logger.info(data);
 
-      res.status(200).json({
+      res.status(StatusCodes.OK).json({
         success: true,
         data: data,
       });
@@ -44,7 +44,7 @@ const mediaController = {
       const data = await mediaService.createSignUrl(body.key);
       logger.info(data);
 
-      res.status(200).json({
+      res.status(StatusCodes.OK).json({
         success: true,
         data: data,
       });
@@ -66,7 +66,7 @@ const mediaController = {
       );
       logger.info(data);
 
-      res.status(200).json({
+      res.status(StatusCodes.OK).json({
         success: true,
         data: data,
       });

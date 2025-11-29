@@ -1,4 +1,4 @@
-import { AppErrorResponse, AppResponse } from '@/types/app-response';
+import { AppErrorResponse, AppResponse } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
 
 export class AppError extends Error {

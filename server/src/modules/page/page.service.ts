@@ -3,9 +3,10 @@ import {
   HomePageResponse,
   CategoryPageResponse,
   NavigateResponse,
+  SectionCategory,
 } from '@/modules/page/page.response';
 import pageRepository from '@/modules/page/page.repository';
-import { AppResponse } from '@/types/app-response';
+import { AppResponse } from '@/types/app';
 import { HomePageContentType } from '@/modules/page/page.model';
 import { StatusCodes } from 'http-status-codes';
 import { createUrl } from '@/shared/utils/media.util';
@@ -45,6 +46,7 @@ const pageService: PageService = {
         : undefined,
       link: item.slugRegistry.slug,
     }));
+
     const data: HomePageResponse = {
       title: title,
       slug: slug.slug,

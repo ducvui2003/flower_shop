@@ -1,4 +1,4 @@
-import { AppResponseWrapper } from '@/types/app-response';
+import { AppResponseWrapper } from '@/types/app';
 import logger from '@/shared/utils/logger.util';
 import { NextFunction, Request, Response } from 'express';
 

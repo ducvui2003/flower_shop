@@ -17,7 +17,7 @@ import {
 } from '@/shared/services/token.service';
 import { isUniqueCode } from '@/shared/utils/error.util';
 import logger from '@/shared/utils/logger.util';
-import { AppResponse } from '@/types/app-response';
+import { AppResponse } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
 
 interface AuthService {
