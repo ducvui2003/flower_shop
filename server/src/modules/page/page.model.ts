@@ -59,7 +59,7 @@ type HomePageModelType = z.infer<typeof HomePageModel>;
 
 const MediaModel = z.object({
   id: z.int(),
-  url: z.string(),
+  key: z.string(),
   alt: z.string().nullable(),
   metadata: z.unknown().nullable(),
 });

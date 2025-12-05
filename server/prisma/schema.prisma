@@ -112,9 +112,10 @@ model SlugRegistry {
 
 model Media {
   id         Int        @id @default(autoincrement())
-  url        String
+  key        String
   alt        String?
-  metadata   Json?
+  /// [MediaMetadata]
+  metadata   Json       @default("{}")
   provider   String?
   categories Category[]
 

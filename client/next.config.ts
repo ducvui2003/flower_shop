@@ -56,6 +56,10 @@ const nextConfig: NextConfig = {
         hostname: 'flowercorner.b-cdn.net',
         protocol: 'https',
       },
+      {
+        protocol: 'https',
+        hostname: 's3.leanhduc.id.vn',
+      },
     ],
   },
   eslint: {

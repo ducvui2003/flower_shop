@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { AppResponse } from '@/types/app-response';
+import { AppResponse } from '@/types/app';
 import { AppError } from '@/shared/errors/app-error';
 import logger from '@/shared/utils/logger.util';
 
