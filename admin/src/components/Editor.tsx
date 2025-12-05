@@ -1,6 +1,4 @@
-import { FormControl, FormField, FormLabel } from "@/components/admin";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
-import { FieldTitle, useInput } from "ra-core";
 import { ReactNode } from "react";
 
 type EditorProps = {
@@ -10,26 +8,8 @@ type EditorProps = {
   resource?: string;
 };
 
-const Editor = ({ className, source, label, resource }: EditorProps) => {
-  const { id, field } = useInput({
-    source: source,
-  });
-  return (
-    <div className="tiptap-editor">
-      <FormField id={id} className={className} name={field.name}>
-        {label !== false && (
-          <FormLabel>
-            <FieldTitle label={label} source={source} resource={resource} />
-          </FormLabel>
-        )}
-        <FormControl>
-          <div className="border-[1px] focus:ring-1 rounded-2xl overflow-hidden">
-            <SimpleEditor />
-          </div>
-        </FormControl>
-      </FormField>
-    </div>
-  );
+const Editor = () => {
+  return <SimpleEditor />;
 };
 
 export default Editor;
