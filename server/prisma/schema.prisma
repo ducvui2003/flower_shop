@@ -55,24 +55,37 @@ model ProductCategory {
 
 model Product {
   id          Int    @id @default(autoincrement())
-  name        String @default("anonymous")
+  name        String
   description String
   price       Float
-  priceSale   Float? @map("price_sale")
+  priceSale   Float  @map("price_sale")
 
-  slugRegistryId Int               @map("slug_registry_id")
-  slug           SlugRegistry      @relation(fields: [slugRegistryId], references: [id])
-  categories     ProductCategory[]
+  slugRegistryId Int          @map("slug_registry_id")
+  slug           SlugRegistry @relation(fields: [slugRegistryId], references: [id])
 
-  createdBy String?   @map("created_by")
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedBy String?   @map("updated_by")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  isDeleted Boolean   @default(false) @map("is_deleted")
-  deletedBy String?   @map("deleted_by")
-  deletedAt DateTime? @map("deleted_at")
+  slugPlaceholder String            @unique @map("slug_placeholder") @db.VarChar(50)
+  categories      ProductCategory[]
+
+  createdBy     String?        @map("created_by")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedBy     String?        @map("updated_by")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  isDeleted     Boolean        @default(false) @map("is_deleted")
+  deletedBy     String?        @map("deleted_by")
+  deletedAt     DateTime?      @map("deleted_at")
+  productMedias ProductMedia[]
 
   @@map("products")
+}
+
+model ProductMedia {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int     @map("product_id")
+  media     Media   @relation(fields: [mediaId], references: [id])
+  mediaId   Int     @map("media_id")
+
+  @@map("product_medias")
 }
 
 enum PageType {
@@ -111,13 +124,14 @@ model SlugRegistry {
 }
 
 model Media {
-  id         Int        @id @default(autoincrement())
-  key        String
-  alt        String?
+  id            Int            @id @default(autoincrement())
+  key           String
+  alt           String?
   /// [MediaMetadata]
-  metadata   Json       @default("{}")
-  provider   String?
-  categories Category[]
+  metadata      Json           @default("{}")
+  provider      String?
+  categories    Category[]
+  productMedias ProductMedia[]
 
   @@map("medias")
 }
