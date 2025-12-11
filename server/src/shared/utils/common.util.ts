@@ -20,3 +20,9 @@ export function mapperItemsForPage<T, R>(
     items: page.items.map((item) => converter(item)),
   };
 }
+
+export function cleanPatch<T extends object>(data: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(data).filter(([_, value]) => value !== undefined),
+  ) as Partial<T>;
+}

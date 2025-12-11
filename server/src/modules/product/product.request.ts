@@ -13,6 +13,19 @@ const ProductCreateRequestSchema = ProductModel.pick({
   thumbnailIds: z.array(z.number()).optional(),
 });
 
+const ProductUpdateRequestSchema = z.object({
+  name: z.string().min(1).optional(),
+  description: z.string().optional(),
+  price: z.number().optional(),
+  priceSale: z.number().optional(),
+  slug: z
+    .object({
+      name: z.string(),
+    })
+    .optional(),
+  thumbnailIds: z.array(z.number()).optional(),
+});
+
 const ProductGetParamsSchema = z.object({
   slug: z.string(),
 });
@@ -51,12 +64,13 @@ type ProductGetParamsType = z.infer<typeof ProductGetParamsSchema>;
 type ProductGetQueryType = z.infer<typeof ProductGetQuerySchema>;
 type ProductSearchGetQueryType = z.infer<typeof ProductSearchGetQuerySchema>;
 type ProductCreateRequestType = z.infer<typeof ProductCreateRequestSchema>;
-
+type ProductUpdateRequestType = z.infer<typeof ProductUpdateRequestSchema>;
 export {
   ProductCreateRequestSchema,
   ProductGetQuerySchema,
   ProductGetParamsSchema,
   ProductSearchGetQuerySchema,
+  ProductUpdateRequestSchema,
 };
 
 export type {
@@ -64,4 +78,5 @@ export type {
   ProductGetQueryType,
   ProductGetParamsType,
   ProductSearchGetQueryType,
+  ProductUpdateRequestType,
 };

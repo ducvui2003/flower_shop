@@ -2,6 +2,7 @@ import productRepository from '@/modules/product/product.repository';
 import {
   ProductCreateRequestType,
   ProductSearchGetQueryType,
+  ProductUpdateRequestType,
 } from '@/modules/product/product.request';
 import {
   ProductCreateResponseType,
@@ -12,6 +13,7 @@ import { AppErrorBuilder } from '@/shared/errors/app-error';
 import { isUniqueCode } from '@/shared/utils/error.util';
 import {
   applyPlaceholders,
+  cleanPatch,
   mapperItemsForPage,
 } from '@/shared/utils/common.util';
 import { AppResponse, Page } from '@/types/app';
@@ -22,6 +24,10 @@ interface ProductService {
   createProduct: (
     body: ProductCreateRequestType,
   ) => Promise<AppResponse<ProductCreateResponseType>>;
+  updateProduct: (
+    id: number,
+    body: ProductUpdateRequestType,
+  ) => Promise<AppResponse>;
   searchProduct: (
     data: ProductSearchGetQueryType,
   ) => Promise<AppResponse<Page<ProductGetResponseType>>>;
@@ -58,6 +64,17 @@ const productService: ProductService = {
       }
       throw AppErrorBuilder.internal();
     }
+  },
+  updateProduct: async (
+    id: number,
+    body: ProductUpdateRequestType,
+  ): Promise<AppResponse> => {
+    body = cleanPatch(body);
+    await productRepository.updateProduct(id, body);
+    return {
+      code: StatusCodes.OK,
+      message: 'Update product',
+    };
   },
   searchProduct: async (
     data: ProductSearchGetQueryType,

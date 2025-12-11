@@ -10,13 +10,14 @@ const errorMiddleware = () => {
     res: Response,
     _next: NextFunction,
   ) => {
-    logger.info('error middleware');
+    logger.error('error middleware');
     const statusCode = err instanceof AppError ? err.statusCode : 500;
     const message = err.message || 'Internal Server Error';
 
     const response: AppResponse = {
       code: statusCode,
       message,
+      error: err,
     };
     res.status(statusCode).json(response);
   };

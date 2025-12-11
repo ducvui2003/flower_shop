@@ -9,4 +9,5 @@ routers.use(authRouters);
 routers.use(pageRouters);
 routers.use(mediaRouters);
 routers.use(productRouters);
+
 export default routers;

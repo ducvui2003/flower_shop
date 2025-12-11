@@ -2,13 +2,22 @@ import { ProductModelType } from '@/modules/product/product.model';
 import {
   ProductCreateRequestType,
   ProductSearchGetQueryType,
+  ProductUpdateRequestType,
 } from '@/modules/product/product.request';
 import { SLUG_REGISTER_PRODUCT_SINGLE_PAGE } from '@/shared/config/database.config';
+import { AppErrorBuilder } from '@/shared/errors/app-error';
 import prismaService from '@/shared/services/db.service';
+import {
+  isForeignKeyNotFound,
+  isRecordNotExist,
+  isUniqueCode,
+} from '@/shared/utils/error.util';
 import { Page } from '@/types/app';
+import { StatusCodes } from 'http-status-codes';
 
 interface ProductRepository {
   createProduct: (data: ProductCreateRequestType) => Promise<ProductModelType>;
+  updateProduct: (id: number, data: ProductUpdateRequestType) => Promise<void>;
   searchProducts: (
     data: ProductSearchGetQueryType,
   ) => Promise<Page<ProductModelType>>;
@@ -33,16 +42,79 @@ const productRepository: ProductRepository = {
         },
       });
       if (data.thumbnailIds) {
-        ctx.productMedia.createMany({
-          data: data.thumbnailIds.map((mediaId) => ({
-            productId: product.id,
-            mediaId: mediaId,
-          })),
-        });
+        try {
+          ctx.productMedia.createMany({
+            data: data.thumbnailIds.map((mediaId) => ({
+              productId: product.id,
+              mediaId: mediaId,
+            })),
+          });
+        } catch (e) {
+          if (isForeignKeyNotFound(e)) {
+            throw new AppErrorBuilder()
+              .withError(StatusCodes.CONFLICT)
+              .withMessage('Thumbnail entity not exist in database')
+              .build();
+          }
+          throw e;
+        }
       }
       return product;
     });
     return result;
+  },
+  updateProduct: async (
+    id: number,
+    data: ProductUpdateRequestType,
+  ): Promise<void> => {
+    await prismaService.$transaction(async (tx) => {
+      const { slug, thumbnailIds, ...dataProduct } = data;
+      try {
+        await tx.product.update({
+          where: { id: id },
+          data: {
+            ...dataProduct,
+            ...(slug ? { slugPlaceholder: slug.name } : {}),
+          },
+        });
+      } catch (e) {
+        if (isRecordNotExist(e)) {
+          throw new AppErrorBuilder()
+            .withError(StatusCodes.NOT_FOUND)
+            .withMessage(`Product with id ${id} not exist in database`)
+            .build();
+        }
+        if (isUniqueCode(e)) {
+          throw new AppErrorBuilder()
+            .withStatusCode(StatusCodes.CONFLICT)
+            .withError(e)
+            .withMessage(
+              `Slug ${slug?.name} is owned by another product entity`,
+            )
+            .build();
+        }
+        throw e;
+      }
+      if (thumbnailIds) {
+        try {
+          await tx.productMedia.createMany({
+            data: thumbnailIds.map((mediaId) => ({
+              productId: id,
+              mediaId: mediaId,
+            })),
+          });
+        } catch (e) {
+          if (isForeignKeyNotFound(e)) {
+            throw new AppErrorBuilder()
+              .withStatusCode(StatusCodes.CONFLICT)
+              .withError(e)
+              .withMessage('Thumbnail entity not exist in database')
+              .build();
+          }
+          throw e;
+        }
+      }
+    });
   },
   getProductBySlug: async (name: string): Promise<ProductModelType> => {
     return await prismaService.product.findFirstOrThrow({

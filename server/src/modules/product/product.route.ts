@@ -3,6 +3,7 @@ import {
   ProductCreateRequestSchema,
   ProductGetQuerySchema,
   ProductSearchGetQuerySchema,
+  ProductUpdateRequestSchema,
 } from '@/modules/product/product.request';
 import validationBodyMiddleware, {
   validateQueryMiddleware,
@@ -29,5 +30,11 @@ productRouters
     productController.getProduct,
   );
 
-productRouters.route('/product/:id').delete(productController.deleteProduct);
+productRouters
+  .route('/product/:id')
+  .patch(
+    validationBodyMiddleware(ProductUpdateRequestSchema),
+    productController.updateProduct,
+  )
+  .delete(productController.deleteProduct);
 export default productRouters;

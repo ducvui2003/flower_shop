@@ -2,9 +2,9 @@ import {
   ProductCreateRequestType,
   ProductGetQueryType,
   ProductSearchGetQueryType,
+  ProductUpdateRequestType,
 } from '@/modules/product/product.request';
 import productService from '@/modules/product/product.service';
-import logger from '@/shared/utils/logger.util';
 import { NextFunction, Request, Response } from 'express';
 
 const productController = {
@@ -49,6 +49,27 @@ const productController = {
     try {
       const body: ProductCreateRequestType = req.body;
       const response = await productService.createProduct(body);
+      res.status(response.code).json(response);
+    } catch (e) {
+      next(e);
+    }
+  },
+  updateProduct: async (
+    req: Request<
+      {
+        id: string;
+      },
+      object,
+      object,
+      object
+    >,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const id = req.params.id;
+      const body: ProductUpdateRequestType = req.body;
+      const response = await productService.updateProduct(parseInt(id), body);
       res.status(response.code).json(response);
     } catch (e) {
       next(e);
