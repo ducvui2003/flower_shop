@@ -5,6 +5,9 @@ declare global {
     interface Request {
       file?: Multer.File;
       files?: Multer.File[] | { [fieldname: string]: Multer.File[] };
+      locals: {
+        query?: any;
+      };
     }
   }
 }

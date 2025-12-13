@@ -1,0 +1,40 @@
+### Create Product
+POST http://localhost:8081/api/product
+Content-Type: application/json
+
+{
+    "name":"sunny1",
+    "price": 100000,
+    "priceSale": 50000,
+    "description":"",
+    "slug":{
+        "name": "sunny-1"
+    }
+}
+
+### Update Product
+PATCH  http://localhost:8081/api/product/1
+Content-Type: application/json
+
+{
+    "slug":{
+        "name": "sunny-2"
+    }
+}
+### Search Product 
+GET http://localhost:8081/api/product
+Content-Type: application/json
+
+### Get Product By Id
+GET http://localhost:8081/api/product/2?type=id
+Content-Type: application/json
+
+### Get Product By Name
+GET http://localhost:8081/api/product/sunny-2?type=name
+Content-Type: application/json
+
+### Delete Product By Id
+DELETE  http://localhost:8081/api/product/3
+Content-Type: application/json
+
+

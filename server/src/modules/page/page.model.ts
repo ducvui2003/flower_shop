@@ -1,3 +1,4 @@
+import { SlugRegistry } from '@/shared/models/slug.model';
 import z from 'zod';
 
 enum PageType {
@@ -32,13 +33,6 @@ const HomePageContent = z.object({
   }),
 });
 type HomePageContentType = z.infer<typeof HomePageContent>;
-
-const SlugRegistry = z.object({
-  id: z.int(),
-  slug: z.string(),
-});
-
-type SlugRegistryType = z.infer<typeof SlugRegistry>;
 
 const PageModel = z.object({
   id: z.int(),

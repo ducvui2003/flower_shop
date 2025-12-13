@@ -20,3 +20,17 @@ export const isUniqueCode = (
     err.code === 'P2002'
   );
 };
+export const isForeignKeyNotFound = (
+  err: any,
+): err is Prisma.PrismaClientKnownRequestError => {
+  return (
+    err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2003'
+  );
+};
+export const isRecordNotExist = (
+  err: any,
+): err is Prisma.PrismaClientKnownRequestError => {
+  return (
+    err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025'
+  );
+};

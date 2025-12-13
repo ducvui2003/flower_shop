@@ -1,4 +1,4 @@
-import { MediaModelType } from '@/modules/media/media.model';
+import { MediaModelType } from '@/shared/models/media.model';
 import mediaRepository from '@/modules/media/media.repository';
 import envConfig from '@/shared/config/env.config';
 import { AppResponse } from '@/types/app';

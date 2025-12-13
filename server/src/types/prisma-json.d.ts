@@ -5,6 +5,9 @@ declare global {
   namespace PrismaJson {
     type PageContent = PageContentApp;
     type MediaMetadata = Record<string, string>;
+    type ProductSlugPlaceholder = {
+      name: string;
+    };
   }
 }
 

@@ -46,7 +46,6 @@ const pageService: PageService = {
         : undefined,
       link: item.slugRegistry.slug,
     }));
-
     const data: HomePageResponse = {
       title: title,
       slug: slug.slug,
