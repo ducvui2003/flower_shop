@@ -1,11 +1,14 @@
 import { MediaModelType } from '@/shared/models/media.model';
 import mediaRepository from '@/modules/media/media.repository';
 import envConfig from '@/shared/config/env.config';
-import { AppResponse } from '@/types/app';
+import { AppResponse, Page } from '@/types/app';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { StatusCodes } from 'http-status-codes';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { createUrl } from '@/shared/utils/media.util';
+import { MediaSearchGetQueryType } from '@/modules/media/media.request';
+import { mapperItemsForPage } from '@/shared/utils/common.util';
+import { MediaResponseType } from '@/modules/media/media.response';
 
 type FileMulter = Express.Multer.File;
 
@@ -34,6 +37,9 @@ interface MediaService {
     url: string;
     expiresIn: number;
   }>;
+  getMedias: (
+    data: MediaSearchGetQueryType,
+  ) => Promise<AppResponse<Page<MediaModelType>>>;
 }
 
 const mediaService: MediaService = {
@@ -70,6 +76,24 @@ const mediaService: MediaService = {
     return {
       url,
       expiresIn: 3600,
+    };
+  },
+
+  getMedias: async (
+    data: MediaSearchGetQueryType,
+  ): Promise<AppResponse<Page<MediaResponseType>>> => {
+    const page = await mediaRepository.getMedias(data);
+    const newPage = mapperItemsForPage<MediaModelType, MediaResponseType>(
+      page,
+      (item) => ({
+        ...item,
+        href: createUrl(item.key),
+      }),
+    );
+    return {
+      code: StatusCodes.OK,
+      message: 'Search products',
+      data: newPage,
     };
   },
 };

@@ -1,24 +1,14 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  BookImage,
-  Calendar,
-  Flower,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-} from "lucide-react";
+import { BookImage, Flower, Home, Image } from "lucide-react";
 import { NavLink } from "react-router";
 
 // Menu items.
@@ -37,6 +27,11 @@ const items = [
     title: "Category",
     url: "category",
     icon: BookImage,
+  },
+  {
+    title: "Media",
+    url: "media",
+    icon: Image,
   },
 ];
 

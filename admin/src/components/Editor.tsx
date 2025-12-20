@@ -1,15 +1,64 @@
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
-import { ReactNode } from "react";
+import CodeTool from "@editorjs/code";
+import EditorJS, { OutputData, ToolConstructable } from "@editorjs/editorjs";
+import List from "@editorjs/list";
+import Quote from "@editorjs/quote";
+import { useEffect, useRef } from "react";
 
-type EditorProps = {
-  className?: string;
-  source: string;
-  label: ReactNode;
-  resource?: string;
-};
+interface Props {
+  value?: OutputData;
+  onChange?: (data: OutputData) => void;
+}
 
-const Editor = () => {
-  return <SimpleEditor />;
+const Editor = ({ value, onChange }: Props) => {
+  const editorRef = useRef<EditorJS | null>(null);
+  const initEditor = () => {
+    const editor = new EditorJS({
+      holder: "editorjs",
+      data: value,
+      autofocus: true,
+      tools: {
+        list: {
+          class: List,
+          inlineToolbar: true,
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+        },
+        code: CodeTool,
+      },
+      onReady: () => {
+        editorRef.current = editor;
+      },
+      async onChange(api) {
+        const data = await api.saver.save();
+        onChange?.(data); // JSON output
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (editorRef.current === null) {
+      initEditor();
+    }
+
+    return () => {
+      editorRef?.current?.destroy();
+      editorRef.current = null;
+    };
+  }, []);
+
+  // Update value
+  useEffect(() => {
+    if (!editorRef.current || !value) return;
+    editorRef.current.render(value);
+  }, [value]);
+
+  return (
+    <div className="border-2 rounded-xl p-2">
+      <div id="editorjs" className="max-h-[200px] overflow-y-auto"></div>
+    </div>
+  );
 };
 
 export default Editor;

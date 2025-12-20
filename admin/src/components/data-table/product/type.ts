@@ -1,9 +1,11 @@
 type Product = {
   id: number;
   name: string;
-  basePrice: number;
-  salePrice: number;
+  price: number;
+  priceSale: number;
+  href: string;
   createdAt: Date;
   updatedAt: Date;
 };
+
 export type { Product };

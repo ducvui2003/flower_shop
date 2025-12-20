@@ -17,3 +17,6 @@ Content-Type: application/json
 {
     "key":"123.png"
 }
+###
+GET http://localhost:8081/api/media?page=1
+Content-Type: application/json

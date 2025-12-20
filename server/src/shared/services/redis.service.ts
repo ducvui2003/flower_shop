@@ -18,7 +18,7 @@ class RedisService {
   public async connect() {
     if (!this.client.isOpen) {
       await this.client.connect();
-      console.log('✅ Redis connected');
+      logger.debug('✅ Redis connected');
     }
   }
 

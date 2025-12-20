@@ -1,21 +1,31 @@
-import { columns } from "@/components/data-table/product/columns";
-import { DataTable } from "@/components/data-table/product/data-table";
-import { Product } from "@/components/data-table/product/type";
+import { columns } from "@/components/data-table/media/columns";
+import { DataTable } from "@/components/data-table/media/data-table";
 import LoadingBoundary from "@/components/LoadingBoundary";
 import Pagination from "@/components/Pagination";
 import { useApi } from "@/hooks/use-api";
 import httpService from "@/lib/http/http.service";
 import { Page, ResponseApi } from "@/lib/http/http.type";
+import useMediaStore from "@/store/media.store";
 import { useState } from "react";
 
-const ProductDataTable = () => {
+export type Media = {
+  id: number;
+  key: string;
+  metadata: object;
+  alt: string;
+  provider: string | null;
+  href: string;
+};
+
+const MediaDataTable = () => {
   const [page, setPage] = useState<number>(1);
+  const { reload } = useMediaStore();
   const { data } = useApi(async () => {
-    const res = await httpService.get<ResponseApi<Page<Product>>>(
-      `/product?page=${page}`
+    const res = await httpService.get<ResponseApi<Page<Media>>>(
+      `/media?page=${page}`
     );
     return res.data.data;
-  }, [page]);
+  }, [page, reload]);
   return (
     <div>
       <LoadingBoundary data={data}>
@@ -43,4 +53,4 @@ const ProductDataTable = () => {
   );
 };
 
-export default ProductDataTable;
+export default MediaDataTable;
