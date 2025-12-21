@@ -37,4 +37,9 @@ productRouters
     productController.updateProduct,
   )
   .delete(productController.deleteProduct);
+
+productRouters
+  .route('/admin/product/:id')
+  .get(productController.getProductEditing);
+
 export default productRouters;

@@ -22,6 +22,7 @@ interface ProductRepository {
     data: ProductSearchGetQueryType,
   ) => Promise<Page<ProductModelType>>;
   getProductById: (id: number) => Promise<ProductModelType>;
+  getProductEditingById: (id: number) => Promise<ProductModelType>;
   getProductBySlug: (name: string) => Promise<ProductModelType>;
   deleteProductById: (id: number) => Promise<void>;
 }
@@ -173,6 +174,17 @@ const productRepository: ProductRepository = {
       },
       include: {
         slug: true,
+      },
+    });
+  },
+  getProductEditingById: async (id: number): Promise<ProductModelType> => {
+    return await prismaService.product.findFirstOrThrow({
+      where: {
+        id: id,
+      },
+      include: {
+        slug: true,
+        categories: true,
       },
     });
   },

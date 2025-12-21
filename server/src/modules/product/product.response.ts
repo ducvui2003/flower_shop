@@ -34,19 +34,38 @@ const ProductDetailGetResponseSchema = ProductModel.pick({
 }).extend({
   href: z.string(),
 });
+
+const ProductEditingGetResponseSchema = ProductModel.pick({
+  id: true,
+  name: true,
+  price: true,
+  priceSale: true,
+  description: true,
+  slug: true,
+  slugPlaceholder: true,
+  createdAt: true,
+  updatedAt: true,
+  isDeleted: true,
+}).extend({});
+
 type ProductCreateResponseType = z.infer<typeof ProductCreateResponseSchema>;
 type ProductDetailGetResponseType = z.infer<
   typeof ProductDetailGetResponseSchema
 >;
 type ProductGetResponseType = z.infer<typeof ProductGetResponseSchema>;
+type ProductEditingGetResponseType = z.infer<
+  typeof ProductEditingGetResponseSchema
+>;
 
 export {
   ProductCreateResponseSchema,
   ProductDetailGetResponseSchema,
   ProductGetResponseSchema,
+  ProductEditingGetResponseSchema,
 };
 export type {
   ProductCreateResponseType,
   ProductDetailGetResponseType,
   ProductGetResponseType,
+  ProductEditingGetResponseType,
 };

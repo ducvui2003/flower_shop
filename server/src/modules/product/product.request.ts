@@ -1,4 +1,7 @@
-import { ProductModel } from '@/modules/product/product.model';
+import {
+  ProductMetadataModel,
+  ProductModel,
+} from '@/modules/product/product.model';
 import z from 'zod';
 
 const ProductCreateRequestSchema = ProductModel.pick({
@@ -6,6 +9,7 @@ const ProductCreateRequestSchema = ProductModel.pick({
   description: true,
   price: true,
   priceSale: true,
+  metadata: true,
 }).extend({
   slug: z.object({
     name: z.string(),
@@ -24,6 +28,12 @@ const ProductUpdateRequestSchema = z.object({
     })
     .optional(),
   thumbnailIds: z.array(z.number()).optional(),
+  metadata: z
+    .object({
+      title: z.string(),
+      metaDescription: z.string(),
+    })
+    .optional(),
 });
 
 const ProductGetParamsSchema = z.object({

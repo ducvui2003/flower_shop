@@ -7,6 +7,7 @@ import {
 import {
   ProductCreateResponseType,
   ProductDetailGetResponseType,
+  ProductEditingGetResponseType,
   ProductGetResponseType,
 } from '@/modules/product/product.response';
 import { AppErrorBuilder } from '@/shared/errors/app-error';
@@ -19,6 +20,7 @@ import {
 import { AppResponse, Page } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
 import { ProductModelType } from '@/modules/product/product.model';
+import logger from '@/shared/utils/logger.util';
 
 interface ProductService {
   createProduct: (
@@ -34,6 +36,9 @@ interface ProductService {
   getProductById: (
     id: number,
   ) => Promise<AppResponse<ProductDetailGetResponseType>>;
+  getProductEditingById: (
+    id: number,
+  ) => Promise<AppResponse<ProductEditingGetResponseType>>;
   getProductBySlug: (
     slug: string,
   ) => Promise<AppResponse<ProductDetailGetResponseType>>;
@@ -121,6 +126,21 @@ const productService: ProductService = {
           createdAt: productEtt.createdAt,
           updatedAt: productEtt.updatedAt,
         },
+      };
+    } catch (e) {
+      throw AppErrorBuilder.conflict('Not has product with id ' + id);
+    }
+  },
+  getProductEditingById: async (
+    id: number,
+  ): Promise<AppResponse<ProductEditingGetResponseType>> => {
+    try {
+      const productEtt = await productRepository.getProductEditingById(id);
+      logger.info(productEtt);
+      return {
+        code: StatusCodes.OK,
+        message: 'Get product editing by id',
+        data: { ...productEtt },
       };
     } catch (e) {
       throw AppErrorBuilder.conflict('Not has product with id ' + id);

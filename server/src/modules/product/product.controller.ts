@@ -45,6 +45,26 @@ const productController = {
       next(e);
     }
   },
+  getProductEditing: async (
+    req: Request<
+      {
+        id: string;
+      },
+      object,
+      object,
+      ProductGetQueryType
+    >,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const id = req.params.id;
+    try {
+      const response = await productService.getProductEditingById(parseInt(id));
+      res.status(response.code).json(response);
+    } catch (e) {
+      next(e);
+    }
+  },
   createProduct: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body: ProductCreateRequestType = req.body;

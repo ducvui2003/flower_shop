@@ -37,4 +37,7 @@ Content-Type: application/json
 DELETE  http://localhost:8081/api/product/3
 Content-Type: application/json
 
+### Get Product Editing By Id
+GET  http://localhost:8081/api/admin/product/1
+Content-Type: application/json
 

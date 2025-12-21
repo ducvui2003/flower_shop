@@ -3,6 +3,13 @@ import { MediaModel } from '@/shared/models/media.model';
 import { SlugRegistry } from '@/shared/models/slug.model';
 import z from 'zod';
 
+const ProductMetadataModel = z
+  .object({
+    title: z.string(),
+    metaDescription: z.string(),
+  })
+  .nullable();
+
 const ProductModel = MetadataModel.extend({
   id: z.number(),
   name: z.string(),
@@ -11,6 +18,7 @@ const ProductModel = MetadataModel.extend({
   priceSale: z.number(),
   slug: SlugRegistry,
   slugPlaceholder: z.string(),
+  metadata: ProductMetadataModel,
 });
 
 const CategoryModel = z.object({
@@ -41,9 +49,16 @@ const ProductMediaModel = z.object({
 type ProductCategoryModelType = z.infer<typeof ProductCategoryModel>;
 type ProductModelType = z.infer<typeof ProductModel>;
 type ProductMediaModelType = z.infer<typeof ProductMediaModel>;
-export { ProductModel, ProductCategoryModel, ProductMediaModel };
+type ProductMetadataModelType = z.infer<typeof ProductMetadataModel>;
+export {
+  ProductModel,
+  ProductCategoryModel,
+  ProductMediaModel,
+  ProductMetadataModel,
+};
 export type {
   ProductModelType,
   ProductCategoryModelType,
   ProductMediaModelType,
+  ProductMetadataModelType,
 };

@@ -66,6 +66,9 @@ model Product {
   slugPlaceholder String            @unique @map("slug_placeholder") @db.VarChar(50)
   categories      ProductCategory[]
 
+  /// [ProductMetadata]
+  metadata Json?
+
   createdBy     String?        @map("created_by")
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedBy     String?        @map("updated_by")

@@ -12,7 +12,7 @@ const httpService = {
     return appAxios.put<R>(url, body, config);
   },
   patch: <R, B>(url: string, body: B, config?: AxiosRequestConfig) => {
-    return appAxios.put<R>(url, body, config);
+    return appAxios.patch<R>(url, body, config);
   },
   delete: <R>(url: string, config?: AxiosRequestConfig) => {
     return appAxios.delete<R>(url, config);

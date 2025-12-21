@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Pencil } from "lucide-react";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -72,7 +72,12 @@ export const columns: ColumnDef<Product>[] = [
               Copy product ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View product details</DropdownMenuItem>
+            <NavLink to={`/product/update/${product.id.toString()}`}>
+              <DropdownMenuItem>
+                <Pencil />
+                Edit
+              </DropdownMenuItem>
+            </NavLink>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <DialogDeleteProduct id={product.id} />
             </DropdownMenuItem>

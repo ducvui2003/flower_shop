@@ -3,7 +3,7 @@ import cors from 'cors';
 const corsMiddleware = () => {
   return cors({
     origin: envConfig.ALLOW_ORIGINS,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
