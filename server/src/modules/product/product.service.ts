@@ -140,7 +140,21 @@ const productService: ProductService = {
       return {
         code: StatusCodes.OK,
         message: 'Get product editing by id',
-        data: { ...productEtt },
+        data: {
+          id: productEtt.id,
+          name: productEtt.name,
+          price: productEtt.price,
+          slug: productEtt.slug,
+          priceSale: productEtt.priceSale,
+          description: productEtt.description,
+          createdAt: productEtt.createdAt,
+          isDeleted: productEtt.isDeleted,
+          slugPlaceholder: productEtt.slugPlaceholder,
+          updatedAt: productEtt.updatedAt,
+          metadata: productEtt.metadata,
+          categoryIds: productEtt.categories.map((item) => item.categoryId),
+          imageIds: productEtt.productMedias.map((item) => item.mediaId),
+        },
       };
     } catch (e) {
       throw AppErrorBuilder.conflict('Not has product with id ' + id);

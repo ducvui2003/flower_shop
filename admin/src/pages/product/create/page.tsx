@@ -1,3 +1,4 @@
+import DialogGetImage from "@/components/dialog/dialog-get-image";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/ui/button";
 import {
@@ -81,7 +82,6 @@ const ProductCreatePage = () => {
     if (!result.success) {
       logger.error(result.error.flatten());
 
-      // optional: show toast
       toast.error("Invalid form data");
 
       return;
@@ -129,7 +129,18 @@ const ProductCreatePage = () => {
               )}
             />
             <Separator className="my-2" />
-            <h3 className="text-xl font-bold">Media</h3>
+            <h3 className="text-xl font-bold mb-5">Media</h3>
+            <DialogGetImage
+              className="w-full"
+              onImagesChangeChanged={(images) => console.log(images)}
+            >
+              <div className="w-full grid place-items-center h-20 border-dotted border-2 border-gray-400 bg-gray-100 rounded">
+                <Button type="button" className="bg-green-500">
+                  Choose Image
+                </Button>
+              </div>
+            </DialogGetImage>
+
             <Separator className="my-2" />
             <FieldGroup>
               <h3 className="text-xl font-bold">Search Engine</h3>

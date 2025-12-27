@@ -57,7 +57,6 @@ const pageRepository: PageRepository = {
       },
     });
   },
-
   getCategories: async (ids) => {
     return await prismaService.category.findMany({
       select: {

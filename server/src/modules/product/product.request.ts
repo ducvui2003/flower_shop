@@ -1,7 +1,4 @@
-import {
-  ProductMetadataModel,
-  ProductModel,
-} from '@/modules/product/product.model';
+import { ProductModel } from '@/modules/product/product.model';
 import z from 'zod';
 
 const ProductCreateRequestSchema = ProductModel.pick({
@@ -14,7 +11,7 @@ const ProductCreateRequestSchema = ProductModel.pick({
   slug: z.object({
     name: z.string(),
   }),
-  thumbnailIds: z.array(z.number()).optional(),
+  images: z.array(z.number()).optional(),
 });
 
 const ProductUpdateRequestSchema = z.object({
@@ -27,7 +24,7 @@ const ProductUpdateRequestSchema = z.object({
       name: z.string(),
     })
     .optional(),
-  thumbnailIds: z.array(z.number()).optional(),
+  images: z.array(z.int()).optional(),
   metadata: z
     .object({
       title: z.string(),
@@ -56,7 +53,6 @@ const ProductSearchGetQuerySchema = z.object({
     z.number().optional(),
   ),
   sort: z.enum(['price_asc', 'price_desc']).default('price_asc'),
-
   page: z.preprocess(
     (v) => (v === undefined ? undefined : Number(v)),
     z.number().int().min(1).default(1),

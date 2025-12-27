@@ -8,6 +8,13 @@ type Product = {
   updatedAt: Date;
 };
 
+type Image = {
+  id: number;
+  key: string;
+  href: string;
+  alt: string;
+};
+
 type ProductEditing = {
   id: number;
   name: string;
@@ -27,14 +34,12 @@ type ProductEditing = {
     id: number;
     slug: string;
   };
-  categories: Array<{
-    categoryId: number;
-    createdAt: Date;
-  }>;
+  categoryIds: Array<number>;
   metadata?: {
     title: string;
     metaDescription: string;
   };
+  imageIds: Array<number>;
 };
 
-export type { Product, ProductEditing };
+export type { Product, ProductEditing, Image };

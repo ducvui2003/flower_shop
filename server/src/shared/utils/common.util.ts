@@ -20,6 +20,12 @@ export function mapperItemsForPage<T, R>(
     items: page.items.map((item) => converter(item)),
   };
 }
+export function mapperItems<T, R>(
+  items: Array<T>,
+  converter: (item: T) => R,
+): Array<R> {
+  return items.map((item) => converter(item));
+}
 
 export function cleanPatch<T extends object>(data: T): Partial<T> {
   return Object.fromEntries(

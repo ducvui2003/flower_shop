@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import httpService from "@/lib/http/http.service";
 import { Trash2 } from "lucide-react";
 
 type DialogDeleteMediaProps = {

@@ -1,5 +1,8 @@
 import prismaService from '@/shared/services/db.service';
-import { MediaSearchGetQueryType } from '@/modules/media/media.request';
+import {
+  MediaGetQueryType,
+  MediaSearchGetQueryType,
+} from '@/modules/media/media.request';
 import { MediaModelType } from '@/shared/models/media.model';
 import { Page } from '@/types/app';
 
@@ -10,6 +13,7 @@ interface MediaRepository {
     metadata?: Record<string, string>,
   ) => Promise<MediaModelType>;
   getMedias: (data: MediaSearchGetQueryType) => Promise<Page<MediaModelType>>;
+  getMediasByIds: (data: MediaGetQueryType) => Promise<Array<MediaModelType>>;
 }
 
 const mediaRepository: MediaRepository = {
@@ -27,10 +31,17 @@ const mediaRepository: MediaRepository = {
     });
   },
   getMedias: async (data: MediaSearchGetQueryType) => {
+    let whereClaude = {};
+    if (data.excludes) {
+      whereClaude = {
+        id: { notIn: data.excludes },
+      };
+    }
     const [items, totalItems] = await prismaService.$transaction([
       prismaService.media.findMany({
         take: data.limit,
         skip: (data.page - 1) * data.limit,
+        where: whereClaude,
         select: {
           id: true,
           key: true,
@@ -41,7 +52,6 @@ const mediaRepository: MediaRepository = {
       }),
       prismaService.media.count(),
     ]);
-
     return {
       items,
       totalItems,
@@ -49,6 +59,23 @@ const mediaRepository: MediaRepository = {
       currentPage: data.page,
       isLast: data.page === Math.ceil(totalItems / data.limit),
     };
+  },
+  getMediasByIds: async (data: MediaGetQueryType) => {
+    const items = prismaService.media.findMany({
+      where: {
+        id: {
+          in: data.ids,
+        },
+      },
+      select: {
+        id: true,
+        key: true,
+        alt: true,
+        metadata: true,
+        provider: true,
+      },
+    });
+    return items;
   },
 };
 

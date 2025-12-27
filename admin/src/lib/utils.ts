@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
+import { createContext, useContext } from "react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -52,3 +53,17 @@ export const diffObjects = (
 
   return result;
 };
+
+export function createCtx<A extends object | null>() {
+  const ctx = createContext<A | undefined>(undefined);
+
+  function useCtx() {
+    const c = useContext(ctx);
+    if (c === undefined) {
+      throw new Error("Context must be used within a Provider");
+    }
+    return c;
+  }
+
+  return [useCtx, ctx.Provider] as const;
+}

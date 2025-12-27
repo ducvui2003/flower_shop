@@ -46,7 +46,11 @@ const ProductEditingGetResponseSchema = ProductModel.pick({
   createdAt: true,
   updatedAt: true,
   isDeleted: true,
-}).extend({});
+  metadata: true,
+}).extend({
+  imageIds: z.array(z.number()).optional(),
+  categoryIds: z.array(z.number()).optional(),
+});
 
 type ProductCreateResponseType = z.infer<typeof ProductCreateResponseSchema>;
 type ProductDetailGetResponseType = z.infer<

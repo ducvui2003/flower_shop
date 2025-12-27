@@ -5,7 +5,7 @@ import HomePage from "@/pages/home/page";
 import RootLayout from "@/pages/layout";
 import MediaPage from "@/pages/media/page";
 import ProductCreatePage from "@/pages/product/create/page";
-import { productLoader } from "@/pages/product/update/use-loader";
+import { productLoader } from "@/pages/product/update/loader";
 import ProductPage from "@/pages/product/page";
 import ProductUpdatePage from "@/pages/product/update/page";
 

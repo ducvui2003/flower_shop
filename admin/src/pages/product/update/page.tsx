@@ -1,4 +1,5 @@
-import { ProductEditing } from "@/components/data-table/product/type";
+import { Image, ProductEditing } from "@/components/data-table/product/type";
+import DialogGetImage from "@/components/dialog/dialog-get-image";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,9 +21,10 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import logger from "@/config/logger.util";
 import httpService from "@/lib/http/http.service";
-import { diffObjects } from "@/lib/utils";
+import { cn, diffObjects } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
+import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import { toast } from "sonner";
@@ -59,19 +61,32 @@ const formSchema = z.object({
       metaDescription: z.string(),
     })
     .nullable(),
-  thumbnailIds: z.array(z.number()).optional(),
+  images: z
+    .array(
+      z.object({
+        id: z.number(),
+        key: z.string(),
+        href: z.string(),
+        alt: z.string(),
+      })
+    )
+    .optional(),
 });
 type FormInput = z.input<typeof formSchema>;
 type FormOutput = z.output<typeof formSchema>;
 
 const ProductUpdatePage = () => {
-  const product = useLoaderData<ProductEditing>();
+  const product = useLoaderData<
+    ProductEditing & {
+      images?: Array<Image>;
+    }
+  >();
   const formInitialize: FormInput = {
     name: product.name,
     description: product.description ?? "",
     price: product.price,
     priceSale: product.priceSale,
-    categories: product.categories.map((c) => c.categoryId),
+    categories: product.categoryIds,
     slug: { name: product.slugPlaceholder },
     metadata: product.metadata
       ? {
@@ -79,7 +94,7 @@ const ProductUpdatePage = () => {
           metaDescription: product.metadata.metaDescription,
         }
       : null,
-    thumbnailIds: [],
+    images: product.images,
   };
 
   const form = useForm<FormInput>({
@@ -89,7 +104,7 @@ const ProductUpdatePage = () => {
       description: product.description,
       price: product.price,
       priceSale: product.priceSale,
-      categories: product.categories.map((c) => c.categoryId),
+      categories: product.categoryIds,
       slug: { name: product.slugPlaceholder },
       metadata: product.metadata
         ? {
@@ -97,7 +112,7 @@ const ProductUpdatePage = () => {
             metaDescription: product.metadata.metaDescription,
           }
         : null,
-      thumbnailIds: [],
+      images: product.images,
     },
   });
 
@@ -117,6 +132,7 @@ const ProductUpdatePage = () => {
     }
     diffData = {
       ...diffData,
+      images: (diffData.images as Array<Image>).map((i) => i.id),
       metadata: {
         ...data.metadata,
         ...diffData.metadata,
@@ -164,7 +180,48 @@ const ProductUpdatePage = () => {
               )}
             />
             <Separator className="my-2" />
-            <h3 className="text-xl font-bold">Media</h3>
+            <Controller
+              name="images"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Images</FieldLabel>
+                  <DialogGetImage {...field} className="w-full">
+                    <div className="w-full grid place-items-center h-20 border-dotted border-2 border-gray-400 bg-gray-100 rounded">
+                      <Button type="button" className="bg-green-500">
+                        Choose Image
+                      </Button>
+                    </div>
+                  </DialogGetImage>
+
+                  <div className="grid mt-4 grid-cols-6 gap-4">
+                    {field.value?.map((item, i) => (
+                      <div
+                        key={item.id}
+                        className={cn(i === 0 && "row-span-1")}
+                      >
+                        <div className="p-4 relative rounded shadow w-fit bg-gray-50">
+                          <X
+                            className="absolute top-0 right-0 text-sm hover:opacity-70 text-red-500 cursor-pointer"
+                            onClick={() =>
+                              field.onChange(
+                                field.value?.filter((i) => item.id !== i.id)
+                              )
+                            }
+                          />
+                          <img
+                            src={item.href}
+                            className="aspect-square object-contain"
+                            alt={item.alt}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Field>
+              )}
+            />
+
             <Separator className="my-2" />
             <FieldGroup>
               <h3 className="text-xl font-bold">Search Engine</h3>
@@ -231,7 +288,6 @@ const ProductUpdatePage = () => {
                   return (
                     <Field data-invalid={fieldState.invalid}>
                       <FieldLabel>Price</FieldLabel>
-
                       <Input
                         type="number"
                         value={value}

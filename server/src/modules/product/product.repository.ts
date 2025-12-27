@@ -1,4 +1,7 @@
-import { ProductModelType } from '@/modules/product/product.model';
+import {
+  ProductModelType,
+  ProductWithMediaIdModelType,
+} from '@/modules/product/product.model';
 import {
   ProductCreateRequestType,
   ProductSearchGetQueryType,
@@ -12,6 +15,7 @@ import {
   isRecordNotExist,
   isUniqueCode,
 } from '@/shared/utils/error.util';
+import logger from '@/shared/utils/logger.util';
 import { Page } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
 
@@ -22,7 +26,7 @@ interface ProductRepository {
     data: ProductSearchGetQueryType,
   ) => Promise<Page<ProductModelType>>;
   getProductById: (id: number) => Promise<ProductModelType>;
-  getProductEditingById: (id: number) => Promise<ProductModelType>;
+  getProductEditingById: (id: number) => Promise<ProductWithMediaIdModelType>;
   getProductBySlug: (name: string) => Promise<ProductModelType>;
   deleteProductById: (id: number) => Promise<void>;
 }
@@ -42,10 +46,10 @@ const productRepository: ProductRepository = {
           slug: true,
         },
       });
-      if (data.thumbnailIds) {
+      if (data.images) {
         try {
           ctx.productMedia.createMany({
-            data: data.thumbnailIds.map((mediaId) => ({
+            data: data.images.map((mediaId) => ({
               productId: product.id,
               mediaId: mediaId,
             })),
@@ -69,7 +73,7 @@ const productRepository: ProductRepository = {
     data: ProductUpdateRequestType,
   ): Promise<void> => {
     await prismaService.$transaction(async (tx) => {
-      const { slug, thumbnailIds, ...dataProduct } = data;
+      const { slug, images: thumbnailIds, ...dataProduct } = data;
       try {
         await tx.product.update({
           where: { id: id },
@@ -98,6 +102,11 @@ const productRepository: ProductRepository = {
       }
       if (thumbnailIds) {
         try {
+          await tx.productMedia.deleteMany({
+            where: {
+              productId: id,
+            },
+          });
           await tx.productMedia.createMany({
             data: thumbnailIds.map((mediaId) => ({
               productId: id,
@@ -177,14 +186,25 @@ const productRepository: ProductRepository = {
       },
     });
   },
-  getProductEditingById: async (id: number): Promise<ProductModelType> => {
+  getProductEditingById: async (
+    id: number,
+  ): Promise<ProductWithMediaIdModelType> => {
     return await prismaService.product.findFirstOrThrow({
       where: {
         id: id,
       },
       include: {
         slug: true,
-        categories: true,
+        categories: {
+          select: {
+            categoryId: true,
+          },
+        },
+        productMedias: {
+          select: {
+            mediaId: true,
+          },
+        },
       },
     });
   },

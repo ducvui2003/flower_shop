@@ -1,5 +1,6 @@
 import {
   MediaCreateWithFileType,
+  MediaGetQueryType,
   MediaSearchGetQueryType,
   MediaSignUrlRequestType,
 } from '@/modules/media/media.request';
@@ -26,7 +27,6 @@ const mediaController = {
         body.metadata,
       );
       logger.info(data);
-
       res.status(StatusCodes.OK).json({
         success: true,
         data: data,
@@ -84,6 +84,19 @@ const mediaController = {
       const query: MediaSearchGetQueryType = req.locals.query;
       const data = await mediaService.getMedias(query);
 
+      res.status(data.code).json(data);
+    } catch (err) {
+      next(err);
+    }
+  },
+  getMediasByIds: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const query: MediaGetQueryType = req.locals.query;
+      const data = await mediaService.getMediasByIds(query);
       res.status(data.code).json(data);
     } catch (err) {
       next(err);

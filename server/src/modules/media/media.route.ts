@@ -2,6 +2,7 @@ import mediaController from '@/modules/media/media.controller';
 import uploadMiddleware from '@/modules/media/media.middleware';
 import {
   MediaCreateWithFile,
+  MediaGetQuerySchema,
   MediaSearchGetQuerySchema,
   MediaSignUrlRequest,
 } from '@/modules/media/media.request';
@@ -28,6 +29,11 @@ mediaRouters
     '/media',
     validateQueryMiddleware(MediaSearchGetQuerySchema),
     mediaController.getMedias,
+  )
+  .get(
+    '/media-id',
+    validateQueryMiddleware(MediaGetQuerySchema),
+    mediaController.getMediasByIds,
   )
   .post(
     '/media/sign-url',
