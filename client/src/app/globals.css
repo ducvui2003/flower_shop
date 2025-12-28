@@ -227,8 +227,12 @@
     @apply pc:text-4xl text-center text-2xl font-light;
   }
 }
+
+@utility product-image {
+  @apply rounded outline-2 outline-gray-300;
+}
 @utility product-image-selected {
-  @apply outline-primary rounded outline-2;
+  @apply outline-primary;
 }
 @utility container {
   margin-inline: auto;

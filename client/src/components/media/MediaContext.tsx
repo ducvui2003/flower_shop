@@ -1,5 +1,5 @@
 'use client';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 import { MediaType } from '@/types/media.type';
 import { StaticImageData } from 'next/image';
 import { createContext, ReactNode, useContext, useState } from 'react';

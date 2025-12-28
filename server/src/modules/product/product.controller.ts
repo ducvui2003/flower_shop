@@ -11,7 +11,7 @@ const productController = {
   getProducts: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: ProductSearchGetQueryType = req.locals.query;
-      const response = await productService.searchProduct(query);
+      const response = await productService.searchProducts(query);
       res.status(response.code).json(response);
     } catch (e) {
       next(e);

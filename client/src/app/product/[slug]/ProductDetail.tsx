@@ -22,8 +22,8 @@ export default function ProductDetail({
     id,
     images,
     name,
-    priceNew: salePrice,
-    priceOld: basePrice,
+    priceSale: salePrice,
+    price: basePrice,
     views,
     tag,
   },
@@ -33,7 +33,12 @@ export default function ProductDetail({
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="pc:grid-cols-2 grid grid-cols-1 gap-10">
         <div>
-          <ProductImages images={[...(images ?? [])]} />
+          <ProductImages
+            images={images.map((i) => ({
+              alt: i.alt ?? '',
+              src: i.src,
+            }))}
+          />
         </div>
         <div className="relative lg:border-gray-200">
           <div>
@@ -116,13 +121,14 @@ export default function ProductDetail({
           <Separator className="my-2" />
           <div className="flex gap-3">
             <Link
-              href={APP_INFO.PHONE}
+              href={`tel:${APP_INFO.PHONE}`}
               className="inline-flex w-[150px] items-center justify-center gap-3 rounded-md border-2 border-green-600 px-3 py-2 text-green-600 transition-colors hover:bg-green-600 hover:text-white"
             >
               <ClientIcon icon={'ic:baseline-phone'} />
               {TEXT.PRODUCT_DETAIL.ORDER}
             </Link>
             <Link
+              target="_blank"
               href={APP_INFO.ZALO_OA}
               className="inline-flex w-[150px] items-center justify-center gap-3 rounded-md border-2 border-blue-600 px-3 py-2 text-blue-600 transition-colors hover:bg-blue-600 hover:text-white"
             >

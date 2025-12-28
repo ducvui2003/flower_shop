@@ -1,6 +1,6 @@
 type Link = string;
 type Source = {
-  href: string;
-  alt?: string;
+  src: string;
+  alt: string | null;
 };
 export type { Link, Source };

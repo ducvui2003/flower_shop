@@ -1,6 +1,7 @@
 import { SupplierType } from '@/types/supplier.type';
 import { z } from 'zod';
 import { CategoryType } from './category.type';
+import { Link, Source } from '@/types/common.type';
 type ProductSearchParamsType = {
   price?: string[];
   category?: string[];
@@ -13,8 +14,8 @@ type ProductCardType = {
   name: string;
   basePrice: number;
   salePrice: number;
-  link: string;
-  thumbnails?: string[] | string;
+  link: Link;
+  thumbnails?: Source[] | Source;
   view?: number;
   className?: string;
   numSell?: number;

@@ -1,7 +1,7 @@
 import { MetadataModel } from '@/shared/models/common.model';
 import { MediaModel } from '@/shared/models/media.model';
 import { SlugRegistry } from '@/shared/models/slug.model';
-import z, { object } from 'zod';
+import z from 'zod';
 
 const ProductMetadataModel = z
   .object({
@@ -65,6 +65,7 @@ const ProductMediaModel = z.object({
   mediaId: z.number(),
   product: ProductModel,
   media: MediaModel,
+  isThumbnail: z.boolean().nullable().default(false),
 });
 
 type ProductCategoryModelType = z.infer<typeof ProductCategoryModel>;

@@ -2,7 +2,7 @@ import Link from '@/components/Link';
 import { Button } from '@/components/ui/button';
 import { cn, currency } from '@/lib/utils';
 import { ProductCardType } from '@/types/product.type';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import Image from 'next/image';
 
@@ -32,8 +32,8 @@ const ProductCard = ({
         <div className="pc:h-[250px] relative h-[150px] overflow-hidden rounded-t-lg">
           {!Array.isArray(thumbnails) && (
             <Image
-              src={thumbnails ?? DEFAULT_IMAGE}
-              alt={name}
+              src={thumbnails?.src ?? DEFAULT_IMAGE_PRODUCT.src}
+              alt={thumbnails?.alt ?? DEFAULT_IMAGE_PRODUCT.alt}
               fill
               className="object-cover transition-all group-hover:scale-110"
             />

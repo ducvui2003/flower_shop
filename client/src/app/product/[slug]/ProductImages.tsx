@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 type ProductImagesProps = {
-  images: { url: string; alt: string }[];
+  images: { src: string; alt: string }[];
 };
 
 export default function ProductImages({ images }: ProductImagesProps) {
@@ -20,23 +20,24 @@ export default function ProductImages({ images }: ProductImagesProps) {
               )}
             >
               <Image
-                src={img.url}
+                src={img.src}
                 alt={img.alt}
                 fill
+                sizes="(max-width: 640px) 25w, (max-width: 1280px) 10vw"
                 className={cn(
-                  'pointer-events-none absolute inset-0 rounded bg-cover bg-center select-none',
+                  'pointer-events-none absolute inset-0 rounded bg-cover bg-center object-contain select-none',
                 )}
               />
             </div>
           ))}
         </div>
 
-        <div className="relative aspect-square flex-1 rounded">
+        <div className="relative aspect-square flex-1">
           <Image
             id="product-thumbnail"
-            src={images[0].url}
+            src={images[0].src}
             alt={images[0].alt}
-            className="object-cover"
+            className="rounded bg-gray-100 object-contain"
             fill
             sizes="100vw"
           />

@@ -1,42 +1,27 @@
 type Link = string;
 type Source = {
-  href: string;
-  alt?: string;
+  src: string;
+  alt: string | null;
 };
 type PageResponse<T = string> = {
   title: string;
   slug: string;
   content: T;
-  createdAt: Date;
-  updatedAt: Date;
 };
 
 type Product = {
   id: number;
   title: string;
   price: number;
-  salePrice: number;
+  priceSale: number;
   thumbnail?: Source;
   link: Link;
 };
 
 type ContentMap = {
-  slider: CategorySlider;
-  'category-product': CategoryProduct;
-};
-
-type CategorySlider = {
-  items: Array<{
-    id: number;
-    name: string;
-    thumbnail?: Source;
-    link: Link;
-  }>;
-};
-
-type CategoryProduct = {
-  items: Array<Product>;
-  link: Link;
+  banner: Array<Source>;
+  categorySlider: CategorySlider;
+  categoryProduct: CategoryProduct;
 };
 
 type SectionGeneric<T extends keyof ContentMap> = {
@@ -45,12 +30,23 @@ type SectionGeneric<T extends keyof ContentMap> = {
   content: ContentMap[T];
 };
 
-type HomePageContent = {
-  banners: Array<Source>;
-  sections: Array<SectionGeneric<keyof ContentMap>>;
+type SectionBanner = SectionGeneric<'banner'>;
+type SectionCategorySlider = SectionGeneric<'categorySlider'>;
+type SectionCategoryProduct = SectionGeneric<'categoryProduct'>;
+
+type CategorySlider = Array<{
+  id: number;
+  name: string;
+  thumbnail?: Source;
+  link: Link;
+}>;
+
+type CategoryProduct = {
+  items: Array<Product>;
+  link: Link;
 };
 
-type HomePageResponse = PageResponse<HomePageContent>;
+type HomePageResponse = PageResponse<Array<SectionGeneric<keyof ContentMap>>>;
 
 type CategoryPageContent = {
   items: Product[];
@@ -69,11 +65,13 @@ type NavigateResponse = Array<{
   child?: Array<NavigateItem>;
 }>;
 
-type SectionCategory = SectionGeneric<'category-product'>;
-
 export type {
   HomePageResponse,
   CategoryPageResponse,
   NavigateResponse,
-  SectionCategory,
+  CategorySlider,
+  //Sections
+  SectionBanner,
+  SectionCategorySlider,
+  SectionCategoryProduct,
 };

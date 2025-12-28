@@ -26,7 +26,7 @@ GET http://localhost:8081/api/product
 Content-Type: application/json
 
 ### Get Product By Id
-GET http://localhost:8081/api/product/2?type=id
+GET http://localhost:8081/api/product/1?type=id
 Content-Type: application/json
 
 ### Get Product By Name

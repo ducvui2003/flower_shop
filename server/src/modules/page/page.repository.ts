@@ -1,24 +1,29 @@
-import prismaService from '@/shared/services/db.service';
-import { ID_HOME_PAGE } from '@/shared/config/database.config';
 import {
   CategoryModelType,
-  HomePageModelType,
   MediaModelType,
+  NavigatorModelType,
   PageContent,
+  PageModelType,
 } from '@/modules/page/page.model';
+import prismaService from '@/shared/services/db.service';
+import { PageSection } from '@prisma/client';
 
 interface PageRepository {
-  getPageHome: () => Promise<HomePageModelType>;
+  getPage: (id: number) => Promise<PageModelType>;
+  getPageSection: (pageId: number) => Promise<Array<PageSection>>;
   updatePageContent: (id: number, content: PageContent) => Promise<void>;
   getMedias: (ids: Array<number>) => Promise<Array<MediaModelType>>;
   getCategories: (ids: Array<number>) => Promise<Array<CategoryModelType>>;
+  getNavigators: () => Promise<Array<NavigatorModelType>>;
 }
 
 const pageRepository: PageRepository = {
-  getPageHome: async () => {
-    return await prismaService.page.findFirstOrThrow({
+  getPage: async (id: number): Promise<PageModelType> => {
+    return prismaService.page.findFirstOrThrow({
+      where: {
+        id: id,
+      },
       select: {
-        content: true,
         createdAt: true,
         id: true,
         isDeleted: true,
@@ -33,16 +38,18 @@ const pageRepository: PageRepository = {
           },
         },
       },
+    });
+  },
+  getPageSection: async (pageId: number): Promise<Array<PageSection>> => {
+    return await prismaService.pageSection.findMany({
       where: {
-        slugRegistryId: ID_HOME_PAGE,
+        pageId: pageId,
       },
     });
   },
   updatePageContent: async (id: number, content: PageContent) => {
     await prismaService.page.update({
-      data: {
-        content: content,
-      },
+      data: {},
       where: {
         id: id,
       },
@@ -57,12 +64,15 @@ const pageRepository: PageRepository = {
       },
     });
   },
+  getNavigators: async (): Promise<Array<NavigatorModelType>> => {
+    const navigators = await prismaService.navigator.findMany();
+    return navigators;
+  },
   getCategories: async (ids) => {
     return await prismaService.category.findMany({
       select: {
         id: true,
         name: true,
-        parentId: true,
         slugRegistry: {
           select: {
             id: true,

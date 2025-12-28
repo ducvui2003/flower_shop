@@ -12,11 +12,11 @@ type FilterDataType = {
 type ProductPageType = {
   id: number;
   name: string;
-  priceOld: number;
-  priceNew: number;
+  price: number;
+  priceSale: number;
   images: {
-    url: string;
-    alt: string;
+    src: string;
+    alt: string | null;
   }[];
   description: string;
   views: number;

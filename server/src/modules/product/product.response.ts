@@ -16,11 +16,16 @@ const ProductGetResponseSchema = ProductModel.pick({
   name: true,
   price: true,
   priceSale: true,
-  description: true,
   createdAt: true,
   updatedAt: true,
 }).extend({
   href: z.string(),
+  thumbnail: z
+    .object({
+      src: z.string(),
+      alt: z.string().nullable(),
+    })
+    .optional(),
 });
 
 const ProductDetailGetResponseSchema = ProductModel.pick({
@@ -33,6 +38,12 @@ const ProductDetailGetResponseSchema = ProductModel.pick({
   updatedAt: true,
 }).extend({
   href: z.string(),
+  images: z.array(
+    z.object({
+      src: z.string(),
+      alt: z.string().nullable(),
+    }),
+  ),
 });
 
 const ProductEditingGetResponseSchema = ProductModel.pick({

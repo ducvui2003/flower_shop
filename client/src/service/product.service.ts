@@ -6,7 +6,7 @@ import {
 } from '@/types/review.type';
 import httpClient from '@/lib/http.client';
 import { ProductCardType } from '@/types/product.type';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 
 const productService = {
   getReviewsOfProduct: async (
@@ -48,7 +48,7 @@ const productService = {
           salePrice: 8000,
           name: 'hello123',
           slug: '/123',
-          thumbnail: DEFAULT_IMAGE,
+          thumbnail: DEFAULT_IMAGE_PRODUCT,
           href: '/hoa-tot-nghiep/tot-nghiep/hoa-hong',
         })),
       paging: {

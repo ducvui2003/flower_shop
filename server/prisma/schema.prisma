@@ -32,7 +32,6 @@ model User {
 model Category {
   id             Int               @id @default(autoincrement())
   name           String            @default("anonymous")
-  parentId       Int?
   products       ProductCategory[]
   slugRegistryId Int               @map("slug_registry_id")
   slugRegistry   SlugRegistry      @relation(fields: [slugRegistryId], references: [id])
@@ -82,11 +81,12 @@ model Product {
 }
 
 model ProductMedia {
-  id        Int     @id @default(autoincrement())
-  product   Product @relation(fields: [productId], references: [id])
-  productId Int     @map("product_id")
-  media     Media   @relation(fields: [mediaId], references: [id])
-  mediaId   Int     @map("media_id")
+  id          Int      @id @default(autoincrement())
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   Int      @map("product_id")
+  media       Media    @relation(fields: [mediaId], references: [id])
+  mediaId     Int      @map("media_id")
+  isThumbnail Boolean? @default(false)
 
   @@unique([productId, mediaId])
   @@map("product_medias")
@@ -98,21 +98,53 @@ enum PageType {
   ABOUT
 }
 
-// Expect category and product page
 model Page {
   id             Int          @id @default(autoincrement())
   title          String
   type           PageType
-  /// [PageContent]
-  content        Json
   slugRegistryId Int          @map("slug_registry_id")
   slug           SlugRegistry @relation(fields: [slugRegistryId], references: [id])
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  isDeleted Boolean?  @default(false) @map("is_deleted")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime?     @updatedAt @map("updated_at")
+  isDeleted    Boolean?      @default(false) @map("is_deleted")
+  pageSections PageSection[]
 
   @@map("pages")
+}
+
+enum PageSectionType {
+  banner
+  category_slider
+  category_product_section
+}
+
+model PageSection {
+  id        Int             @id @default(autoincrement())
+  type      PageSectionType
+  position  Int
+  config    Json
+  is_active Boolean?        @default(false)
+  pageId    Int             @map("page_id")
+  page      Page            @relation(fields: [pageId], references: [id])
+
+  @@unique([pageId, position])
+  @@map("page_sections")
+}
+
+enum NavigatorTableRef {
+  category
+  page
+}
+
+model Navigator {
+  id       Int               @id @default(autoincrement())
+  parent   Int?
+  label    String
+  tableRef NavigatorTableRef @map("table_ref")
+  ref      Int
+
+  @@map("navigators")
 }
 
 model SlugRegistry {

@@ -1,7 +1,7 @@
 import httpServer from '@/lib/http.server';
 import { ResponseApi } from '@/types/api.type';
-import { NavigateResponse, PageHomeResponse } from '@/types/page.type';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { HomePageResponse, NavigateResponse } from '@/types/page.type';
+import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 
 type SectionRes = {
   title: string;
@@ -16,9 +16,9 @@ type SectionRes = {
   listHref: string;
 };
 const pageService = {
-  getHomeStructure: async (): Promise<PageHomeResponse> => {
+  getHomeStructure: async (): Promise<HomePageResponse> => {
     const data =
-      await httpServer.get<ResponseApi<PageHomeResponse>>('/api/page/home');
+      await httpServer.get<ResponseApi<HomePageResponse>>('/api/page/home');
     return data.payload.data;
   },
 
@@ -34,7 +34,7 @@ const pageService = {
             salePrice: 8000,
             name: 'hello123',
             slug: '/123',
-            thumbnail: DEFAULT_IMAGE,
+            thumbnail: DEFAULT_IMAGE_PRODUCT,
             href: '/hoa-tot-nghiep/tot-nghiep/hoa-hong',
           })),
         listHref: '/hoa-tuoi-giam-gia',
@@ -49,7 +49,7 @@ const pageService = {
             salePrice: 8000,
             name: 'hello123',
             slug: '/123',
-            thumbnail: DEFAULT_IMAGE,
+            thumbnail: DEFAULT_IMAGE_PRODUCT,
             href: '',
           })),
         listHref: '/hoa-tuoi-tot-nghiep',

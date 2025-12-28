@@ -9,13 +9,13 @@ import {
 } from '@/modules/product/product.request';
 import { SLUG_REGISTER_PRODUCT_SINGLE_PAGE } from '@/shared/config/database.config';
 import { AppErrorBuilder } from '@/shared/errors/app-error';
+import { MediaModelType } from '@/shared/models/media.model';
 import prismaService from '@/shared/services/db.service';
 import {
   isForeignKeyNotFound,
   isRecordNotExist,
   isUniqueCode,
 } from '@/shared/utils/error.util';
-import logger from '@/shared/utils/logger.util';
 import { Page } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
 
@@ -25,7 +25,12 @@ interface ProductRepository {
   searchProducts: (
     data: ProductSearchGetQueryType,
   ) => Promise<Page<ProductModelType>>;
+  getProductsById: (id: Array<number>) => Promise<Array<ProductModelType>>;
   getProductById: (id: number) => Promise<ProductModelType>;
+  getProductThumbnailsById: (
+    ids: Array<number>,
+  ) => Promise<Array<MediaModelType>>;
+  getProductMediaById: (id: number) => Promise<Array<MediaModelType>>;
   getProductEditingById: (id: number) => Promise<ProductWithMediaIdModelType>;
   getProductBySlug: (name: string) => Promise<ProductModelType>;
   deleteProductById: (id: number) => Promise<void>;
@@ -136,6 +141,35 @@ const productRepository: ProductRepository = {
       },
     });
   },
+  getProductThumbnailsById: async (
+    ids: Array<number>,
+  ): Promise<Array<MediaModelType>> => {
+    const data = await prismaService.productMedia.findMany({
+      where: {
+        productId: {
+          in: ids,
+        },
+        isThumbnail: true,
+      },
+      select: {
+        media: true,
+      },
+    });
+
+    return data.map((i) => i.media);
+  },
+  getProductMediaById: async (id: number): Promise<Array<MediaModelType>> => {
+    const data = await prismaService.productMedia.findMany({
+      where: {
+        productId: id,
+      },
+      select: {
+        media: true,
+      },
+    });
+
+    return data.map((i) => i.media);
+  },
   searchProducts: async (
     data: ProductSearchGetQueryType,
   ): Promise<Page<ProductModelType>> => {
@@ -143,7 +177,9 @@ const productRepository: ProductRepository = {
       ? {
           some: {
             category: {
-              name: { in: data.categories },
+              id: {
+                in: data.categories,
+              },
             },
           },
         }
@@ -176,6 +212,21 @@ const productRepository: ProductRepository = {
       isLast: data.page === Math.ceil(totalItems / data.limit),
     };
   },
+  getProductsById: async (
+    ids: Array<number>,
+  ): Promise<Array<ProductModelType>> => {
+    return prismaService.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+
+      include: {
+        slug: true,
+      },
+    });
+  },
   getProductById: async (id: number): Promise<ProductModelType> => {
     return await prismaService.product.findFirstOrThrow({
       where: {
@@ -186,6 +237,7 @@ const productRepository: ProductRepository = {
       },
     });
   },
+
   getProductEditingById: async (
     id: number,
   ): Promise<ProductWithMediaIdModelType> => {
