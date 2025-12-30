@@ -2,7 +2,7 @@
 GET http://localhost:8081/api/page/home
 
 ### Get category page
-GET http://localhost:8081/api/page/category?name=hoa-tuoi
+GET http://localhost:8081/api/page/category?name=hoa-sinh-nhat
 
 ### Get navigate
 GET http://localhost:8081/api/page/navigate

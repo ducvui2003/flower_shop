@@ -44,6 +44,12 @@ const ProductSearchGetQuerySchema = z.object({
     if (Array.isArray(v)) return v.map(Number); // already an array
     return [Number(v)]; // single value → wrap in array
   }, z.array(z.number())),
+  categoriesSlug: z.preprocess((v) => {
+    if (v === undefined) return []; // no category → empty array
+    if (Array.isArray(v)) return v.map(String);
+    if (typeof v === 'string') return [v]; // already an array
+    return [v]; // single value → wrap in array
+  }, z.array(z.string())),
   minPrice: z.preprocess(
     (v) => (v ? Number(v) : undefined),
     z.number().optional(),

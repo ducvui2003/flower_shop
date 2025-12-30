@@ -20,9 +20,9 @@ const Navigation = ({ breakpoint }: NavigationProps) => {
 const PcNav = async () => {
   const data = await pageService.getNavigateStructure();
   if (data?.length === 0) return null;
-  const LinkRender = (i: number, item: { title: string; link?: string }) => {
+  const LinkRender = (i: number, item: { title: string; href?: string }) => {
     return (
-      <Link key={i} href={item.link!} passHref>
+      <Link key={i} href={item.href!} passHref>
         <span className="hover:bg-primary text-primary inline-block max-w-[250px] min-w-[200px] bg-white px-4 py-2 transition hover:text-white">
           {item.title}
         </span>
@@ -37,7 +37,7 @@ const PcNav = async () => {
             <div key={i} className="group relative">
               {LinkRender(i, item)}
               {item.child && (
-                <ul className="absolute top-full right-0 left-0 z-10 hidden w-fit group-hover:block">
+                <ul className="absolute top-full right-0 left-0 z-10 hidden w-fit shadow group-hover:block">
                   {item.child.map((childItem, childI) => {
                     return (
                       <li key={childI}>{LinkRender(childI, childItem)}</li>
@@ -70,7 +70,7 @@ const MobileNav = async () => {
         <ul className="grid flex-col gap-3 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
           {data.map((component, index) => {
             return (
-              <Link key={index} href={component.link} legacyBehavior passHref>
+              <Link key={index} href={component.href} legacyBehavior passHref>
                 <span className="hover:bg-primary text-primary border-primary inline-block max-w-[250px] min-w-[200px] border-b-1 bg-white p-2 transition hover:text-white">
                   {component.title}
                 </span>

@@ -172,6 +172,7 @@ const productService: ProductService = {
           })),
           createdAt: productEtt.createdAt,
           updatedAt: productEtt.updatedAt,
+          metadata: productEtt.metadata,
         },
       };
     } catch (e) {
@@ -232,6 +233,7 @@ const productService: ProductService = {
           })),
           createdAt: productEtt.createdAt,
           updatedAt: productEtt.updatedAt,
+          metadata: productEtt.metadata,
         },
       };
     } catch (e) {

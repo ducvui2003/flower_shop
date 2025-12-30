@@ -56,7 +56,7 @@ const mediaRepository: MediaRepository = {
       items,
       totalItems,
       totalPages: Math.ceil(totalItems / data.limit),
-      currentPage: data.page,
+      currentPage: items.length !== 0 ? data.page : 0,
       isLast: data.page === Math.ceil(totalItems / data.limit),
     };
   },

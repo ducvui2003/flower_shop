@@ -7,6 +7,7 @@ import {
 } from '@/modules/page/page.model';
 import pageRepository from '@/modules/page/page.repository';
 import {
+  CategoryPageContent,
   CategoryPageResponse,
   HomePageResponse,
   NavigateResponse,
@@ -15,7 +16,11 @@ import {
   SectionCategorySlider,
 } from '@/modules/page/page.response';
 import productService from '@/modules/product/product.service';
-import { ID_HOME_PAGE } from '@/shared/config/database.config';
+import {
+  ID_CATEGORY_PAGE,
+  ID_HOME_PAGE,
+} from '@/shared/config/database.config';
+import { applyPlaceholders } from '@/shared/utils/common.util';
 import { createUrl } from '@/shared/utils/media.util';
 import { AppResponse } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
@@ -72,7 +77,9 @@ const pageService: PageService = {
                 src: createUrl(item.thumbnail.key),
               }
             : undefined,
-          link: item.slugRegistry.slug,
+          href: applyPlaceholders(item.slugRegistry.slug, {
+            name: item.slugPlaceholder,
+          }),
         };
       }),
     };
@@ -86,7 +93,9 @@ const pageService: PageService = {
             alt: item.thumbnail.alt ?? undefined,
           }
         : undefined,
-      link: item.slugRegistry.slug,
+      link: applyPlaceholders(item.slugRegistry.slug, {
+        name: item.slugPlaceholder,
+      }),
     }));
 
     // category_product_section
@@ -115,12 +124,16 @@ const pageService: PageService = {
                 price: i.price,
                 priceSale: i.priceSale,
                 thumbnail: i.thumbnail,
-                link: i.href,
+                href: i.href,
               };
             }),
-          link:
-            categoriesData.find((_) => _.id === item.id)?.slugRegistry.slug ??
-            '',
+          href: applyPlaceholders(
+            categoriesData.find((_) => _.id === item.id)!.slugRegistry.slug,
+            {
+              name: categoriesData.find((_) => _.id === item.id)!
+                .slugPlaceholder,
+            },
+          ),
         },
       }));
 
@@ -138,27 +151,36 @@ const pageService: PageService = {
   getCategoryPageStructure: async (
     slug: string,
   ): Promise<AppResponse<CategoryPageResponse>> => {
-    const data: CategoryPageResponse = {
-      title: 'Hoa sinh nhật',
-      slug: '/sinh-nhat',
+    const categoryData = await pageRepository.getCategoryBySlug(slug);
+    if (!categoryData) {
+      return {
+        code: StatusCodes.NOT_FOUND,
+        message: 'Get Category Page',
+        error: 'Category not found',
+      };
+    }
+
+    const result: CategoryPageResponse = {
+      title: categoryData.name,
+      slug: applyPlaceholders(categoryData.slugRegistry.slug, {
+        name: categoryData.slugPlaceholder,
+      }),
       content: {
-        items: Array(5)
-          .fill(null)
-          .map((_, i) => ({
-            id: i,
-            title: 'Sunny',
-            slug: '/123',
-            priceSale: 8000,
-            price: 10000,
-            link: '/san-pham/bo-hoa-123',
-          })),
+        id: categoryData.id,
+        thumbnail: categoryData.thumbnail
+          ? {
+              src: createUrl(categoryData.thumbnail.key),
+              alt: categoryData.thumbnail.alt ?? '',
+            }
+          : undefined,
       },
     };
 
-    return Promise.resolve({
+    return {
       code: StatusCodes.OK,
-      data,
-    });
+      message: 'Get Category Page',
+      data: result,
+    };
   },
 
   getNavigateStructure: async (): Promise<AppResponse<NavigateResponse>> => {
@@ -173,14 +195,26 @@ const pageService: PageService = {
     const result: Array<NavigatorAggregateType> = topNavigators.map((i) => {
       return {
         title: i.label,
-        link: categories.find((_) => _.id === i.id)?.slugRegistry.slug ?? '',
+        href: applyPlaceholders(
+          categories.find((_) => _.id === i.id)?.slugRegistry.slug ?? '',
+          {
+            name: categories.find((_) => _.id === i.id)?.slugPlaceholder ?? '',
+          },
+        ),
         child: navigatorData
-          .filter((_) => _.parent === i.id)
+          .filter((_) => _.parent && _.parent === i.id)
           .map((_) => {
             return {
               title: _.label,
-              link:
-                categories.find((_) => _.id === i.id)?.slugRegistry.slug ?? '',
+              href: applyPlaceholders(
+                categories.find((category) => _.id === category.id)
+                  ?.slugRegistry.slug ?? '',
+                {
+                  name:
+                    categories.find((category) => _.id === category.id)
+                      ?.slugPlaceholder ?? '',
+                },
+              ),
             };
           }),
       };

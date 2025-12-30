@@ -1,3 +1,5 @@
+import { ProductType } from '@/types/product.type';
+
 type Link = string;
 type Source = {
   src: string;
@@ -7,15 +9,6 @@ type PageResponse<T = string> = {
   title: string;
   slug: string;
   content: T;
-};
-
-type Product = {
-  id: number;
-  title: string;
-  price: number;
-  priceSale: number;
-  thumbnail?: Source;
-  link: Link;
 };
 
 type ContentMap = {
@@ -38,32 +31,33 @@ type CategorySlider = Array<{
   id: number;
   name: string;
   thumbnail?: Source;
-  link: Link;
+  href: Link;
 }>;
 
 type CategoryProduct = {
-  items: Array<Product>;
-  link: Link;
+  items: Array<ProductType>;
+  href: Link;
 };
 
 type HomePageResponse = PageResponse<Array<SectionGeneric<keyof ContentMap>>>;
 
-type CategoryPageContent = {
-  items: Product[];
-};
-
-type CategoryPageResponse = PageResponse<CategoryPageContent>;
-
 type NavigateItem = {
   title: string;
-  link: Link;
+  href: Link;
 };
 
 type NavigateResponse = Array<{
   title: string;
-  link: Link;
+  href: Link;
   child?: Array<NavigateItem>;
 }>;
+
+type CategoryPageContent = {
+  id: number;
+  thumbnail?: Source;
+};
+
+type CategoryPageResponse = PageResponse<CategoryPageContent>;
 
 export type {
   HomePageResponse,
@@ -75,4 +69,5 @@ export type {
   SectionBanner,
   SectionCategorySlider,
   SectionCategoryProduct,
+  ProductType,
 };

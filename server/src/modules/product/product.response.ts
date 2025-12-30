@@ -36,6 +36,7 @@ const ProductDetailGetResponseSchema = ProductModel.pick({
   description: true,
   createdAt: true,
   updatedAt: true,
+  metadata: true,
 }).extend({
   href: z.string(),
   images: z.array(

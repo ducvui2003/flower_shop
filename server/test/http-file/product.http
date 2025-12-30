@@ -22,11 +22,15 @@ Content-Type: application/json
     }
 }
 ### Search Product 
-GET http://localhost:8081/api/product
+GET http://localhost:8081/api/product?categoriesSlug=hoa-sinh-nhat
 Content-Type: application/json
 
 ### Get Product By Id
 GET http://localhost:8081/api/product/1?type=id
+Content-Type: application/json
+
+### Get Product By Name
+GET http://localhost:8081/api/product/hoa-tuoi-tham?type=name
 Content-Type: application/json
 
 ### Get Product By Name

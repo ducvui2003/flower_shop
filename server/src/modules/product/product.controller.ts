@@ -5,12 +5,14 @@ import {
   ProductUpdateRequestType,
 } from '@/modules/product/product.request';
 import productService from '@/modules/product/product.service';
+import logger from '@/shared/utils/logger.util';
 import { NextFunction, Request, Response } from 'express';
 
 const productController = {
   getProducts: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: ProductSearchGetQueryType = req.locals.query;
+      logger.info(query);
       const response = await productService.searchProducts(query);
       res.status(response.code).json(response);
     } catch (e) {

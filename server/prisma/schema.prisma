@@ -30,13 +30,14 @@ model User {
 }
 
 model Category {
-  id             Int               @id @default(autoincrement())
-  name           String            @default("anonymous")
-  products       ProductCategory[]
-  slugRegistryId Int               @map("slug_registry_id")
-  slugRegistry   SlugRegistry      @relation(fields: [slugRegistryId], references: [id])
-  thumbnail      Media?            @relation(fields: [thumbnailId], references: [id])
-  thumbnailId    Int?              @map("thumbnail_id")
+  id              Int               @id @default(autoincrement())
+  name            String            @default("anonymous")
+  products        ProductCategory[]
+  slugRegistryId  Int               @map("slug_registry_id")
+  slugRegistry    SlugRegistry      @relation(fields: [slugRegistryId], references: [id])
+  slugPlaceholder String            @unique @map("slug_placeholder") @db.VarChar(50)
+  thumbnail       Media?            @relation(fields: [thumbnailId], references: [id])
+  thumbnailId     Int?              @map("thumbnail_id")
 
   @@map("categories")
 }

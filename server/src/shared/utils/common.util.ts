@@ -32,3 +32,8 @@ export function cleanPatch<T extends object>(data: T): Partial<T> {
     Object.entries(data).filter(([_, value]) => value !== undefined),
   ) as Partial<T>;
 }
+
+export function mergeObjects<T, U>(a?: T, b?: U): (T & U) | undefined {
+  if (!a || !b) return undefined;
+  return { ...a, ...b };
+}

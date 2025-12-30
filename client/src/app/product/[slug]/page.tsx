@@ -22,24 +22,22 @@ export async function generateMetadata({ params }: ProductPage) {
   const { slug } = await params;
 
   const product = await getProduct(slug);
-
   const headersList = await headers();
   const host = headersList.get('host');
   const protocol = headersList.get('x-forwarded-proto') || 'https';
-  const fullUrl = `${protocol}://${host}/product/detail/${slug}`;
-
+  const fullUrl = `${protocol}://${host}/san-pham/${slug}`;
+  console.log(product);
   return {
     title: product.name,
     description: product.description,
     openGraph: {
-      title: product.name,
-      description: product.description,
+      title: product.metadata.title,
+      description: product.metadata.metaDescription,
       url: fullUrl,
       type: 'website',
       siteName: product.name,
       images: [
         {
-          url: product?.images[0].src ?? DEFAULT_IMAGE_PRODUCT,
           width: 800,
           height: 600,
           alt: product.name,
@@ -52,10 +50,18 @@ export async function generateMetadata({ params }: ProductPage) {
 export default async function ProductPage({ params }: ProductPage) {
   const { slug } = await params;
   const product = await getProduct(slug);
-
   return (
     <section>
-      <ProductDetail product={product} />
+      <ProductDetail
+        id={product.id}
+        name={product.name}
+        images={product.images}
+        description={product.description}
+        price={product.price}
+        priceSale={product.salePrice}
+        avgRate={5}
+        views={36}
+      />
     </section>
   );
 }

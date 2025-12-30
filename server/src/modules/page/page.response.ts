@@ -15,7 +15,7 @@ type Product = {
   price: number;
   priceSale: number;
   thumbnail?: Source;
-  link: Link;
+  href: Link;
 };
 
 type ContentMap = {
@@ -38,30 +38,31 @@ type CategorySlider = Array<{
   id: number;
   name: string;
   thumbnail?: Source;
-  link: Link;
+  href: Link;
 }>;
 
 type CategoryProduct = {
   items: Array<Product>;
-  link: Link;
+  href: Link;
 };
 
 type HomePageResponse = PageResponse<Array<SectionGeneric<keyof ContentMap>>>;
 
 type CategoryPageContent = {
-  items: Product[];
+  id: number;
+  thumbnail?: Source;
 };
 
 type CategoryPageResponse = PageResponse<CategoryPageContent>;
 
 type NavigateItem = {
   title: string;
-  link: Link;
+  href: Link;
 };
 
 type NavigateResponse = Array<{
   title: string;
-  link: Link;
+  href: Link;
   child?: Array<NavigateItem>;
 }>;
 
@@ -74,4 +75,6 @@ export type {
   SectionBanner,
   SectionCategorySlider,
   SectionCategoryProduct,
+  // Category
+  CategoryPageContent,
 };

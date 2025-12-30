@@ -1,20 +1,12 @@
+import http from '@/lib/http.client';
 import httpServer from '@/lib/http.server';
 import { ResponseApi } from '@/types/api.type';
-import { HomePageResponse, NavigateResponse } from '@/types/page.type';
-import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
+import {
+  CategoryPageResponse,
+  HomePageResponse,
+  NavigateResponse,
+} from '@/types/page.type';
 
-type SectionRes = {
-  title: string;
-  products: {
-    id: number;
-    name: string;
-    basePrice: number;
-    salePrice: number;
-    href: string;
-    thumbnail: string;
-  }[];
-  listHref: string;
-};
 const pageService = {
   getHomeStructure: async (): Promise<HomePageResponse> => {
     const data =
@@ -22,48 +14,24 @@ const pageService = {
     return data.payload.data;
   },
 
-  getSectionHome: async (): Promise<SectionRes[]> => {
-    const data: SectionRes[] = [
-      {
-        title: 'Hoa tươi giảm giá 30%',
-        products: Array(4)
-          .fill(null)
-          .map((_, i) => ({
-            id: i,
-            basePrice: 10000,
-            salePrice: 8000,
-            name: 'hello123',
-            slug: '/123',
-            thumbnail: DEFAULT_IMAGE_PRODUCT,
-            href: '/hoa-tot-nghiep/tot-nghiep/hoa-hong',
-          })),
-        listHref: '/hoa-tuoi-giam-gia',
-      },
-      {
-        title: 'HOA TẶNG TỐT NGHIỆP',
-        products: Array(4)
-          .fill(null)
-          .map((_, i) => ({
-            id: i,
-            basePrice: 10000,
-            salePrice: 8000,
-            name: 'hello123',
-            slug: '/123',
-            thumbnail: DEFAULT_IMAGE_PRODUCT,
-            href: '',
-          })),
-        listHref: '/hoa-tuoi-tot-nghiep',
-      },
-    ];
-    return new Promise((resolve) => {
-      resolve(data);
-    });
-  },
-
   getNavigateStructure: async (): Promise<NavigateResponse> => {
     const data =
       await httpServer.get<ResponseApi<NavigateResponse>>('/api/page/navigate');
     return data.payload.data;
+  },
+  getCategoryPage: async (
+    slug: string,
+  ): Promise<CategoryPageResponse | null> => {
+    try {
+      const data = await http.get<ResponseApi<CategoryPageResponse>>(
+        `/api/page/category?name=${slug}`,
+        {},
+        false,
+      );
+      return data.payload.data;
+    } catch (e) {
+      return null;
+    }
   },
 };
 

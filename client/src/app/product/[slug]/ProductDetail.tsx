@@ -3,8 +3,7 @@ import Link from '@/components/Link';
 import ListView from '@/components/ListView';
 import { Separator } from '@/components/ui/separator';
 import { currency } from '@/lib/utils';
-import { ProductPageType } from '@/types/page/product.page.type';
-import { APP_INFO } from '@/utils/const.util';
+import { APP_INFO, DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import ProductImages from './ProductImages';
 import ProductDescription from '@/app/product/[slug]/ProductDescription';
@@ -12,30 +11,41 @@ import ProductRelated from '@/app/product/[slug]/ProductRelated';
 import React from 'react';
 
 type ProductDetailProps = {
-  product: ProductPageType;
+  id: number;
+  name: string;
+  price: number;
+  priceSale?: number;
+  images: {
+    src: string;
+    alt: string | null;
+  }[];
+  description: string;
+  views: number;
+  avgRate: number;
+  tag?: { id: number; name: string; href?: string }[];
 };
 
 export default function ProductDetail({
-  product: {
-    avgRate = 5,
-    description,
-    id,
-    images,
-    name,
-    priceSale: salePrice,
-    price: basePrice,
-    views,
-    tag,
-  },
+  avgRate = 5,
+  description,
+  id,
+  images,
+  name,
+  priceSale: salePrice,
+  price: basePrice,
+  views,
+  tag,
 }: ProductDetailProps) {
-  const percent = Math.round(((basePrice - salePrice) / basePrice) * 100);
+  const percent = salePrice
+    ? Math.round(((basePrice - salePrice) / basePrice) * 100)
+    : 0;
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="pc:grid-cols-2 grid grid-cols-1 gap-10">
         <div>
           <ProductImages
             images={images.map((i) => ({
-              alt: i.alt ?? '',
+              alt: i.alt ?? DEFAULT_IMAGE_PRODUCT.alt,
               src: i.src,
             }))}
           />
@@ -168,7 +178,7 @@ export default function ProductDetail({
         {tag && (
           <ProductRelated
             categoryId={tag.map((i) => i.id)}
-            category={tag.map((i) => i.name)}
+            categoriesName={tag.map((i) => i.name)}
           />
         )}
       </div>

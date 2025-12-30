@@ -16,7 +16,9 @@ import {
   isRecordNotExist,
   isUniqueCode,
 } from '@/shared/utils/error.util';
+import logger from '@/shared/utils/logger.util';
 import { Page } from '@/types/app';
+import { Prisma } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 
 interface ProductRepository {
@@ -173,23 +175,38 @@ const productRepository: ProductRepository = {
   searchProducts: async (
     data: ProductSearchGetQueryType,
   ): Promise<Page<ProductModelType>> => {
-    const categoryFilter = data.categories.length
-      ? {
+    const categoryOr: Prisma.ProductWhereInput[] = [];
+
+    if (data.categories.length > 0) {
+      categoryOr.push({
+        categories: {
+          some: {
+            categoryId: { in: data.categories },
+          },
+        },
+      });
+    }
+
+    if (data.categoriesSlug.length > 0) {
+      categoryOr.push({
+        categories: {
           some: {
             category: {
-              id: {
-                in: data.categories,
-              },
+              slugPlaceholder: { in: data.categoriesSlug },
             },
           },
-        }
-      : undefined;
+        },
+      });
+    }
+
+    const where: Prisma.ProductWhereInput = {
+      ...(data.name && { name: data.name }),
+      ...(categoryOr.length > 0 && { OR: categoryOr }),
+    };
+
     const [items, totalItems] = await prismaService.$transaction([
       prismaService.product.findMany({
-        where: {
-          name: data.name,
-          categories: categoryFilter,
-        },
+        where,
         take: data.limit,
         skip: (data.page - 1) * data.limit,
         include: {
@@ -197,10 +214,7 @@ const productRepository: ProductRepository = {
         },
       }),
       prismaService.product.count({
-        where: {
-          name: data.name,
-          categories: categoryFilter,
-        },
+        where,
       }),
     ]);
 
@@ -208,7 +222,7 @@ const productRepository: ProductRepository = {
       items,
       totalItems,
       totalPages: Math.ceil(totalItems / data.limit),
-      currentPage: data.page,
+      currentPage: items.length !== 0 ? data.page : 0,
       isLast: data.page === Math.ceil(totalItems / data.limit),
     };
   },

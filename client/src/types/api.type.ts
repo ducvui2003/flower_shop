@@ -13,18 +13,16 @@ type ResponseApi<T> = {
 
 type ResponseApiPaging<T> = {
   status: number;
-  data: Paging<T>;
+  data: Page<T>;
   message: string;
 };
 
-type Paging<T> = {
-  items: (T & Metadata)[];
-  pagination: {
-    page: number;
-    limit: number;
-    totalItems: number;
-    totalPages: number;
-  };
+type Page<T> = {
+  items: Array<T>;
+  isLast: boolean;
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
 };
 
 type Metadata = {
@@ -42,4 +40,4 @@ type PageReq<T = object> = {
   sorts?: string[];
 } & T;
 
-export type { ResponseApi, ResponseApiPaging, Paging, PageReq };
+export type { ResponseApi, ResponseApiPaging, Page, PageReq };

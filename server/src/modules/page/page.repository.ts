@@ -14,6 +14,7 @@ interface PageRepository {
   updatePageContent: (id: number, content: PageContent) => Promise<void>;
   getMedias: (ids: Array<number>) => Promise<Array<MediaModelType>>;
   getCategories: (ids: Array<number>) => Promise<Array<CategoryModelType>>;
+  getCategoryBySlug: (slug: string) => Promise<CategoryModelType | null>;
   getNavigators: () => Promise<Array<NavigatorModelType>>;
 }
 
@@ -87,11 +88,38 @@ const pageRepository: PageRepository = {
             metadata: true,
           },
         },
+        slugPlaceholder: true,
       },
       where: {
         id: {
           in: ids,
         },
+      },
+    });
+  },
+  getCategoryBySlug: async (slug: string) => {
+    return await prismaService.category.findFirst({
+      select: {
+        id: true,
+        name: true,
+        slugRegistry: {
+          select: {
+            id: true,
+            slug: true,
+          },
+        },
+        thumbnail: {
+          select: {
+            id: true,
+            key: true,
+            alt: true,
+            metadata: true,
+          },
+        },
+        slugPlaceholder: true,
+      },
+      where: {
+        slugPlaceholder: slug,
       },
     });
   },

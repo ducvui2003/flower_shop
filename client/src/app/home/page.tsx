@@ -1,24 +1,24 @@
 import Banner from '@/app/home/Banner';
+import FeatureSection from '@/app/home/FeatureSection';
 import CategorySection from '@/components/event/CategorySection';
 import SectionGeneric from '@/components/event/SectionGeneric';
-import FeatureSection from '@/app/home/FeatureSection';
 import pageService from '@/service/page.service';
-import React from 'react';
-import { notFound } from 'next/navigation';
-import {
-  APP_INFO,
-  DEFAULT_IMAGE_CATEGORY,
-  DEFAULT_IMAGE_PRODUCT,
-} from '@/utils/const.util';
-import { Metadata } from 'next';
 import {
   HomePageResponse,
   SectionBanner,
   SectionCategoryProduct,
   SectionCategorySlider,
 } from '@/types/page.type';
+import {
+  APP_INFO,
+  DEFAULT_IMAGE_CATEGORY,
+  DEFAULT_IMAGE_PRODUCT,
+} from '@/utils/const.util';
+import { headers } from 'next/headers';
+import { notFound } from 'next/navigation';
+import { cache } from 'react';
 
-const getData = async () => {
+const getData = cache(async () => {
   try {
     const data = await pageService.getHomeStructure();
     return {
@@ -28,11 +28,16 @@ const getData = async () => {
   } catch (e) {
     return null;
   }
-};
+});
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = headersList.get('x-forwarded-proto') || 'https';
+  const fullUrl = `${protocol}://${host}`;
   return {
     title: APP_INFO.NAME,
+    url: fullUrl,
     openGraph: {
       images: ['/logo.jpg'],
     },
@@ -50,7 +55,7 @@ export default async function HomePage() {
             const data = section as SectionBanner;
             return (
               <>
-                <Banner data={data.content} />;
+                <Banner data={data.content} />
                 <Spacing />
               </>
             );
@@ -65,7 +70,7 @@ export default async function HomePage() {
                     categories={data.content.map((i) => ({
                       id: i.id,
                       name: i.name,
-                      link: i.link,
+                      link: i.href,
                       thumbnail: i?.thumbnail ?? DEFAULT_IMAGE_CATEGORY,
                     }))}
                   />
@@ -77,25 +82,28 @@ export default async function HomePage() {
           case 'categoryProduct': {
             const data = section as SectionCategoryProduct;
             return (
-              <div className="container-p container">
-                <SectionGeneric
-                  title={data.title}
-                  products={data.content.items.map((item) => ({
-                    id: item.id,
-                    name: item.title,
-                    basePrice: item.price,
-                    salePrice: item.priceSale,
-                    link: item.link,
-                    thumbnails: item?.thumbnail ?? DEFAULT_IMAGE_PRODUCT,
-                  }))}
-                  link={data.content.link}
-                />
-              </div>
+              <>
+                <div className="container-p container">
+                  <SectionGeneric
+                    title={data.title}
+                    products={data.content.items.map((item) => ({
+                      id: item.id,
+                      name: item.title,
+                      price: item.price,
+                      priceSale: item.priceSale,
+                      href: item.href,
+                      thumbnails: item?.thumbnail ?? DEFAULT_IMAGE_PRODUCT,
+                    }))}
+                    link={data.content.href}
+                  />
+                </div>
+                <Spacing />
+              </>
             );
           }
         }
       })}
-      <Spacing />
+
       <FeatureSection />
     </>
   );

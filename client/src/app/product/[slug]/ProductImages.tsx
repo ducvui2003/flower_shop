@@ -1,5 +1,6 @@
 import ProductImagesInteract from '@/app/product/[slug]/ProductImages.client';
 import { cn } from '@/lib/utils';
+import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 import Image from 'next/image';
 
 type ProductImagesProps = {
@@ -35,8 +36,8 @@ export default function ProductImages({ images }: ProductImagesProps) {
         <div className="relative aspect-square flex-1">
           <Image
             id="product-thumbnail"
-            src={images[0].src}
-            alt={images[0].alt}
+            src={images?.[0]?.src ?? DEFAULT_IMAGE_PRODUCT.src}
+            alt={images?.[0]?.alt ?? DEFAULT_IMAGE_PRODUCT.alt}
             className="rounded bg-gray-100 object-contain"
             fill
             sizes="100vw"

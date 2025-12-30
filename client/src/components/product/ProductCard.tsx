@@ -1,20 +1,33 @@
 import Link from '@/components/Link';
 import { Button } from '@/components/ui/button';
 import { cn, currency } from '@/lib/utils';
-import { ProductCardType } from '@/types/product.type';
+import { Link as LinkType, Source } from '@/types/common.type';
 import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import Image from 'next/image';
 
+type ProductCardType = {
+  id: number;
+  name: string;
+  price: number;
+  priceSale: number;
+  href: LinkType;
+  thumbnails?: Source;
+};
+
 type ProductCardProps = ProductCardType & {
+  view?: number;
+  className?: string;
+  numSell?: number;
+  avgStar?: number;
   clickButton?: boolean;
 };
 
 const ProductCard = ({
   name,
-  basePrice,
-  salePrice,
-  link: href,
+  price: basePrice,
+  priceSale: salePrice,
+  href,
   thumbnails,
   className,
   clickButton = false,
@@ -69,5 +82,5 @@ const ProductCard = ({
     </article>
   );
 };
-
+export type { ProductCardType };
 export default ProductCard;

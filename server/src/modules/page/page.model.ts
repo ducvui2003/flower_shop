@@ -24,10 +24,10 @@ type NavigatorModelType = z.infer<typeof NavigatorModel>;
 
 type NavigatorAggregateType = {
   title: string;
-  link: string;
+  href: string;
   child: Array<{
     title: string;
-    link: string;
+    href: string;
   }>;
 };
 
@@ -101,6 +101,7 @@ const CategoryModel = z.object({
   id: z.int(),
   name: z.string(),
   slugRegistry: SlugRegistry,
+  slugPlaceholder: z.string(),
   thumbnail: MediaModel.nullable(),
 });
 

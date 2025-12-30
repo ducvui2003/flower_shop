@@ -2,6 +2,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import {
   Carousel,
   CarouselContent,
+  CarouselDot,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
@@ -38,6 +39,9 @@ const CategorySection = ({ title, categories }: CategorySectionProps) => {
         </CarouselContent>
         <CarouselPrevious className="hover:bg-primary absolute top-1/2 left-4 -translate-y-1/2 hover:text-white" />
         <CarouselNext className="hover:bg-primary absolute top-1/2 right-4 -translate-y-1/2 hover:text-white" />
+        <div className="pc:hidden pc:justify-center pc:bottom-5 absolute bottom-1 left-1/2 flex -translate-x-1/2 justify-end">
+          <CarouselDot />
+        </div>
       </Carousel>
     </section>
   );
