@@ -19,7 +19,10 @@ import {
 } from '@/shared/utils/common.util';
 import { AppResponse, Page } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
-import { ProductModelType } from '@/modules/product/product.model';
+import {
+  ProductModelType,
+  ProductWithoutDescriptionModelType,
+} from '@/modules/product/product.model';
 import { createUrl } from '@/shared/utils/media.util';
 
 interface ProductService {
@@ -92,7 +95,7 @@ const productService: ProductService = {
       page.items.map((i) => i.id),
     );
     const newPage = mapperItemsForPage<
-      ProductModelType,
+      ProductWithoutDescriptionModelType,
       ProductGetResponseType
     >(page, (item) => {
       const thumbnail = thumbnails.find((i) => i.id === item.id);
@@ -101,7 +104,6 @@ const productService: ProductService = {
         name: item.name,
         price: item.price,
         priceSale: item.priceSale,
-        description: item.description,
         href: applyPlaceholders(item.slug.slug, {
           name: item.slugPlaceholder,
         }),

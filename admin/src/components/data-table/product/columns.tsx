@@ -10,9 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { formatDate } from "@/lib/utils";
+import { formatDate, toCurrencyString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Pencil } from "lucide-react";
+import { toast } from "sonner";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -27,10 +28,18 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "price",
     header: "Price",
+    cell: ({ cell }) => {
+      const price = cell.getValue<number>();
+      if (price) return toCurrencyString(price);
+    },
   },
   {
     accessorKey: "priceSale",
     header: "Sale Price",
+    cell: ({ cell }) => {
+      const price = cell.getValue<number>();
+      if (price) return toCurrencyString(price);
+    },
   },
   {
     accessorKey: "createdAt",
@@ -65,9 +74,10 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(product.id.toString())
-              }
+              onClick={() => {
+                navigator.clipboard.writeText(product.id.toString());
+                toast.message("Copy id success");
+              }}
             >
               Copy product ID
             </DropdownMenuItem>

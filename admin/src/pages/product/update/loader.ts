@@ -12,9 +12,13 @@ export async function productLoader({ params }: LoaderFunctionArgs) {
   }
 
   try {
-    const res = await httpService.get<ResponseApi<ProductEditing>>(
-      `/admin/product/${id}`
-    );
+    const res = await httpService.get<
+      ResponseApi<
+        ProductEditing & {
+          description: string;
+        }
+      >
+    >(`/admin/product/${id}`);
     const product = res.data.data;
     let images;
     if (product.imageIds) {
@@ -26,6 +30,7 @@ export async function productLoader({ params }: LoaderFunctionArgs) {
 
     return {
       ...product,
+      description: JSON.parse(product.description),
       images: images,
     };
   } catch (e) {

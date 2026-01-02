@@ -26,7 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
 import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -88,6 +88,7 @@ type FormInput = z.input<typeof formSchema>;
 type FormOutput = z.output<typeof formSchema>;
 
 const ProductUpdatePage = () => {
+  const navigate = useNavigate();
   const product = useLoaderData<
     ProductEditing & {
       images?: Array<Image>;
@@ -147,7 +148,7 @@ const ProductUpdatePage = () => {
     }
     diffData = {
       ...diffData,
-      images: (diffData.images as Array<Image>).map((i) => i.id),
+      images: (diffData.images as Array<Image> | undefined)?.map((i) => i.id),
       metadata: {
         ...data.metadata,
         ...diffData.metadata,
@@ -157,6 +158,7 @@ const ProductUpdatePage = () => {
     try {
       await httpService.patch(`/product/${product.id}`, diffData);
       toast.success("Update product success");
+      navigate("/product", { replace: true });
     } catch (e) {
       if (isAxiosError(e)) {
         toast.error(e.code, {
@@ -190,7 +192,12 @@ const ProductUpdatePage = () => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel>Description</FieldLabel>
-                  <Editor />
+                  <Editor
+                    value={field.value}
+                    onChange={(data) => {
+                      field.onChange(data);
+                    }}
+                  />
                 </Field>
               )}
             />

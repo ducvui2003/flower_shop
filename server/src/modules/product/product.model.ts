@@ -12,8 +12,17 @@ const ProductMetadataModel = z
 
 const ProductModel = MetadataModel.extend({
   id: z.number(),
-  name: z.string(),
+  name: z.string().nonempty(),
   description: z.string(),
+  price: z.number(),
+  priceSale: z.number(),
+  slug: SlugRegistry,
+  slugPlaceholder: z.string(),
+  metadata: ProductMetadataModel,
+});
+const ProductWithoutDescriptionModel = MetadataModel.extend({
+  id: z.number(),
+  name: z.string().nonempty(),
   price: z.number(),
   priceSale: z.number(),
   slug: SlugRegistry,
@@ -73,7 +82,9 @@ type ProductModelType = z.infer<typeof ProductModel>;
 type ProductMediaModelType = z.infer<typeof ProductMediaModel>;
 type ProductMetadataModelType = z.infer<typeof ProductMetadataModel>;
 type ProductWithMediaIdModelType = z.infer<typeof ProductWithMediaIdModel>;
-
+type ProductWithoutDescriptionModelType = z.infer<
+  typeof ProductWithoutDescriptionModel
+>;
 export {
   ProductModel,
   ProductCategoryModel,
@@ -86,4 +97,5 @@ export type {
   ProductMediaModelType,
   ProductMetadataModelType,
   ProductWithMediaIdModelType,
+  ProductWithoutDescriptionModelType,
 };

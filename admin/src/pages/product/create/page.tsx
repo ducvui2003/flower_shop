@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
 import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -63,11 +64,11 @@ const formSchema = z.object({
   }, z.number().positive("Price must be greater than 0")),
   categories: z.array(z.number().int().positive()),
   slug: z.object({
-    name: z.string(),
+    name: z.string().nonempty(),
   }),
   metadata: z.object({
     title: z.string(),
-    metadata: z.string(),
+    metaDescription: z.string(),
   }),
   images: z
     .array(
@@ -84,6 +85,7 @@ type FormInput = z.input<typeof formSchema>;
 type FormOutput = z.output<typeof formSchema>;
 
 const ProductCreatePage = () => {
+  const navigate = useNavigate();
   const form = useForm<FormInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -98,7 +100,7 @@ const ProductCreatePage = () => {
       slug: { name: "" },
       metadata: {
         title: "",
-        metadata: "",
+        metaDescription: "",
       },
       images: [],
     },
@@ -116,10 +118,13 @@ const ProductCreatePage = () => {
     }
 
     const data: FormOutput = result.data;
-    console.log(data);
     try {
-      await httpService.post("/product", data);
+      await httpService.post("/product", {
+        ...data,
+        description: JSON.stringify(data.description),
+      });
       toast.success("Create product success");
+      navigate("/product", { replace: true });
     } catch (e) {
       if (isAxiosError(e)) {
         toast.error(e.code, {
@@ -156,7 +161,6 @@ const ProductCreatePage = () => {
                   <Editor
                     value={field.value}
                     onChange={(data) => {
-                      console.log(data);
                       field.onChange(data);
                     }}
                   />
@@ -220,16 +224,22 @@ const ProductCreatePage = () => {
                       aria-invalid={fieldState.invalid}
                       placeholder="Hoa tuoi "
                     />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
               <Controller
-                name="metadata.metadata"
+                name="metadata.metaDescription"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel>Meta description</FieldLabel>
                     <Textarea {...field} aria-invalid={fieldState.invalid} />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
@@ -247,6 +257,9 @@ const ProductCreatePage = () => {
                         placeholder="/sanpham/"
                       />
                     </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />

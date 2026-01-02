@@ -26,13 +26,12 @@ export async function generateMetadata({ params }: ProductPage) {
   const host = headersList.get('host');
   const protocol = headersList.get('x-forwarded-proto') || 'https';
   const fullUrl = `${protocol}://${host}/san-pham/${slug}`;
-  console.log(product);
   return {
-    title: product.name,
+    title: product.metadata?.title ?? product.name,
     description: product.description,
     openGraph: {
-      title: product.metadata.title,
-      description: product.metadata.metaDescription,
+      title: product.metadata?.title ?? product.name,
+      description: product.metadata?.metaDescription ?? '',
       url: fullUrl,
       type: 'website',
       siteName: product.name,

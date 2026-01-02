@@ -1,6 +1,7 @@
 import {
   ProductModelType,
   ProductWithMediaIdModelType,
+  ProductWithoutDescriptionModelType,
 } from '@/modules/product/product.model';
 import {
   ProductCreateRequestType,
@@ -16,7 +17,7 @@ import {
   isRecordNotExist,
   isUniqueCode,
 } from '@/shared/utils/error.util';
-import logger from '@/shared/utils/logger.util';
+
 import { Page } from '@/types/app';
 import { Prisma } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
@@ -26,7 +27,7 @@ interface ProductRepository {
   updateProduct: (id: number, data: ProductUpdateRequestType) => Promise<void>;
   searchProducts: (
     data: ProductSearchGetQueryType,
-  ) => Promise<Page<ProductModelType>>;
+  ) => Promise<Page<ProductWithoutDescriptionModelType>>;
   getProductsById: (id: Array<number>) => Promise<Array<ProductModelType>>;
   getProductById: (id: number) => Promise<ProductModelType>;
   getProductThumbnailsById: (
@@ -53,9 +54,15 @@ const productRepository: ProductRepository = {
           slug: true,
         },
       });
+      await ctx.productCategory.createMany({
+        data: data.categories.map((i) => ({
+          categoryId: i,
+          productId: product.id,
+        })),
+      });
       if (data.images) {
         try {
-          ctx.productMedia.createMany({
+          await ctx.productMedia.createMany({
             data: data.images.map((mediaId) => ({
               productId: product.id,
               mediaId: mediaId,
@@ -174,7 +181,7 @@ const productRepository: ProductRepository = {
   },
   searchProducts: async (
     data: ProductSearchGetQueryType,
-  ): Promise<Page<ProductModelType>> => {
+  ): Promise<Page<ProductWithoutDescriptionModelType>> => {
     const categoryOr: Prisma.ProductWhereInput[] = [];
 
     if (data.categories.length > 0) {
@@ -211,6 +218,9 @@ const productRepository: ProductRepository = {
         skip: (data.page - 1) * data.limit,
         include: {
           slug: true,
+        },
+        omit: {
+          description: true,
         },
       }),
       prismaService.product.count({

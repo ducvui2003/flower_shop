@@ -32,7 +32,7 @@ type ProductDetailType = {
   metadata: {
     title: string;
     metaDescription: string;
-  };
+  } | null;
   createdAt: Date;
   updatedAt: Date;
 };

@@ -67,3 +67,11 @@ export function createCtx<A extends object | null>() {
 
   return [useCtx, ctx.Provider] as const;
 }
+export function toCurrencyString(amount: number) {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  })
+    .format(amount)
+    .replace("₫", "đ"); // swap symbol if needed
+}

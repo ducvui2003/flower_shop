@@ -2,6 +2,7 @@ import Banner from '@/app/home/Banner';
 import FeatureSection from '@/app/home/FeatureSection';
 import CategorySection from '@/components/event/CategorySection';
 import SectionGeneric from '@/components/event/SectionGeneric';
+import { uuid } from '@/lib/utils';
 import pageService from '@/service/page.service';
 import {
   HomePageResponse,
@@ -16,7 +17,7 @@ import {
 } from '@/utils/const.util';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { cache } from 'react';
+import React, { cache } from 'react';
 
 const getData = cache(async () => {
   try {
@@ -54,16 +55,16 @@ export default async function HomePage() {
           case 'banner': {
             const data = section as SectionBanner;
             return (
-              <>
+              <React.Fragment key={uuid()}>
                 <Banner data={data.content} />
                 <Spacing />
-              </>
+              </React.Fragment>
             );
           }
           case 'categorySlider': {
             const data = section as SectionCategorySlider;
             return (
-              <>
+              <React.Fragment key={uuid()}>
                 <div className="container-p container my-4">
                   <CategorySection
                     title={data.title}
@@ -76,13 +77,13 @@ export default async function HomePage() {
                   />
                 </div>
                 <Spacing />
-              </>
+              </React.Fragment>
             );
           }
           case 'categoryProduct': {
             const data = section as SectionCategoryProduct;
             return (
-              <>
+              <React.Fragment key={uuid()}>
                 <div className="container-p container">
                   <SectionGeneric
                     title={data.title}
@@ -98,7 +99,7 @@ export default async function HomePage() {
                   />
                 </div>
                 <Spacing />
-              </>
+              </React.Fragment>
             );
           }
         }
