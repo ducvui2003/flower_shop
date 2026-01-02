@@ -36,9 +36,21 @@ const categories = [
   { value: "3", label: "Hoa Chúc Mừng" },
 ];
 
+const OutputDataSchema = z.object({
+  time: z.number().optional(),
+  version: z.string().optional(),
+  blocks: z.array(
+    z.object({
+      id: z.string().optional(),
+      type: z.string(),
+      data: z.unknown(),
+    })
+  ),
+});
+
 const formSchema = z.object({
   name: z.string(),
-  description: z.string().optional().default(""),
+  description: OutputDataSchema.optional(),
   price: z.preprocess((val) => {
     if (val === "" || val === null || val === undefined) {
       return undefined;
@@ -83,7 +95,10 @@ const ProductUpdatePage = () => {
   >();
   const formInitialize: FormInput = {
     name: product.name,
-    description: product.description ?? "",
+    description: product.description ?? {
+      time: Date.now(),
+      blocks: [],
+    },
     price: product.price,
     priceSale: product.priceSale,
     categories: product.categoryIds,

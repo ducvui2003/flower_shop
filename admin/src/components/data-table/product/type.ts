@@ -1,3 +1,5 @@
+import { OutputData } from "@editorjs/editorjs";
+
 type Product = {
   id: number;
   name: string;
@@ -18,7 +20,7 @@ type Image = {
 type ProductEditing = {
   id: number;
   name: string;
-  description: string;
+  description: OutputData;
   price: number;
   priceSale: number;
   slugRegistryId: number;

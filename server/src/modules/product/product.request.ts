@@ -11,7 +11,7 @@ const ProductCreateRequestSchema = ProductModel.pick({
   slug: z.object({
     name: z.string(),
   }),
-  images: z.array(z.number()).optional(),
+  images: z.array(z.int()).optional(),
 });
 
 const ProductUpdateRequestSchema = z.object({

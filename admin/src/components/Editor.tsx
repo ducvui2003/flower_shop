@@ -1,5 +1,5 @@
 import CodeTool from "@editorjs/code";
-import EditorJS, { OutputData, ToolConstructable } from "@editorjs/editorjs";
+import EditorJS, { OutputData } from "@editorjs/editorjs";
 import List from "@editorjs/list";
 import Quote from "@editorjs/quote";
 import { useEffect, useRef } from "react";
@@ -11,7 +11,9 @@ interface Props {
 
 const Editor = ({ value, onChange }: Props) => {
   const editorRef = useRef<EditorJS | null>(null);
-  const initEditor = () => {
+
+  useEffect(() => {
+    if (editorRef.current) return;
     const editor = new EditorJS({
       holder: "editorjs",
       data: value,
@@ -35,12 +37,6 @@ const Editor = ({ value, onChange }: Props) => {
         onChange?.(data); // JSON output
       },
     });
-  };
-
-  useEffect(() => {
-    if (editorRef.current === null) {
-      initEditor();
-    }
 
     return () => {
       editorRef?.current?.destroy();
@@ -48,7 +44,6 @@ const Editor = ({ value, onChange }: Props) => {
     };
   }, []);
 
-  // Update value
   useEffect(() => {
     if (!editorRef.current || !value) return;
     editorRef.current.render(value);

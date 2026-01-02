@@ -9,25 +9,46 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  MultiSelect,
+  MultiSelectContent,
+  MultiSelectGroup,
+  MultiSelectItem,
+  MultiSelectTrigger,
+  MultiSelectValue,
+} from "@/components/ui/multi-select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import logger from "@/config/logger.util";
 import httpService from "@/lib/http/http.service";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
+import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+const categories = [
+  { value: "1", label: "Hoa Sinh Nhật" },
+  { value: "2", label: "Hoa Khai Trương" },
+  { value: "3", label: "Hoa Chúc Mừng" },
+];
+
+const OutputDataSchema = z.object({
+  time: z.number().optional(),
+  version: z.string().optional(),
+  blocks: z.array(
+    z.object({
+      id: z.string().optional(),
+      type: z.string(),
+      data: z.unknown(),
+    })
+  ),
+});
+
 const formSchema = z.object({
   name: z.string(),
-  description: z.string().optional().default(""),
+  description: OutputDataSchema,
   price: z.preprocess((val) => {
     if (val === "" || val === null || val === undefined) {
       return undefined;
@@ -40,19 +61,24 @@ const formSchema = z.object({
     }
     return Number(val);
   }, z.number().positive("Price must be greater than 0")),
-  category: z.preprocess(
-    (val) => (val === "" ? undefined : Number(val)),
-    z.number().int().positive()
-  ),
+  categories: z.array(z.number().int().positive()),
   slug: z.object({
     name: z.string(),
   }),
-  search: z.object({
+  metadata: z.object({
     title: z.string(),
     metadata: z.string(),
-    url: z.string(),
   }),
-  thumbnailIds: z.array(z.number()).optional(),
+  images: z
+    .array(
+      z.object({
+        id: z.number(),
+        key: z.string(),
+        href: z.string(),
+        alt: z.string(),
+      })
+    )
+    .optional(),
 });
 type FormInput = z.input<typeof formSchema>;
 type FormOutput = z.output<typeof formSchema>;
@@ -62,17 +88,19 @@ const ProductCreatePage = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      description: undefined,
+      description: {
+        time: Date.now(),
+        blocks: [],
+      },
       price: undefined,
       priceSale: undefined,
-      category: undefined,
+      categories: [],
       slug: { name: "" },
-      search: {
+      metadata: {
         title: "",
         metadata: "",
-        url: "",
       },
-      thumbnailIds: [],
+      images: [],
     },
   });
 
@@ -87,7 +115,8 @@ const ProductCreatePage = () => {
       return;
     }
 
-    const data: FormOutput = result.data; // FormOutput
+    const data: FormOutput = result.data;
+    console.log(data);
     try {
       await httpService.post("/product", data);
       toast.success("Create product success");
@@ -124,28 +153,64 @@ const ProductCreatePage = () => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel>Description</FieldLabel>
-                  <Editor />
+                  <Editor
+                    value={field.value}
+                    onChange={(data) => {
+                      console.log(data);
+                      field.onChange(data);
+                    }}
+                  />
                 </Field>
               )}
             />
             <Separator className="my-2" />
             <h3 className="text-xl font-bold mb-5">Media</h3>
-            <DialogGetImage
-              className="w-full"
-              onImagesChangeChanged={(images) => console.log(images)}
-            >
-              <div className="w-full grid place-items-center h-20 border-dotted border-2 border-gray-400 bg-gray-100 rounded">
-                <Button type="button" className="bg-green-500">
-                  Choose Image
-                </Button>
-              </div>
-            </DialogGetImage>
+            <Controller
+              name="images"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Images</FieldLabel>
+                  <DialogGetImage {...field} className="w-full">
+                    <div className="w-full grid place-items-center h-20 border-dotted border-2 border-gray-400 bg-gray-100 rounded">
+                      <Button type="button" className="bg-green-500">
+                        Choose Image
+                      </Button>
+                    </div>
+                  </DialogGetImage>
 
+                  <div className="grid mt-4 grid-cols-6 gap-4">
+                    {field.value?.map((item, i) => (
+                      <div
+                        key={item.id}
+                        className={cn(i === 0 && "row-span-1")}
+                      >
+                        <div className="p-4 relative rounded shadow w-fit bg-gray-50">
+                          <X
+                            className="absolute top-0 right-0 text-sm hover:opacity-70 text-red-500 cursor-pointer"
+                            onClick={() =>
+                              field.onChange(
+                                field.value?.filter((i) => item.id !== i.id)
+                              )
+                            }
+                          />
+                          <img
+                            src={item.href}
+                            className="aspect-square object-contain"
+                            alt={item.alt}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Field>
+              )}
+            />
             <Separator className="my-2" />
             <FieldGroup>
               <h3 className="text-xl font-bold">Search Engine</h3>
               <Controller
-                name="search.title"
+                name="metadata.title"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
@@ -159,7 +224,7 @@ const ProductCreatePage = () => {
                 )}
               />
               <Controller
-                name="search.metadata"
+                name="metadata.metadata"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
@@ -169,7 +234,7 @@ const ProductCreatePage = () => {
                 )}
               />
               <Controller
-                name="search.url"
+                name="slug.name"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
@@ -244,26 +309,33 @@ const ProductCreatePage = () => {
                 }}
               />
               <Controller
-                name="category"
+                name="categories"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel>Category</FieldLabel>
-                    <Select
-                      value={field.value ? String(field.value) : ""}
-                      onValueChange={(value) => field.onChange(value)}
+                    <MultiSelect
+                      values={field.value.map(String)}
+                      onValuesChange={(vals) =>
+                        field.onChange(vals.map(Number))
+                      }
                     >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a fruit" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">Apple</SelectItem>
-                        <SelectItem value="2">Banana</SelectItem>
-                        <SelectItem value="3">Blueberry</SelectItem>
-                        <SelectItem value="4">Grapes</SelectItem>
-                        <SelectItem value="5">Pineapple</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      <MultiSelectTrigger className="w-full">
+                        <MultiSelectValue placeholder="Select categories..." />
+                      </MultiSelectTrigger>
+                      <MultiSelectContent>
+                        <MultiSelectGroup>
+                          {categories.map((item) => (
+                            <MultiSelectItem
+                              key={item.value}
+                              value={item.value}
+                            >
+                              {item.label}
+                            </MultiSelectItem>
+                          ))}
+                        </MultiSelectGroup>
+                      </MultiSelectContent>
+                    </MultiSelect>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
