@@ -79,6 +79,13 @@ type PageModelType = z.infer<typeof PageModel>;
 
 type PageContent = HomePageContentType;
 
+const PageContentMetadataModel = z.object({
+  title: z.string(),
+  metaDescription: z.string(),
+});
+
+type PageContentMetadataType = z.infer<typeof PageContentMetadataModel>;
+
 const HomePageModel = PageModel.omit({
   createdAt: true,
   updatedAt: true,
@@ -107,7 +114,7 @@ const CategoryModel = z.object({
 
 type CategoryModelType = z.infer<typeof CategoryModel>;
 
-export { PageModel, HomePageContent, NavigatorModel };
+export { PageModel, HomePageContent, NavigatorModel, PageContentMetadataModel };
 
 export type {
   PageContent,
@@ -121,4 +128,5 @@ export type {
   BannerPageSectionType,
   CategorySliderPageSectionType,
   CategoryProductPageSectionType,
+  PageContentMetadataType,
 };

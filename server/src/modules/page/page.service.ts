@@ -7,7 +7,6 @@ import {
 } from '@/modules/page/page.model';
 import pageRepository from '@/modules/page/page.repository';
 import {
-  CategoryPageContent,
   CategoryPageResponse,
   HomePageResponse,
   NavigateResponse,
@@ -16,10 +15,7 @@ import {
   SectionCategorySlider,
 } from '@/modules/page/page.response';
 import productService from '@/modules/product/product.service';
-import {
-  ID_CATEGORY_PAGE,
-  ID_HOME_PAGE,
-} from '@/shared/config/database.config';
+import { ID_HOME_PAGE } from '@/shared/config/database.config';
 import { applyPlaceholders } from '@/shared/utils/common.util';
 import { createUrl } from '@/shared/utils/media.util';
 import { AppResponse } from '@/types/app';

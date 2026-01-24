@@ -1,3 +1,4 @@
+import pageContentController from '@/modules/page/content/page.controller';
 import pageBuilderController from '@/modules/page/page-builder.controller';
 import pageController from '@/modules/page/page.controller';
 import { HomePageContentUpdateRequestSchema } from '@/modules/page/page.request';
@@ -15,5 +16,8 @@ pageRouters
   );
 pageRouters.use('/page/category', pageController.getCategoryStructure);
 pageRouters.use('/page/navigate', pageController.getNavigateStructure);
+pageRouters
+  .route('/page/about')
+  .get(pageContentController.getAboutPageStructure);
 
 export default pageRouters;

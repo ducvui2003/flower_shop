@@ -67,6 +67,7 @@ type NavigateResponse = Array<{
 }>;
 
 export type {
+  PageResponse,
   HomePageResponse,
   CategoryPageResponse,
   NavigateResponse,

@@ -54,3 +54,8 @@ Content-Type: application/json
         }
     ]
 }
+
+### About Page
+GET  http://localhost:8081/api/page/about
+Content-Type: application/json
+

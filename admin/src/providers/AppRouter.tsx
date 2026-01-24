@@ -8,6 +8,8 @@ import ProductCreatePage from "@/pages/product/create/page";
 import { productLoader } from "@/pages/product/update/loader";
 import ProductPage from "@/pages/product/page";
 import ProductUpdatePage from "@/pages/product/update/page";
+import ContentPage from "@/pages/content/page";
+import { contentLoader } from "@/pages/content/loader";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +44,11 @@ const router = createBrowserRouter([
       {
         path: "media",
         element: <MediaPage />,
+      },
+      {
+        path: "content/:page",
+        loader: contentLoader,
+        element: <ContentPage />,
       },
     ],
   },

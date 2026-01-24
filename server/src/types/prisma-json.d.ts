@@ -1,4 +1,7 @@
-import { PageContent as PageContentApp } from '@/modules/page/page.model';
+import {
+  PageContent as PageContentApp,
+  PageContentMetadataType,
+} from '@/modules/page/page.model';
 import { ProductMetadataModelType } from '@/modules/product/product.model';
 
 declare global {
@@ -7,6 +10,7 @@ declare global {
     type PageContent = PageContentApp;
     type MediaMetadata = Record<string, string>;
     type ProductMetadata = ProductMetadataModelType;
+    type PageContentMetadata = PageContentMetadataType;
   }
 }
 

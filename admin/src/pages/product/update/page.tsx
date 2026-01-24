@@ -44,7 +44,7 @@ const OutputDataSchema = z.object({
       id: z.string().optional(),
       type: z.string(),
       data: z.unknown(),
-    })
+    }),
   ),
 });
 
@@ -80,7 +80,7 @@ const formSchema = z.object({
         key: z.string(),
         href: z.string(),
         alt: z.string(),
-      })
+      }),
     )
     .optional(),
 });
@@ -104,12 +104,7 @@ const ProductUpdatePage = () => {
     priceSale: product.priceSale,
     categories: product.categoryIds,
     slug: { name: product.slugPlaceholder },
-    metadata: product.metadata
-      ? {
-          title: product.metadata.title,
-          metaDescription: product.metadata.metaDescription,
-        }
-      : null,
+    metadata: product.metadata,
     images: product.images,
   };
 
@@ -227,7 +222,7 @@ const ProductUpdatePage = () => {
                             className="absolute top-0 right-0 text-sm hover:opacity-70 text-red-500 cursor-pointer"
                             onClick={() =>
                               field.onChange(
-                                field.value?.filter((i) => item.id !== i.id)
+                                field.value?.filter((i) => item.id !== i.id),
                               )
                             }
                           />

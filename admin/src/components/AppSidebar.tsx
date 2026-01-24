@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { BookImage, Flower, Home, Image } from "lucide-react";
+import { BookImage, Flower, Home, icons, Image, Rss } from "lucide-react";
 import { NavLink } from "react-router";
 
 // Menu items.
@@ -32,6 +32,11 @@ const items = [
     title: "Media",
     url: "media",
     icon: Image,
+  },
+  {
+    title: "Content",
+    url: "content/about",
+    icon: Rss,
   },
 ];
 

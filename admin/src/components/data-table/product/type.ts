@@ -37,11 +37,21 @@ type ProductEditing = {
     slug: string;
   };
   categoryIds: Array<number>;
-  metadata?: {
+  metadata: {
     title: string;
     metaDescription: string;
-  };
+  } | null;
   imageIds: Array<number>;
 };
 
-export type { Product, ProductEditing, Image };
+type PageContentResponse = {
+  title: string;
+  slug: string;
+  content: OutputData;
+  metadata: {
+    title: string;
+    metaDescription: string;
+  } | null;
+};
+
+export type { Product, ProductEditing, Image, PageContentResponse };

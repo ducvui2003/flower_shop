@@ -100,16 +100,18 @@ enum PageType {
 }
 
 model Page {
-  id             Int          @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   title          String
   type           PageType
-  slugRegistryId Int          @map("slug_registry_id")
-  slug           SlugRegistry @relation(fields: [slugRegistryId], references: [id])
-
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime?     @updatedAt @map("updated_at")
-  isDeleted    Boolean?      @default(false) @map("is_deleted")
-  pageSections PageSection[]
+  slugRegistryId Int           @map("slug_registry_id")
+  slug           SlugRegistry  @relation(fields: [slugRegistryId], references: [id])
+  content        String        @default("{}")
+  /// [PageContentMetadata]
+  metadata       Json?
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime?     @updatedAt @map("updated_at")
+  isDeleted      Boolean?      @default(false) @map("is_deleted")
+  pageSections   PageSection[]
 
   @@map("pages")
 }
