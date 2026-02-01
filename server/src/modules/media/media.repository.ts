@@ -14,6 +14,8 @@ interface MediaRepository {
   ) => Promise<MediaModelType>;
   getMedias: (data: MediaSearchGetQueryType) => Promise<Page<MediaModelType>>;
   getMediasByIds: (data: MediaGetQueryType) => Promise<Array<MediaModelType>>;
+  isKeyExist: (data: string) => Promise<boolean>;
+  deleteMediaById: (data: number) => Promise<MediaModelType>;
 }
 
 const mediaRepository: MediaRepository = {
@@ -76,6 +78,28 @@ const mediaRepository: MediaRepository = {
       },
     });
     return items;
+  },
+  isKeyExist: async (data: string): Promise<boolean> => {
+    const media = await prismaService.media.findFirst({
+      where: {
+        key: data,
+      },
+    });
+    return media ? true : false;
+  },
+  deleteMediaById: async (data: number): Promise<MediaModelType> => {
+    const media = await prismaService.media.delete({
+      where: {
+        id: data,
+      },
+    });
+    return {
+      id: media.id,
+      key: media.key,
+      alt: media.alt,
+      metadata: media.metadata,
+      provider: media.provider,
+    };
   },
 };
 

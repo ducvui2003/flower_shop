@@ -5,11 +5,11 @@ import { Upload } from "lucide-react";
 import React, { useRef } from "react";
 import { toast } from "sonner";
 
-const ButtonUploadFile = () => {
+const ButtonUploadFile = ({ callback }: { callback?: () => void }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleUploadFile = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const files = event.target.files;
     if (!files) return;
@@ -26,7 +26,7 @@ const ButtonUploadFile = () => {
           key: file.name,
         });
 
-        const { url } = presignRes.data.data;
+        const { url, key } = presignRes.data.data;
 
         // 2️⃣ Upload to R2
         const uploadRes = await httpService.manual().put(url, file, {
@@ -37,14 +37,16 @@ const ButtonUploadFile = () => {
         if (uploadRes.status === 200 || uploadRes.status === 204) {
           // 3️⃣ Notify backend
           await httpService.post("/media", {
-            key: file.name,
+            key: key,
             metadata: {},
           });
           toast.success("Upload file success", {
-            description: file.name,
+            description: key,
           });
+
+          callback?.();
         }
-      })
+      }),
     );
 
     // reset input

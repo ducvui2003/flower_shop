@@ -37,3 +37,26 @@ export function mergeObjects<T, U>(a?: T, b?: U): (T & U) | undefined {
   if (!a || !b) return undefined;
   return { ...a, ...b };
 }
+
+export function addDatetimePostfix(filename: string) {
+  const dotIndex = filename.lastIndexOf('.');
+  const name = dotIndex !== -1 ? filename.slice(0, dotIndex) : filename;
+  const ext = dotIndex !== -1 ? filename.slice(dotIndex) : '';
+
+  const now = new Date();
+
+  const datetime =
+    [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0'),
+    ].join('') +
+    '-' +
+    [
+      String(now.getHours()).padStart(2, '0'),
+      String(now.getMinutes()).padStart(2, '0'),
+      String(now.getSeconds()).padStart(2, '0'),
+    ].join('');
+
+  return `${name}-${datetime}${ext}`;
+}

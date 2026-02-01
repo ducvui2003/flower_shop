@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
         destination: '/info/policy',
       },
       {
-        source: '/trang-chu',
+        source: '/',
         destination: '/home',
       },
       {

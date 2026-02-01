@@ -39,5 +39,6 @@ mediaRouters
     '/media/sign-url',
     validationBodyMiddleware(MediaSignUrlRequest),
     mediaController.getSignUrl,
-  );
+  )
+  .delete('/media/:id', mediaController.deleteMediaById);
 export default mediaRouters;

@@ -10,8 +10,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import logger from "@/config/logger.util";
+import httpService from "@/lib/http/http.service";
+import { diffObjects } from "@/lib/utils";
+import { OutputData } from "@editorjs/editorjs";
+import { isAxiosError } from "axios";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useParams } from "react-router";
+import { toast } from "sonner";
 import z from "zod";
 
 const OutputDataSchema = z.object({
@@ -42,23 +49,73 @@ const formSchema = z.object({
 type FormInput = z.input<typeof formSchema>;
 type FormOutput = z.output<typeof formSchema>;
 
+const setDefaultContentEditor = (value: string): OutputData => {
+  if (!value || value === "{}") {
+    return {
+      time: Date.now(),
+      blocks: [],
+    };
+  }
+  return JSON.parse(value) as OutputData;
+};
+
 const ContentPage = () => {
+  const { page } = useParams();
   const pageData = useLoaderData<PageContentResponse>();
   const formInitialize: FormInput = {
     title: pageData.title,
-    metadata: pageData.metadata,
-    content: pageData.content ?? {
-      time: Date.now(),
-      blocks: [],
+    metadata: pageData.metadata ?? {
+      title: "",
+      metaDescription: "",
     },
+    content: setDefaultContentEditor(pageData.content),
     slug: {
       name: pageData.slug,
     },
   };
+  logger.debug(pageData);
   const form = useForm<FormInput>({
     defaultValues: formInitialize,
   });
-  const handleSubmit = async () => {};
+
+  const handleSubmit = async (value: FormInput) => {
+    const result = formSchema.safeParse(value);
+    if (!result.success) {
+      logger.error(result.error.flatten());
+      toast.error("Invalid form data");
+      return;
+    }
+    const data: FormOutput = result.data;
+    let diffData = diffObjects(data, formInitialize);
+    if (Object.keys(diffData).length === 0) {
+      toast.warning("No values changed");
+      return;
+    }
+    diffData = {
+      ...diffData,
+      metadata: {
+        ...data.metadata,
+        ...diffData.metadata,
+      },
+    };
+    diffData["content"] = JSON.stringify(diffData["content"]);
+    logger.debug(diffData);
+    try {
+      await httpService.patch(`/page/${page}`, diffData);
+      toast.success(`Update ${page} success`);
+      // navigate("/content", { replace: true });
+    } catch (e) {
+      if (isAxiosError(e)) {
+        toast.error(e.code, {
+          description: e.response?.data?.message ?? "Not defined",
+        });
+      } else toast.error("Not define");
+      logger.error(e);
+    }
+  };
+  useEffect(() => {
+    form.reset(formInitialize);
+  }, [pageData]);
   return (
     <div className="p-2">
       <h2 className="text-2xl font-bold">{pageData.title}</h2>
@@ -133,9 +190,9 @@ const ContentPage = () => {
             </Field>
           )}
         />
-        <div className="fixed left-1/2 flex gap-2 bg-white -translate-x-1/2 bottom-1 border-2 p-2 rounded-xl ">
+        <div className="fixed left-1/2 flex gap-2 bg-white -translate-x-1/2 bottom-1 border-2 p-2 rounded-xl z-50">
           <Button type="submit" className="bg-green-500">
-            Create
+            Update
           </Button>
           <Button type="reset">Clear</Button>
         </div>

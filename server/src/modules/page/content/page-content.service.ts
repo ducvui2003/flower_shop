@@ -1,30 +1,58 @@
-import { PageWithContentType } from '@/modules/page/content/page-content.model';
 import pageContentRepository from '@/modules/page/content/page-content.repository';
+import { PageContentUpdateRequestType } from '@/modules/page/content/page-content.request';
 import { PageContentResponse } from '@/modules/page/content/page-content.response';
-import { ID_ABOUT_PAGE, ID_HOME_PAGE } from '@/shared/config/database.config';
+import {
+  ID_ABOUT_PAGE,
+  ID_HOME_PAGE,
+  ID_POLICY_PAGE,
+} from '@/shared/config/database.config';
+import { AppErrorBuilder } from '@/shared/errors/app-error';
 import { AppResponse } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
 
 interface PageContentService {
   getPageWithContent: (
-    page: 'about' | '',
+    page: 'about' | 'policy',
   ) => Promise<AppResponse<PageContentResponse>>;
+  updatePageWithContent: (
+    page: 'about' | 'policy',
+    content: PageContentUpdateRequestType,
+  ) => Promise<AppResponse<void>>;
 }
 
 const pageContentService: PageContentService = {
   getPageWithContent: async (page) => {
-    const contentData = await pageContentRepository.getPage(ID_ABOUT_PAGE);
+    let pageId = 0;
+    if (page === 'policy') pageId = ID_POLICY_PAGE;
+    if (page === 'about') pageId = ID_ABOUT_PAGE;
+    if (pageId === 0) {
+      throw AppErrorBuilder.badRequest(`Page ${page} is not supported`);
+    }
+    const contentData = await pageContentRepository.getPage(pageId);
     const data: PageContentResponse = {
       title: contentData.title,
       slug: contentData.slug.slug,
       content: contentData.content,
       metadata: contentData.metadata,
     };
-    return Promise.resolve({
+    return {
       code: StatusCodes.OK,
       message: 'Page with content fetched successfully',
       data,
-    });
+    };
+  },
+  updatePageWithContent: async (page, content) => {
+    let pageId = 0;
+    if (page === 'policy') pageId = ID_POLICY_PAGE;
+    if (page === 'about') pageId = ID_ABOUT_PAGE;
+    if (pageId === 0) {
+      throw AppErrorBuilder.badRequest(`Page ${page} is not supported`);
+    }
+    await pageContentRepository.updatePage(pageId, content);
+    return {
+      code: StatusCodes.OK,
+      message: `Page ${page} content updated successfully`,
+    };
   },
 };
 export default pageContentService;

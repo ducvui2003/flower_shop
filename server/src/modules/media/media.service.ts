@@ -2,7 +2,11 @@ import { MediaModelType } from '@/shared/models/media.model';
 import mediaRepository from '@/modules/media/media.repository';
 import envConfig from '@/shared/config/env.config';
 import { AppResponse, Page } from '@/types/app';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { StatusCodes } from 'http-status-codes';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { createUrl } from '@/shared/utils/media.util';
@@ -10,8 +14,16 @@ import {
   MediaGetQueryType,
   MediaSearchGetQueryType,
 } from '@/modules/media/media.request';
-import { mapperItems, mapperItemsForPage } from '@/shared/utils/common.util';
+import {
+  addDatetimePostfix,
+  mapperItems,
+  mapperItemsForPage,
+} from '@/shared/utils/common.util';
 import { MediaResponseType } from '@/modules/media/media.response';
+import {
+  isForeignKeyNotFound,
+  isRecordNotExist,
+} from '@/shared/utils/error.util';
 
 type FileMulter = Express.Multer.File;
 
@@ -23,6 +35,15 @@ const S3 = new S3Client({
     secretAccessKey: envConfig.R2_SECRET_KEY,
   },
 });
+
+export async function deleteImageFromS3(key: string) {
+  await S3.send(
+    new DeleteObjectCommand({
+      Bucket: envConfig.R2_BUCKET,
+      Key: key,
+    }),
+  );
+}
 
 interface MediaService {
   createMedia: (
@@ -36,16 +57,23 @@ interface MediaService {
       }
     >
   >;
-  createSignUrl: (key: string) => Promise<{
-    url: string;
-    expiresIn: number;
-  }>;
+  createSignUrl: (
+    key: string,
+    type: 'create' | 'update',
+  ) => Promise<
+    AppResponse<{
+      url: string;
+      key: string;
+      expiresIn: number;
+    }>
+  >;
   getMedias: (
     data: MediaSearchGetQueryType,
   ) => Promise<AppResponse<Page<MediaModelType>>>;
   getMediasByIds: (
     data: MediaGetQueryType,
   ) => Promise<AppResponse<Array<MediaModelType>>>;
+  deleteMediaById: (data: number) => Promise<AppResponse<void>>;
 }
 
 const mediaService: MediaService = {
@@ -73,16 +101,38 @@ const mediaService: MediaService = {
     }
   },
 
-  createSignUrl: async (key: string) => {
-    const url = await getSignedUrl(
-      S3,
-      new PutObjectCommand({ Bucket: envConfig.R2_BUCKET, Key: key }),
-      { expiresIn: 3600 },
-    );
-    return {
-      url,
-      expiresIn: 3600,
-    };
+  createSignUrl: async (key: string, type: 'create' | 'update') => {
+    if (type === 'create') {
+      const url = await getSignedUrl(
+        S3,
+        new PutObjectCommand({ Bucket: envConfig.R2_BUCKET, Key: key }),
+        { expiresIn: 3600 },
+      );
+      return {
+        code: StatusCodes.OK,
+        data: {
+          url,
+          key: key,
+          expiresIn: 3600,
+        },
+      };
+    } else {
+      const isExist = await mediaRepository.isKeyExist(key);
+      const newKey = !isExist ? key : addDatetimePostfix(key);
+      const url = await getSignedUrl(
+        S3,
+        new PutObjectCommand({ Bucket: envConfig.R2_BUCKET, Key: newKey }),
+        { expiresIn: 3600 },
+      );
+      return {
+        code: StatusCodes.OK,
+        data: {
+          url,
+          key: newKey,
+          expiresIn: 3600,
+        },
+      };
+    }
   },
 
   getMedias: async (
@@ -118,6 +168,32 @@ const mediaService: MediaService = {
       message: 'Get media by ids',
       data: newPage,
     };
+  },
+
+  deleteMediaById: async (data: number): Promise<AppResponse<void>> => {
+    try {
+      const media = await mediaRepository.deleteMediaById(data);
+      await deleteImageFromS3(media.key);
+      return {
+        code: StatusCodes.NO_CONTENT,
+        message: `Delete media #${data} success`,
+      };
+    } catch (err) {
+      if (isForeignKeyNotFound(err))
+        return {
+          code: StatusCodes.CONFLICT,
+          message: 'Media is still in use',
+        };
+      if (isRecordNotExist(err)) {
+        return {
+          code: StatusCodes.NOT_FOUND,
+          message: 'Media not found',
+        };
+      }
+      return {
+        code: StatusCodes.INTERNAL_SERVER_ERROR,
+      };
+    }
   },
 };
 const uploadToS3 = async (

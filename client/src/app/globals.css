@@ -278,3 +278,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Editor js custom */
+.edjs-image {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.edjs-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.edjs-image--border img {
+  border: 1px solid #e5e7eb;
+}
+
+.edjs-image--background {
+  background: #f3f4f6;
+  padding: 1rem;
+}
+
+.edjs-image--stretched img {
+  width: 100%;
+}

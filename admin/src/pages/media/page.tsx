@@ -15,7 +15,7 @@ const MediaPage = () => {
           <Button className="mr-3" onClick={() => updateReload()}>
             <RefreshCcw />
           </Button>
-          <ButtonUploadFile />
+          <ButtonUploadFile callback={updateReload} />
         </div>
       </div>
       <MediaDataTable />

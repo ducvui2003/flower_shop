@@ -33,6 +33,24 @@ const pageService = {
       return null;
     }
   },
+  getPageCommonStructure: async (page: 'about' | 'policy') => {
+    try {
+      const data = await httpServer.get<
+        ResponseApi<{
+          title: string;
+          slug: string;
+          content: string;
+          metadata: {
+            title: string;
+            metaDescription: string;
+          } | null;
+        }>
+      >(`/api/page/${page}`, {}, false);
+      return data.payload.data;
+    } catch (e) {
+      return null;
+    }
+  },
 };
 
 export default pageService;

@@ -83,9 +83,9 @@ model Product {
 
 model ProductMedia {
   id          Int      @id @default(autoincrement())
-  product     Product  @relation(fields: [productId], references: [id])
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId   Int      @map("product_id")
-  media       Media    @relation(fields: [mediaId], references: [id])
+  media       Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
   mediaId     Int      @map("media_id")
   isThumbnail Boolean? @default(false)
 

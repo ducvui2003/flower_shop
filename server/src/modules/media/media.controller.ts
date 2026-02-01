@@ -27,10 +27,7 @@ const mediaController = {
         body.metadata,
       );
       logger.info(data);
-      res.status(StatusCodes.OK).json({
-        success: true,
-        data: data,
-      });
+      res.status(data.code).json(data);
     } catch (err) {
       next(err);
     }
@@ -42,13 +39,10 @@ const mediaController = {
   ): Promise<void> => {
     try {
       const body: MediaSignUrlRequestType = req.body;
-      const data = await mediaService.createSignUrl(body.key);
-      logger.info(data);
+      const data = await mediaService.createSignUrl(body.key, 'update');
+      logger.debug(data);
 
-      res.status(StatusCodes.OK).json({
-        success: true,
-        data: data,
-      });
+      res.status(data.code).json(data);
     } catch (e) {
       next(e);
     }
@@ -67,10 +61,7 @@ const mediaController = {
       );
       logger.info(data);
 
-      res.status(StatusCodes.OK).json({
-        success: true,
-        data: data,
-      });
+      res.status(data.code).json(data);
     } catch (err) {
       next(err);
     }
@@ -100,6 +91,15 @@ const mediaController = {
       res.status(data.code).json(data);
     } catch (err) {
       next(err);
+    }
+  },
+  deleteMediaById: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+      const data = await mediaService.deleteMediaById(parseInt(id));
+      res.status(data.code).json(data);
+    } catch (e) {
+      next(e);
     }
   },
 };

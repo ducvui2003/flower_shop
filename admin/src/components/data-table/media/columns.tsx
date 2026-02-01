@@ -2,6 +2,7 @@ import { Media } from "@/components/data-table/media/page";
 import DialogDeleteMedia from "@/components/dialog/dialog-delete-media";
 import DialogUpdateMedia from "@/components/dialog/dialog-update-media";
 import envConfig from "@/config/env.config";
+import useMediaStore from "@/store/media.store";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const createUrl = (key: string) => {
@@ -41,10 +42,11 @@ export const columns: ColumnDef<Media>[] = [
   {
     header: "Edit",
     cell: ({ row }) => {
+      const { updateReload } = useMediaStore();
       return (
         <div className="flex gap-2">
           <DialogUpdateMedia />
-          <DialogDeleteMedia id={row.getValue("id")} />
+          <DialogDeleteMedia id={row.getValue("id")} callback={updateReload} />
         </div>
       );
     },

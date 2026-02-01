@@ -47,7 +47,7 @@ type ProductEditing = {
 type PageContentResponse = {
   title: string;
   slug: string;
-  content: OutputData;
+  content: string;
   metadata: {
     title: string;
     metaDescription: string;

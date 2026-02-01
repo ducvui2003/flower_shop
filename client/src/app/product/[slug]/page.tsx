@@ -1,7 +1,6 @@
 import { cache } from 'react';
 import productService from '@/service/product.server.service';
 import { notFound } from 'next/navigation';
-import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 import { headers } from 'next/headers';
 import ProductDetail from '@/app/product/[slug]/ProductDetail';
 
