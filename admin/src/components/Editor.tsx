@@ -1,14 +1,13 @@
+import httpService from "@/lib/http/http.service";
+import { ResponseApi } from "@/lib/http/http.type";
 import { cn } from "@/lib/utils";
 import CodeTool from "@editorjs/code";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
-import List from "@editorjs/list";
 import ImageTool from "@editorjs/image";
+import List from "@editorjs/list";
 import Quote from "@editorjs/quote";
 import { useEffect, useRef } from "react";
-import httpService from "@/lib/http/http.service";
-import { ResponseApi } from "@/lib/http/http.type";
 import { toast } from "sonner";
-import { isAxiosError } from "axios";
 
 interface Props {
   value?: OutputData;
@@ -18,92 +17,59 @@ interface Props {
 
 const Editor = ({ value, onChange, className }: Props) => {
   const editorRef = useRef<EditorJS | null>(null);
+  const isReadyRef = useRef(false);
 
   useEffect(() => {
-    if (editorRef.current) return;
+    if (editorRef.current || isReadyRef.current) return;
+
+    isReadyRef.current = true;
     const editor = new EditorJS({
       holder: "editorjs",
       data: value,
       autofocus: true,
       tools: {
-        list: {
-          class: List,
-          inlineToolbar: true,
-        },
-        quote: {
-          class: Quote,
-          inlineToolbar: true,
-        },
+        list: { class: List, inlineToolbar: true },
+        quote: { class: Quote, inlineToolbar: true },
         code: CodeTool,
         image: {
           class: ImageTool,
           config: {
             uploader: {
-              /**
-               * Upload file to the server and return an uploaded image data
-               * @param {File} file - file selected from the device or pasted by drag-n-drop
-               * @return {Promise.<{success, file: {url}}>}
-               */
               async uploadByFile(file: File) {
                 try {
-                  // 1️⃣ Get presigned URL
                   const presignRes = await httpService.post<
                     ResponseApi<{ url: string; key: string }>,
-                    {
-                      key: string;
-                    }
-                  >("/media/sign-url", {
-                    key: file.name,
-                  });
+                    { key: string }
+                  >("/media/sign-url", { key: file.name });
 
                   const { url, key } = presignRes.data.data;
-
-                  // 2️⃣ Upload to R2
                   const uploadRes = await httpService.manual().put(url, file, {
                     headers: {},
                     withCredentials: false,
                   });
 
                   if (uploadRes.status !== 200 && uploadRes.status !== 204) {
-                    throw new Error(
-                      "Upload CloudFlare failed with status " +
-                        uploadRes.status,
-                    );
+                    throw new Error(`Upload failed: ${uploadRes.status}`);
                   }
 
-                  // 3️⃣ Notify backend
                   const response = await httpService.post<
                     ResponseApi<{ url: string }>,
-                    {
-                      key: string;
-                      metadata: object;
-                    }
+                    { key: string; metadata: object }
                   >("/media", {
                     key: key,
-                    metadata: {
-                      place: "description",
-                    },
+                    metadata: { place: "description" },
                   });
-                  toast.success("Upload file success", {
+
+                  toast.success("Upload success", {
                     description: presignRes.data.data.key,
                   });
-                  return {
-                    success: 1,
-                    file: { url: response.data.data.url },
-                  };
+
+                  return { success: 1, file: { url: response.data.data.url } };
                 } catch (error) {
-                  if (isAxiosError(error)) {
-                    return {
-                      success: 0,
-                      message: error.message,
-                    };
-                  }
                   return {
                     success: 0,
                     message:
-                      error instanceof Error
-                        ? error.message
-                        : "Image upload failed",
+                      error instanceof Error ? error.message : "Upload failed",
                   };
                 }
               },
@@ -115,20 +81,32 @@ const Editor = ({ value, onChange, className }: Props) => {
         editorRef.current = editor;
       },
       async onChange(api) {
+        if (!editorRef.current) return;
         const data = await api.saver.save();
-        onChange?.(data); // JSON output
+        onChange?.(data);
       },
     });
 
     return () => {
-      editorRef?.current?.destroy();
+      if (editorRef.current?.destroy) {
+        editorRef.current.destroy();
+      }
       editorRef.current = null;
+      isReadyRef.current = false;
     };
-  }, []);
+  }, []); // Keep empty - initialization only
 
   useEffect(() => {
     if (!editorRef.current || !value) return;
-    editorRef.current.render(value);
+
+    const updateContent = async () => {
+      const currentData = await editorRef.current!.save();
+      if (JSON.stringify(currentData) !== JSON.stringify(value)) {
+        await editorRef.current!.render(value);
+      }
+    };
+
+    updateContent();
   }, [value]);
 
   return (

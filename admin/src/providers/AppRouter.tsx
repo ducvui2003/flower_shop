@@ -10,6 +10,7 @@ import ProductPage from "@/pages/product/page";
 import ProductUpdatePage from "@/pages/product/update/page";
 import ContentPage from "@/pages/content/page";
 import { contentLoader } from "@/pages/content/loader";
+import NavigatorsPage from "@/pages/navigator/page";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
         path: "content/:page",
         loader: contentLoader,
         element: <ContentPage />,
+      },
+      {
+        path: "navigators",
+        element: <NavigatorsPage />,
       },
     ],
   },

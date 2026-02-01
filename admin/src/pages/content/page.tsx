@@ -132,7 +132,7 @@ const ContentPage = () => {
                 <Input
                   {...field}
                   aria-invalid={fieldState.invalid}
-                  placeholder="Hoa tuoi "
+                  placeholder="Hoa tuoi"
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -164,6 +164,7 @@ const ContentPage = () => {
                     {...field}
                     aria-invalid={fieldState.invalid}
                     placeholder="/"
+                    disabled
                   />
                 </div>
                 {fieldState.invalid && (
@@ -181,6 +182,7 @@ const ContentPage = () => {
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel>Content</FieldLabel>
               <Editor
+                key={page} // Add this line to force re-mount on navigation
                 className="max-h-[400px]"
                 value={field.value}
                 onChange={(data) => {

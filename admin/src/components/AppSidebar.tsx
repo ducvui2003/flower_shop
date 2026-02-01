@@ -19,6 +19,7 @@ import {
   Flower,
   Home,
   Image,
+  Navigation,
   Rss,
 } from "lucide-react";
 import { NavLink } from "react-router";
@@ -26,9 +27,14 @@ import { NavLink } from "react-router";
 // Menu items.
 const items = [
   {
-    title: "Home",
+    title: "Dashboard",
     url: "/",
     icon: Home,
+  },
+  {
+    title: "Navigators",
+    url: "/navigators",
+    icon: Navigation,
   },
   {
     title: "Product",

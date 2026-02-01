@@ -26,7 +26,7 @@ const getData = cache(async () => {
       title: data.title,
       content: data.content,
     };
-  } catch (e) {
+  } catch (_) {
     return null;
   }
 });
