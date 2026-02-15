@@ -123,13 +123,13 @@ enum PageSectionType {
 }
 
 model PageSection {
-  id        Int             @id @default(autoincrement())
-  type      PageSectionType
-  position  Int
-  config    Json
-  is_active Boolean?        @default(false)
-  pageId    Int             @map("page_id")
-  page      Page            @relation(fields: [pageId], references: [id])
+  id       Int             @id @default(autoincrement())
+  type     PageSectionType
+  position Int
+  config   Json
+  isActive Boolean         @default(false) @map("is_active")
+  pageId   Int             @map("page_id")
+  page     Page            @relation(fields: [pageId], references: [id])
 
   @@unique([pageId, position])
   @@map("page_sections")
