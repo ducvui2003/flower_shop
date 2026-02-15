@@ -1,5 +1,5 @@
+import pageContentController from '@/modules/page/content/page-content.controller';
 import { PageContentUpdateRequestSchema } from '@/modules/page/content/page-content.request';
-import pageContentController from '@/modules/page/content/page.controller';
 import pageBuilderController from '@/modules/page/page-builder.controller';
 import pageController from '@/modules/page/page.controller';
 import { HomePageContentUpdateRequestSchema } from '@/modules/page/page.request';
@@ -31,5 +31,9 @@ pageRouters
     validationBodyMiddleware(PageContentUpdateRequestSchema),
     pageContentController.updatePolicyPageStructure,
   );
+
+pageRouters
+  .route('/page/home/config')
+  .get(pageContentController.getHomePageSections);
 
 export default pageRouters;

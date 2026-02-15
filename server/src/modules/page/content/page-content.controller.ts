@@ -3,6 +3,18 @@ import pageContentService from '@/modules/page/content/page-content.service';
 import { NextFunction, Request, Response } from 'express';
 
 const pageContentController = {
+  getHomePageSections: async (
+    _: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const response = await pageContentService.getPageSections('home');
+      res.status(response.code).json(response);
+    } catch (error) {
+      next(error);
+    }
+  },
   getAboutPageStructure: async (
     _: Request,
     res: Response,

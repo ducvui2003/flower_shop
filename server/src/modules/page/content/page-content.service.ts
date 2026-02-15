@@ -1,6 +1,8 @@
 import pageContentRepository from '@/modules/page/content/page-content.repository';
 import { PageContentUpdateRequestType } from '@/modules/page/content/page-content.request';
 import { PageContentResponse } from '@/modules/page/content/page-content.response';
+import { PageSectionModelType } from '@/modules/page/page.model';
+import pageRepository from '@/modules/page/page.repository';
 import {
   ID_ABOUT_PAGE,
   ID_HOME_PAGE,
@@ -18,6 +20,9 @@ interface PageContentService {
     page: 'about' | 'policy',
     content: PageContentUpdateRequestType,
   ) => Promise<AppResponse<void>>;
+  getPageSections: (
+    page: 'home',
+  ) => Promise<AppResponse<Array<PageSectionModelType>>>;
 }
 
 const pageContentService: PageContentService = {
@@ -52,6 +57,22 @@ const pageContentService: PageContentService = {
     return {
       code: StatusCodes.OK,
       message: `Page ${page} content updated successfully`,
+    };
+  },
+  getPageSections: async (page) => {
+    let pageId = 0;
+    if (page === 'home') pageId = ID_HOME_PAGE;
+    if (pageId === 0) {
+      throw AppErrorBuilder.badRequest(`Page ${page} is not supported`);
+    }
+    const data = await pageRepository.getPageSection(pageId);
+    return {
+      code: StatusCodes.OK,
+      message: `Page ${page} content updated successfully`,
+      data: data.map((section) => ({
+        ...section,
+        config: section.config as any,
+      })),
     };
   },
 };

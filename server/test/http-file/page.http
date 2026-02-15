@@ -62,3 +62,7 @@ Content-Type: application/json
 ### Get Contact Page
 GET  http://localhost:8081/api/page/policy
 Content-Type: application/json
+
+### Get Home Page Section
+GET  http://localhost:8081/api/page/home/config
+Content-Type: application/json

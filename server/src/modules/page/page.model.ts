@@ -102,6 +102,15 @@ const MediaModel = z.object({
   metadata: z.unknown().nullable(),
 });
 
+const PageSectionModel = z.object({
+  id: z.number(),
+  type: z.enum(['banner', 'category_slider', 'category_product_section']),
+  config: z.json(),
+  isActive: z.boolean(),
+  pageId: z.number(),
+});
+
+type PageSectionModelType = z.infer<typeof PageSectionModel>;
 type MediaModelType = z.infer<typeof MediaModel>;
 
 const CategoryModel = z.object({
@@ -129,4 +138,6 @@ export type {
   CategorySliderPageSectionType,
   CategoryProductPageSectionType,
   PageContentMetadataType,
+  PageSectionModel,
+  PageSectionModelType,
 };
