@@ -25,7 +25,6 @@ const pageController = {
       next(error);
     }
   },
-
   getNavigateStructure: async (
     _: Request,
     res: Response,

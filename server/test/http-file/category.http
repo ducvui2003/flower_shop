@@ -3,7 +3,7 @@ GET http://localhost:8081/api/category
 Content-Type: application/json
 
 ###  Get categories with search
-GET http://localhost:8081/api/category?name=hoa&page=1&limit=10
+GET http://localhost:8081/api/category?page=1&limit=50
 Content-Type: application/json
 
 ### Get category by ID

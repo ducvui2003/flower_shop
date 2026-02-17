@@ -2,10 +2,10 @@ import {
   BannerPageSectionType,
   CategoryProductPageSectionType,
   CategorySliderPageSectionType,
-  HomePageContentType,
   NavigatorAggregateType,
 } from '@/modules/page/page.model';
 import pageRepository from '@/modules/page/page.repository';
+import { PageSectionUpdateRequestType } from '@/modules/page/page.request';
 import {
   CategoryPageResponse,
   HomePageResponse,
@@ -27,9 +27,8 @@ interface PageService {
     slug: string,
   ) => Promise<AppResponse<CategoryPageResponse>>;
   getNavigateStructure: () => Promise<AppResponse<NavigateResponse>>;
-
-  updateHomePageContent: (
-    body: HomePageContentType,
+  updatePageSections: (
+    body: PageSectionUpdateRequestType,
   ) => Promise<AppResponse<void>>;
 }
 
@@ -46,7 +45,7 @@ const pageService: PageService = {
     const mediaModels = await pageRepository.getMedias(mediaIds);
     const banners: SectionBanner = {
       type: 'banner',
-      title: '',
+      title: 'banner',
       content: mediaModels.map((item) => ({
         src: createUrl(item.key),
         alt: item.alt ?? '',
@@ -222,10 +221,10 @@ const pageService: PageService = {
     });
   },
 
-  updateHomePageContent: async (
-    content: HomePageContentType,
+  updatePageSections: async (
+    data: PageSectionUpdateRequestType,
   ): Promise<AppResponse<void>> => {
-    await pageRepository.updatePageContent(ID_HOME_PAGE, content);
+    await pageRepository.updatePageSection(data, ID_HOME_PAGE);
     return Promise.resolve({
       code: StatusCodes.ACCEPTED,
     });

@@ -56,6 +56,10 @@ const items = [
     icon: Rss,
     items: [
       {
+        title: "Home",
+        url: "home",
+      },
+      {
         title: "About",
         url: "content/about",
         icon: Rss,

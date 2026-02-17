@@ -49,13 +49,13 @@ const DialogGetImage = ({
       }
       onChange?.(next);
     },
-    [isControlled, onChange]
+    [isControlled, onChange],
   );
 
   const [page, setPage] = useState<number>(1);
   const { data } = useApi(async () => {
     const res = await httpService.get<ResponseApi<Page<Image>>>(
-      `/media?page=${page}`
+      `/media?page=${page}`,
     );
     return res.data.data;
   }, [page]);

@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import CategoryPage from "@/pages/category/page";
 import HomePage from "@/pages/home/page";
+import { homeLoader } from "@/pages/home/loader";
 import RootLayout from "@/pages/layout";
 import MediaPage from "@/pages/media/page";
 import ProductCreatePage from "@/pages/product/create/page";
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        loader: homeLoader,
         element: <HomePage />,
       },
       {
@@ -54,6 +56,11 @@ const router = createBrowserRouter([
       {
         path: "navigators",
         element: <NavigatorsPage />,
+      },
+      {
+        path: "home",
+        loader: homeLoader,
+        element: <HomePage />,
       },
     ],
   },

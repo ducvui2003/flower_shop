@@ -106,6 +106,7 @@ const PageSectionModel = z.object({
   id: z.number(),
   type: z.enum(['banner', 'category_slider', 'category_product_section']),
   config: z.json(),
+  position: z.number(),
   isActive: z.boolean(),
   pageId: z.number(),
 });
@@ -123,7 +124,13 @@ const CategoryModel = z.object({
 
 type CategoryModelType = z.infer<typeof CategoryModel>;
 
-export { PageModel, HomePageContent, NavigatorModel, PageContentMetadataModel };
+export {
+  PageModel,
+  HomePageContent,
+  NavigatorModel,
+  PageContentMetadataModel,
+  PageSectionModel,
+};
 
 export type {
   PageContent,
@@ -138,6 +145,5 @@ export type {
   CategorySliderPageSectionType,
   CategoryProductPageSectionType,
   PageContentMetadataType,
-  PageSectionModel,
   PageSectionModelType,
 };

@@ -5,13 +5,17 @@ import {
   PageContent,
   PageModelType,
 } from '@/modules/page/page.model';
+import { PageSectionUpdateRequestType } from '@/modules/page/page.request';
 import prismaService from '@/shared/services/db.service';
 import { PageSection } from '@prisma/client';
 
 interface PageRepository {
   getPage: (id: number) => Promise<PageModelType>;
   getPageSection: (pageId: number) => Promise<Array<PageSection>>;
-  updatePageContent: (id: number, content: PageContent) => Promise<void>;
+  updatePageSection: (
+    data: PageSectionUpdateRequestType,
+    pageId: number,
+  ) => Promise<void>;
   getMedias: (ids: Array<number>) => Promise<Array<MediaModelType>>;
   getCategories: (ids: Array<number>) => Promise<Array<CategoryModelType>>;
   getCategoryBySlug: (slug: string) => Promise<CategoryModelType | null>;
@@ -48,12 +52,50 @@ const pageRepository: PageRepository = {
       },
     });
   },
-  updatePageContent: async (id: number, content: PageContent) => {
-    await prismaService.page.update({
-      data: {},
-      where: {
-        id: id,
-      },
+  updatePageSection: async (
+    data: PageSectionUpdateRequestType,
+    pageId: number,
+  ) => {
+    await prismaService.$transaction(async (tx) => {
+      const newPageSections = data.new;
+      if (newPageSections.length > 0)
+        await tx.pageSection.createMany({
+          data: newPageSections.map((i) => ({
+            id: i.id,
+            config: i.config as any,
+            position: i.position,
+            pageId: pageId,
+            type: i.type as any,
+          })),
+        });
+      const updatePageSections = data.update;
+      if (updatePageSections.length > 0)
+        await Promise.all(
+          updatePageSections.map((i) =>
+            tx.pageSection.update({
+              where: {
+                id: i.id,
+              },
+              data: {
+                config: i.config as any,
+                position: i.position,
+                pageId: pageId,
+                type: i.type as any,
+              },
+            }),
+          ),
+        );
+
+      const deletePageSectionIds = data.delete;
+      if (deletePageSectionIds.length > 0) {
+        await tx.pageSection.deleteMany({
+          where: {
+            id: {
+              in: deletePageSectionIds,
+            },
+          },
+        });
+      }
     });
   },
   getMedias: (ids) => {
