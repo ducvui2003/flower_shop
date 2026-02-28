@@ -12,7 +12,7 @@ const getProduct = cache(async (slug: string) => {
   try {
     const res = await productService.getProductBySlug(slug);
     return res;
-  } catch (e) {
+  } catch (_) {
     notFound();
   }
 });

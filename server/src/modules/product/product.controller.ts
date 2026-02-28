@@ -12,7 +12,6 @@ const productController = {
   getProducts: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: ProductSearchGetQueryType = req.locals.query;
-      logger.info(query);
       const response = await productService.searchProducts(query);
       res.status(response.code).json(response);
     } catch (e) {
@@ -112,6 +111,15 @@ const productController = {
     try {
       const id = req.params.id;
       const response = await productService.deleteProductById(parseInt(id));
+      res.status(response.code).json(response);
+    } catch (e) {
+      next(e);
+    }
+  },
+  getSitemap: async (_: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log('sitemap');
+      const response = await productService.getSitemap();
       res.status(response.code).json(response);
     } catch (e) {
       next(e);

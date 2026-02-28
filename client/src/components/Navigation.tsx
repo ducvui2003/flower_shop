@@ -1,24 +1,32 @@
+'use client';
+
 import ClientIcon from '@/components/ClientIcon';
 import Logo from '@/components/Logo';
 import SearchBar from '@/components/SearchBar';
 import { DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import pageService from '@/service/page.service';
 import { BreakPointType } from '@/utils/const.util';
 import Link from 'next/link';
+import { useState } from 'react';
+
+type NavigationItem = {
+  title: string;
+  href?: string;
+  child?: NavigationItem[];
+};
 
 type NavigationProps = {
   breakpoint: BreakPointType;
+  data: NavigationItem[];
 };
 
-const Navigation = ({ breakpoint }: NavigationProps) => {
-  if (breakpoint === 'mobile') return <MobileNav />;
-  if (breakpoint === 'pc') return <PcNav />;
+const Navigation = ({ breakpoint, data }: NavigationProps) => {
+  if (breakpoint === 'mobile') return <MobileNav data={data} />;
+  if (breakpoint === 'pc') return <PcNav data={data} />;
   return null;
 };
 
-const PcNav = async () => {
-  const data = await pageService.getNavigateStructure();
+const PcNav = ({ data }: { data: NavigationItem[] }) => {
   if (data?.length === 0) return null;
   const LinkRender = (i: number, item: { title: string; href?: string }) => {
     return (
@@ -53,13 +61,12 @@ const PcNav = async () => {
   );
 };
 
-const MobileNav = async () => {
-  const data = await pageService.getNavigateStructure();
+const MobileNav = ({ data }: { data: NavigationItem[] }) => {
+  const [open, setOpen] = useState<boolean>(false);
   if (data?.length === 0) return null;
-
   return (
-    <Sheet>
-      <SheetTrigger className="pc:hidden p-2">
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger id="nav-mobile" className="pc:hidden p-2">
         <ClientIcon height={25} icon="lucide:menu" />
       </SheetTrigger>
       <SheetContent className="min-w-[80vw] p-4">
@@ -70,10 +77,13 @@ const MobileNav = async () => {
         <ul className="grid flex-col gap-3 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
           {data.map((component, index) => {
             return (
-              <Link key={index} href={component.href} legacyBehavior passHref>
-                <span className="hover:bg-primary text-primary border-primary inline-block max-w-[250px] min-w-[200px] border-b-1 bg-white p-2 transition hover:text-white">
-                  {component.title}
-                </span>
+              <Link
+                key={index}
+                href={component.href || '/'}
+                className="hover:bg-primary text-primary border-primary inline-block max-w-[250px] min-w-[200px] border-b-1 bg-white p-2 transition hover:text-white"
+                onClick={() => setOpen(false)}
+              >
+                {component.title}
               </Link>
             );
           })}

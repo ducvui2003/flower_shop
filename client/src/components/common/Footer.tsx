@@ -1,8 +1,8 @@
+import Link from '@/components/Link';
 import Logo from '@/components/Logo';
 import { Separator } from '@/components/ui/separator';
 import { APP_INFO } from '@/utils/const.util';
-import TEXT from '@/utils/text.util';
-import { ReactNode } from 'react';
+import { FOOTER_TEXT } from '@/utils/text.util';
 
 const Footer = () => {
   return (
@@ -11,14 +11,35 @@ const Footer = () => {
       <footer className="bg-[#fcfcfc] pt-7 text-black">
         <div className="container-p pc:grid-cols-3 pc:grid-rows-1 pc:grid container flex flex-col gap-4 pb-4">
           <ColIntro />
-          {TEXT.FOOTER.filter((_, i) => i != 0).map((item, i) => {
+          {FOOTER_TEXT.filter((_, i) => i != 0).map((item, i) => {
             return (
               <div key={i}>
                 <h3 className="mb-4 font-bold">{item.title}</h3>
                 <ul className="flex flex-col gap-4 text-sm">
-                  {item.li.map((child, childI) => (
-                    <Li key={childI}>{child}</Li>
-                  ))}
+                  {item.li.map((child, childI) => {
+                    if (!child.link) {
+                      return (
+                        <li
+                          key={childI}
+                          className="hover:cursor-pointer hover:underline"
+                        >
+                          {child.title}
+                        </li>
+                      );
+                    }
+                    return (
+                      <Link
+                        key={childI}
+                        href={child.link}
+                        legacyBehavior
+                        passHref
+                      >
+                        <li className="text-lg hover:cursor-pointer hover:underline">
+                          {child.title}
+                        </li>
+                      </Link>
+                    );
+                  })}
                 </ul>
               </div>
             );
@@ -39,14 +60,16 @@ const Footer = () => {
 };
 
 const ColIntro = () => {
-  const { li, title } = TEXT.FOOTER[0];
+  const { li, title } = FOOTER_TEXT[0];
   return (
     <div className="flex flex-col">
       <Logo className="h-[100px]" />
       <h3 className="mb-4 font-bold">{title}</h3>
       <ul className="flex flex-col gap-4 text-sm">
         {li.map((child, childI) => (
-          <Li key={childI}>{child}</Li>
+          <li key={childI} className="hover:cursor-pointer hover:underline">
+            {child.title}
+          </li>
         ))}
       </ul>
     </div>
@@ -61,14 +84,6 @@ const CopyRight = () => {
       </p>
     </div>
   );
-};
-
-type LiProps = {
-  children: ReactNode;
-};
-
-const Li = ({ children }: LiProps) => {
-  return <li className="hover:cursor-pointer hover:underline">{children}</li>;
 };
 
 export default Footer;

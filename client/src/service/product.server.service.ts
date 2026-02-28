@@ -2,6 +2,7 @@ import httpServer from '@/lib/http.server';
 import { Page, ResponseApi } from '@/types/api.type';
 import { FilterDataType } from '@/types/page/product.page.type';
 import { ProductDetailType, ProductType } from '@/types/product.type';
+import { sleep } from '@/utils/server.util';
 
 const productService = {
   getProductById: async (id: number): Promise<ProductDetailType> => {
@@ -10,13 +11,6 @@ const productService = {
       undefined,
       false,
     );
-    return res.payload.data;
-  },
-
-  getSitemap: async (): Promise<{ id: number; createdAt: Date }[]> => {
-    const res = await httpServer.get<
-      ResponseApi<{ id: number; createdAt: Date }[]>
-    >(`api/v1/products/metadata/sitemap`, undefined, false);
     return res.payload.data;
   },
 
@@ -64,6 +58,7 @@ const productService = {
     categoryIds,
     categoriesSlug,
     price,
+    sort = 'asc',
   }: {
     categoriesName?: string[];
     categoryIds?: number[];
@@ -74,10 +69,34 @@ const productService = {
         to: number;
       },
     ];
+    sort?: 'asc' | 'desc';
   }): Promise<Page<ProductType>> => {
+    const params = new URLSearchParams();
+
+    if (categoriesName?.[0]) {
+      params.set('name', categoriesName[0].trim().toLowerCase());
+    }
+
+    categoryIds?.forEach((id) => {
+      params.append('categories', String(id));
+    });
+
+    categoriesSlug?.forEach((slug) => {
+      params.append('categoriesSlug', slug);
+    });
+
+    if (price?.[0]) {
+      params.set('minPrice', String(price[0].from));
+      params.set('maxPrice', String(price[0].to));
+    }
+
+    params.set('sort', sort === 'desc' ? 'price_desc' : 'price_asc');
+
+    const query = params.toString();
     const data = await httpServer.get<ResponseApi<Page<ProductType>>>(
-      `/api/product?${categoriesSlug?.map((i) => `categoriesSlug=${i}`).join('&')}`,
+      query ? `/api/product?${query}` : '/api/product',
     );
+    await sleep(10);
     return data.payload.data;
   },
   getProductBySlug: async (slug: string): Promise<ProductDetailType> => {
@@ -90,6 +109,15 @@ const productService = {
       ...res.payload.data,
       views: 36,
     };
+  },
+
+  getSitemap: async (): Promise<
+    { id: number; slug: string; updatedAt: Date }[]
+  > => {
+    const res = await httpServer.get<
+      ResponseApi<{ id: number; slug: string; updatedAt: Date }[]>
+    >(`api/product/sitemap`, undefined, false);
+    return res.payload.data;
   },
 };
 

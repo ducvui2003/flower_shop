@@ -1,9 +1,9 @@
 import PaginationProduct from '@/app/[...category]/pagination';
 import Sort from '@/app/[...category]/sort';
+import { SORT_MAPPING } from '@/app/[...category]/type-const';
 import EmptyState from '@/components/EmptyState';
 import ListView from '@/components/ListView';
 import ProductCard from '@/components/product/ProductCard';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import productService from '@/service/product.server.service';
 import { ProductType } from '@/types/product.type';
 
@@ -19,6 +19,7 @@ export default async function ProductList({
 }: ProductListProp) {
   const products = await productService.getProducts({
     categoriesSlug: category,
+    sort: sort === SORT_MAPPING.desc ? 'desc' : 'asc',
   });
 
   const { items, currentPage, totalItems, totalPages } = products;
@@ -28,29 +29,27 @@ export default async function ProductList({
       <div className="rounded-xl border-2 px-2 py-1">
         <Sort quantity={currentPage} sort={sort} />
       </div>
-      <ScrollArea className="mt-5 min-h-[50vh]">
-        <ListView<ProductType>
-          display="grid"
-          data={items}
-          className="product pc:grid-cols-4 grid-cols-2 gap-5"
-          emptyComponent={null}
-          render={(item, index) => (
-            <ProductCard
-              key={index}
-              id={item.id}
-              name={item.title}
-              price={item.price}
-              priceSale={item.priceSale}
-              href={item.href}
-            />
-          )}
-        />
-        {totalItems !== 0 ? (
-          <PaginationProduct page={currentPage} maxPage={totalPages} />
-        ) : (
-          <EmptyState />
+      <ListView<ProductType>
+        display="grid"
+        data={items}
+        className="product pc:grid-cols-4 grid-cols-2 gap-5"
+        emptyComponent={null}
+        render={(item, index) => (
+          <ProductCard
+            key={index}
+            id={item.id}
+            name={item.title}
+            price={item.price}
+            priceSale={item.priceSale}
+            href={item.href}
+          />
         )}
-      </ScrollArea>
+      />
+      {totalItems !== 0 ? (
+        <PaginationProduct page={currentPage} maxPage={totalPages} />
+      ) : (
+        <EmptyState />
+      )}
     </>
   );
 }

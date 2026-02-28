@@ -1,6 +1,7 @@
 import {
   MediaCreateWithFileType,
   MediaGetQueryType,
+  MediaMetadataUpdateRequestType,
   MediaSearchGetQueryType,
   MediaSignUrlRequestType,
 } from '@/modules/media/media.request';
@@ -91,6 +92,27 @@ const mediaController = {
       res.status(data.code).json(data);
     } catch (err) {
       next(err);
+    }
+  },
+  updateMediaMetadata: async (
+    req: Request<
+      {
+        id: string;
+      },
+      object,
+      MediaMetadataUpdateRequestType,
+      object
+    >,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const id = req.params.id;
+      const body: MediaMetadataUpdateRequestType = req.body;
+      const data = await mediaService.updateMetadataById(parseInt(id), body);
+      res.status(data.code).json(data);
+    } catch (e) {
+      next(e);
     }
   },
   deleteMediaById: async (req: Request, res: Response, next: NextFunction) => {

@@ -4,29 +4,26 @@ import { useEffect } from 'react';
 const HeaderSticky = () => {
   useEffect(() => {
     const header = document.querySelector('#header');
-    const nav = document.querySelector('#nav-pc') as HTMLElement | null;
-    if (header && nav) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) {
-              nav.classList.add('is-sticky');
-            } else {
-              nav.classList.remove('is-sticky');
-            }
-          });
-        },
-        {
-          threshold: 0, // trigger as soon as any pixel enters/leaves view
-        },
-      );
+    const navPc = document.querySelector('#nav-pc') as HTMLElement | null;
 
-      observer.observe(header);
+    if (!header || !navPc) return;
 
-      return () => {
-        observer.unobserve(header);
-      };
-    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          navPc.classList.toggle('is-sticky', !entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0,
+      },
+    );
+
+    observer.observe(header);
+
+    return () => {
+      observer.unobserve(header);
+    };
   }, []);
   return null;
 };

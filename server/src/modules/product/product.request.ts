@@ -32,6 +32,7 @@ const ProductUpdateRequestSchema = z.object({
       metaDescription: z.string(),
     })
     .optional(),
+  categories: z.array(z.int()).optional(),
 });
 
 const ProductGetParamsSchema = z.object({

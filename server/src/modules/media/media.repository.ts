@@ -1,6 +1,7 @@
 import prismaService from '@/shared/services/db.service';
 import {
   MediaGetQueryType,
+  MediaMetadataUpdateRequestType,
   MediaSearchGetQueryType,
 } from '@/modules/media/media.request';
 import { MediaModelType } from '@/shared/models/media.model';
@@ -15,6 +16,10 @@ interface MediaRepository {
   getMedias: (data: MediaSearchGetQueryType) => Promise<Page<MediaModelType>>;
   getMediasByIds: (data: MediaGetQueryType) => Promise<Array<MediaModelType>>;
   isKeyExist: (data: string) => Promise<boolean>;
+  updateMetadataById: (
+    id: number,
+    metadata: Record<string, string>,
+  ) => Promise<void>;
   deleteMediaById: (data: number) => Promise<MediaModelType>;
 }
 
@@ -86,6 +91,16 @@ const mediaRepository: MediaRepository = {
       },
     });
     return media ? true : false;
+  },
+  updateMetadataById: async (id: number, metadata: Record<string, string>) => {
+    await prismaService.media.update({
+      where: {
+        id: id,
+      },
+      data: {
+        metadata: metadata,
+      },
+    });
   },
   deleteMediaById: async (data: number): Promise<MediaModelType> => {
     const media = await prismaService.media.delete({

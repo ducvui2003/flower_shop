@@ -13,7 +13,6 @@ const pageService = {
       await httpServer.get<ResponseApi<HomePageResponse>>('/api/page/home');
     return data.payload.data;
   },
-
   getNavigateStructure: async (): Promise<NavigateResponse> => {
     const data =
       await httpServer.get<ResponseApi<NavigateResponse>>('/api/page/navigate');
@@ -29,7 +28,7 @@ const pageService = {
         false,
       );
       return data.payload.data;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   },
@@ -47,7 +46,7 @@ const pageService = {
         }>
       >(`/api/page/${page}`, {}, false);
       return data.payload.data;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   },

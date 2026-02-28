@@ -9,9 +9,9 @@ import {
 import ClientIcon from '@/components/ClientIcon';
 import Link from '@/components/Link';
 import pageService from '@/service/page.service';
+import { ALT, DEFAULT_IMAGE_CATEGORY } from '@/utils/const.util';
 import { normalizeParam, normalizeSingleParam } from '@/utils/http.util';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
-import { headers } from 'next/headers';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
@@ -72,19 +72,17 @@ const CategoryPage = async ({
   );
   const data = await getData(lastCategory);
   return (
-    <div>
-      {data.content.thumbnail && (
-        <AspectRatio ratio={640 / 178}>
-          <Image
-            src={data.content.thumbnail.src}
-            alt={data.content.thumbnail?.src ?? ''}
-            sizes="100vw"
-            fill
-            className="h-full w-auto object-contain object-top"
-            loading="lazy"
-          />
-        </AspectRatio>
-      )}
+    <section>
+      <AspectRatio ratio={640 / 178}>
+        <Image
+          src={data.content.thumbnail?.src ?? DEFAULT_IMAGE_CATEGORY.src}
+          alt={data.content.thumbnail?.alt ?? DEFAULT_IMAGE_CATEGORY.alt}
+          sizes="100vw"
+          fill
+          className="h-full w-auto object-contain object-top"
+          loading="lazy"
+        />
+      </AspectRatio>
       <div className="container">
         <div className="pc:mx-0 relative mx-2 my-8 flex items-center justify-center">
           {secondLastCategory && (
@@ -97,20 +95,20 @@ const CategoryPage = async ({
             </Link>
           )}
 
-          <h2 className="before:bg-primary relative text-4xl before:absolute before:-right-1 before:-bottom-1 before:-left-1 before:h-[2px]">
+          <h2 className="before:bg-primary pc:w-full pc:before:-bottom-1 relative w-[80%] text-center text-4xl before:absolute before:-right-1 before:-bottom-2 before:-left-1 before:h-[2px]">
             {data.title}
           </h2>
         </div>
-        <section className="pc:mx-0 pc:relative pc:gap-x-4 mx-2 mt-4 gap-y-4">
+        <div className="pc:mx-0 pc:relative pc:gap-x-4 mx-2 mt-4 gap-y-4">
           <ProductList
             filters={{
               category: searchParams[SEARCH_MAPPING.category],
               sort: sort,
             }}
           />
-        </section>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

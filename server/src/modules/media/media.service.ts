@@ -12,6 +12,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { createUrl } from '@/shared/utils/media.util';
 import {
   MediaGetQueryType,
+  MediaMetadataUpdateRequestType,
   MediaSearchGetQueryType,
 } from '@/modules/media/media.request';
 import {
@@ -73,6 +74,10 @@ interface MediaService {
   getMediasByIds: (
     data: MediaGetQueryType,
   ) => Promise<AppResponse<Array<MediaModelType>>>;
+  updateMetadataById: (
+    id: number,
+    data: MediaMetadataUpdateRequestType,
+  ) => Promise<AppResponse<void>>;
   deleteMediaById: (data: number) => Promise<AppResponse<void>>;
 }
 
@@ -169,7 +174,28 @@ const mediaService: MediaService = {
       data: newPage,
     };
   },
-
+  updateMetadataById: async (
+    id: number,
+    data: MediaMetadataUpdateRequestType,
+  ): Promise<AppResponse<void>> => {
+    try {
+      const metadata = data.metadata;
+      await mediaRepository.updateMetadataById(id, metadata);
+      return {
+        code: StatusCodes.OK,
+        message: 'Update Media metadata success',
+      };
+    } catch (err) {
+      if (isRecordNotExist(err))
+        return {
+          code: StatusCodes.NOT_FOUND,
+          message: 'Media not found',
+        };
+      return {
+        code: StatusCodes.INTERNAL_SERVER_ERROR,
+      };
+    }
+  },
   deleteMediaById: async (data: number): Promise<AppResponse<void>> => {
     try {
       const media = await mediaRepository.deleteMediaById(data);

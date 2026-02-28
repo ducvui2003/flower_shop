@@ -3,6 +3,7 @@ import uploadMiddleware from '@/modules/media/media.middleware';
 import {
   MediaCreateWithFile,
   MediaGetQuerySchema,
+  MediaMetadataUpdateRequest,
   MediaSearchGetQuerySchema,
   MediaSignUrlRequest,
 } from '@/modules/media/media.request';
@@ -39,6 +40,11 @@ mediaRouters
     '/media/sign-url',
     validationBodyMiddleware(MediaSignUrlRequest),
     mediaController.getSignUrl,
+  )
+  .put(
+    '/media/:id',
+    validateQueryMiddleware(MediaMetadataUpdateRequest),
+    mediaController.updateMediaMetadata,
   )
   .delete('/media/:id', mediaController.deleteMediaById);
 export default mediaRouters;

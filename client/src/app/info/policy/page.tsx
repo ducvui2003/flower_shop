@@ -38,7 +38,10 @@ const AboutPage = async () => {
   const about = await getPolicyData();
   const html = parseEdjsToHtml(about.content);
   return (
-    <div className="container" dangerouslySetInnerHTML={{ __html: html }}></div>
+    <div
+      className="container min-h-[200px]"
+      dangerouslySetInnerHTML={{ __html: html }}
+    ></div>
   );
 };
 

@@ -40,15 +40,23 @@ const MediaGetQuerySchema = z.object({
   ),
 });
 
+const MediaMetadataUpdateRequest = z.object({
+  metadata: z.record(z.string(), z.string()),
+});
+
 type MediaSignUrlRequestType = z.infer<typeof MediaSignUrlRequest>;
 type MediaSearchGetQueryType = z.infer<typeof MediaSearchGetQuerySchema>;
 type MediaGetQueryType = z.infer<typeof MediaGetQuerySchema>;
 
+type MediaMetadataUpdateRequestType = z.infer<
+  typeof MediaMetadataUpdateRequest
+>;
 export {
   MediaSignUrlRequest,
   MediaCreateWithFile,
   MediaSearchGetQuerySchema,
   MediaGetQuerySchema,
+  MediaMetadataUpdateRequest,
 };
 
 export type {
@@ -56,4 +64,5 @@ export type {
   MediaCreateWithFileType,
   MediaSearchGetQueryType,
   MediaGetQueryType,
+  MediaMetadataUpdateRequestType,
 };

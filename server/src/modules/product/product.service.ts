@@ -49,6 +49,15 @@ interface ProductService {
     slug: string,
   ) => Promise<AppResponse<ProductDetailGetResponseType>>;
   deleteProductById: (id: number) => Promise<AppResponse<void>>;
+  getSitemap: () => Promise<
+    AppResponse<
+      Array<{
+        id: number;
+        slug: string;
+        updatedAt: Date;
+      }>
+    >
+  >;
 }
 const productService: ProductService = {
   createProduct: async (body: ProductCreateRequestType) => {
@@ -252,6 +261,41 @@ const productService: ProductService = {
     } catch (_) {
       throw AppErrorBuilder.conflict('Not has product with id ' + id);
     }
+  },
+  getSitemap: async (): Promise<
+    AppResponse<
+      Array<{
+        id: number;
+        slug: string;
+        updatedAt: Date;
+      }>
+    >
+  > => {
+    const products = await productRepository.searchProducts({
+      categories: [],
+      categoriesSlug: [],
+      limit: 1000,
+      page: 1,
+      sort: 'price_asc',
+    });
+
+    if (products.totalItems === 0) {
+      return {
+        code: StatusCodes.NOT_FOUND,
+        message: 'Sitemap not define',
+      };
+    }
+    return {
+      code: StatusCodes.OK,
+      message: 'Get Sitemap products',
+      data: products.items.map((product) => ({
+        id: product.id,
+        slug: applyPlaceholders(product.slug.slug, {
+          name: product.slugPlaceholder,
+        }),
+        updatedAt: new Date(),
+      })),
+    };
   },
 };
 export default productService;

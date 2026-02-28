@@ -83,14 +83,19 @@ const productRepository: ProductRepository = {
     return result;
   },
   updateProduct: async (
-    id: number,
+    productId: number,
     data: ProductUpdateRequestType,
   ): Promise<void> => {
     await prismaService.$transaction(async (tx) => {
-      const { slug, images: thumbnailIds, ...dataProduct } = data;
+      const {
+        slug,
+        images: thumbnailIds,
+        categories: categoryIds,
+        ...dataProduct
+      } = data;
       try {
         await tx.product.update({
-          where: { id: id },
+          where: { id: productId },
           data: {
             ...dataProduct,
             ...(slug ? { slugPlaceholder: slug.name } : {}),
@@ -100,7 +105,7 @@ const productRepository: ProductRepository = {
         if (isRecordNotExist(e)) {
           throw new AppErrorBuilder()
             .withError(StatusCodes.NOT_FOUND)
-            .withMessage(`Product with id ${id} not exist in database`)
+            .withMessage(`Product with id ${productId} not exist in database`)
             .build();
         }
         if (isUniqueCode(e)) {
@@ -118,12 +123,12 @@ const productRepository: ProductRepository = {
         try {
           await tx.productMedia.deleteMany({
             where: {
-              productId: id,
+              productId: productId,
             },
           });
           await tx.productMedia.createMany({
             data: thumbnailIds.map((mediaId) => ({
-              productId: id,
+              productId: productId,
               mediaId: mediaId,
             })),
           });
@@ -133,6 +138,34 @@ const productRepository: ProductRepository = {
               .withStatusCode(StatusCodes.CONFLICT)
               .withError(e)
               .withMessage('Thumbnail entity not exist in database')
+              .build();
+          }
+          throw e;
+        }
+      }
+      if (categoryIds && categoryIds.length > 0) {
+        try {
+          await tx.productCategory.deleteMany({
+            where: {
+              productId: productId,
+            },
+          });
+          await Promise.all(
+            categoryIds.map((categoryId) =>
+              tx.productCategory.createMany({
+                data: {
+                  productId: productId,
+                  categoryId: categoryId,
+                },
+              }),
+            ),
+          );
+        } catch (e) {
+          if (isForeignKeyNotFound(e)) {
+            throw new AppErrorBuilder()
+              .withStatusCode(StatusCodes.CONFLICT)
+              .withError(e)
+              .withMessage('Category Product entity is not found')
               .build();
           }
           throw e;
