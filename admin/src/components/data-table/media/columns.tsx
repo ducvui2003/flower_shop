@@ -43,10 +43,11 @@ export const columns: ColumnDef<Media>[] = [
     header: "Edit",
     cell: ({ row }) => {
       const { updateReload } = useMediaStore();
+      const id: number = row.getValue("id");
       return (
         <div className="flex gap-2">
-          <DialogUpdateMedia />
-          <DialogDeleteMedia id={row.getValue("id")} callback={updateReload} />
+          <DialogUpdateMedia id={id} />
+          <DialogDeleteMedia id={id} callback={updateReload} />
         </div>
       );
     },

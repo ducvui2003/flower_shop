@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 import { ReactNode } from "react";
 type ProductPageProps = {
-  children: ReactNode;
+  children?: ReactNode;
 };
 
-const ProductPage = () => {
+const ProductPage = ({}: ProductPageProps) => {
   return (
     <div className="p-5">
       <div className="mb-5 flex ">
