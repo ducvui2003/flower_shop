@@ -39,6 +39,7 @@ jobs:
       - name: Create .env file
         run: |
           echo "${{ secrets.ENV_SERVER_FILE }}" > .env
+        working-directory: server
 
       - name: Build Express
         run: npm run build
@@ -53,6 +54,7 @@ jobs:
             --include="dist/***"
             --include="prisma/***"
             --include="package.json"
+            --include="ecosystem.config.js"
             --include="package-lock.json"
             --exclude="*"
           path: server/
@@ -72,6 +74,7 @@ jobs:
           script: |
             cd ${{ secrets.REMOTE_PATH }}
             npm install --omit=dev
+            npx prisma generate
             pm2 describe server > /dev/null 2>&1 \
               && pm2 reload server \
               || pm2 start ecosystem.config.js

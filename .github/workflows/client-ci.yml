@@ -32,14 +32,10 @@ jobs:
           cache: npm
           working-directory: client
 
-      - name: Run Prisma generate
-        run: npx prisma generate
-        working-directory: client
-
       - name: Create .env file
         run: |
           echo "${{ secrets.ENV_CLIENT_FILE }}" > .env
-        workflow_directory: client
+        working-directory: client
 
       - name: Build Express
         run: npm run build
@@ -54,6 +50,7 @@ jobs:
             --include=".next/standalone/***"
             --include=".next/static/***"
             --include="public/***"
+            --include="ecosystem.config.js"
             --exclude="*"
           path: client/
           remote_path: ${{ secrets.REMOTE_PATH }}
