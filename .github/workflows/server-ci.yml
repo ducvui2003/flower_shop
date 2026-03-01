@@ -48,14 +48,14 @@ jobs:
       - name: Deploy to VPS
         uses: burnett01/rsync-deployments@v8
         with:
-          switches: |
-            -avzr --delete \
-            --include=".env" \
-            --include="dist/***" \
-            --include="prisma/***" \
-            --include="package.json" \
-            --include="package-lock.json" \
-            --include="ecosystem.config.js" \
+          switches: >
+            -avzr --delete
+            --include=".env"
+            --include="dist/***"
+            --include="prisma/***"
+            --include="package.json"
+            --include="package-lock.json"
+            --include="ecosystem.config.js"
             --exclude="*"
           path: server/
           remote_path: ${{ secrets.REMOTE_PATH }}
@@ -65,7 +65,7 @@ jobs:
           remote_key: ${{ secrets.REMOTE_PRIVATE_KEY }}
 
       - name: Restart server
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
