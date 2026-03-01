@@ -48,15 +48,7 @@ jobs:
       - name: Deploy to VPS
         uses: burnett01/rsync-deployments@v8
         with:
-          switches: >
-            -avzr --delete
-            --include=".env"
-            --include="dist/***"
-            --include="prisma/***"
-            --include="package.json"
-            --include="package-lock.json"
-            --include="ecosystem.config.js"
-            --exclude="*"
+          switches: -avzr --delete --include=".env" --include="dist/***" --include="prisma/***" --include="package.json" --include="package-lock.json" --include="ecosystem.config.js" --exclude="*"
           path: server/
           remote_path: ${{ secrets.REMOTE_PATH }}/server/
           remote_host: ${{ secrets.REMOTE_HOST }}
