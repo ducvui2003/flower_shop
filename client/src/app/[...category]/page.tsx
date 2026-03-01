@@ -8,7 +8,7 @@ import {
 
 import ClientIcon from '@/components/ClientIcon';
 import Link from '@/components/Link';
-import pageService from '@/service/page.service';
+import pageService from '@/service/page.server.service';
 import { ALT, DEFAULT_IMAGE_CATEGORY } from '@/utils/const.util';
 import { normalizeParam, normalizeSingleParam } from '@/utils/http.util';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';

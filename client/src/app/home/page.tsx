@@ -3,7 +3,7 @@ import FeatureSection from '@/app/home/FeatureSection';
 import CategorySection from '@/components/event/CategorySection';
 import SectionGeneric from '@/components/event/SectionGeneric';
 import { uuid } from '@/lib/utils';
-import pageService from '@/service/page.service';
+import pageService from '@/service/page.server.service';
 import {
   HomePageResponse,
   SectionBanner,

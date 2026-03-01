@@ -7,7 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await productService.getSitemap();
 
   const productUrls = products.map((product) => ({
-    url: `${envConfig.NEXT_PUBLIC_BASE_URL}${product.slug}`,
+    url: `${envConfig.DOMAIN}${product.slug}`,
     lastModified: product.updatedAt,
     changeFrequency: 'daily' as const,
     priority: 0.8,
@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticUrls: MetadataRoute.Sitemap = Object.values(PUBLIC_ROUTES).map(
     (s) => ({
-      url: `${envConfig.NEXT_PUBLIC_BASE_URL}${s}`,
+      url: `${envConfig.DOMAIN}${s}`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,
@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url: `${envConfig.NEXT_PUBLIC_BASE_URL}`,
+      url: `${envConfig.DOMAIN}`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1,

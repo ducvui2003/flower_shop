@@ -22,7 +22,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL(envConfig.NEXT_PUBLIC_BASE_URL),
+  metadataBase: new URL(envConfig.DOMAIN),
   title: {
     default: APP_INFO.NAME,
     template: `%s | ${APP_INFO.NAME}`,
@@ -51,7 +51,7 @@ export const metadata = {
   },
 
   other: {
-    'fb:app_id': envConfig.NEXT_PUBLIC_FACEBOOK_CLIENT_ID,
+    'fb:app_id': envConfig.FACEBOOK_CLIENT_ID,
   },
 };
 

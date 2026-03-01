@@ -16,7 +16,7 @@ const productService = {
     ];
   }): Promise<Page<ProductType>> => {
     const data = await http.get<ResponseApi<Page<ProductType>>>(
-      `/api/product/search?${categoriesSlug?.map((i) => `categoriesSlug=${i}`).join('&')}`,
+      `/product/search?${categoriesSlug?.map((i) => `categoriesSlug=${i}`).join('&')}`,
     );
     return data.payload.data;
   },

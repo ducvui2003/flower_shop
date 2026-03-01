@@ -1,0 +1,77 @@
+name: server-ci
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "server/**"
+      - ".github/actions/setup-node/**"
+      - ".github/workflows/server-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "server/**"
+      - ".github/actions/setup-node/**"
+      - ".github/workflows/server-ci.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node
+        with:
+          node_version: 22.13.1
+          cache: npm
+          working-directory: server
+
+      - name: Run Prisma generate
+        run: npx prisma generate
+        working-directory: server
+
+      - name: Create .env file
+        run: |
+          echo "${{ secrets.ENV_SERVER_FILE }}" > .env
+
+      - name: Build Express
+        run: npm run build
+        working-directory: server
+
+      - name: Deploy to VPS
+        uses: burnett01/rsync-deployments@v8
+        with:
+          switches: >
+            -avzr --delete 
+            --include=".env"
+            --include="dist/***"
+            --include="prisma/***"
+            --include="package.json"
+            --include="package-lock.json"
+            --exclude="*"
+          path: server/
+          remote_path: ${{ secrets.REMOTE_PATH }}
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_port: ${{ secrets.REMOTE_PORT }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+
+      - name: Restart server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: |
+            cd ${{ secrets.REMOTE_PATH }}
+            npm install --omit=dev
+            pm2 describe server > /dev/null 2>&1 \
+              && pm2 reload server \
+              || pm2 start ecosystem.config.js

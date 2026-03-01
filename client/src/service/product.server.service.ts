@@ -94,14 +94,14 @@ const productService = {
 
     const query = params.toString();
     const data = await httpServer.get<ResponseApi<Page<ProductType>>>(
-      query ? `/api/product?${query}` : '/api/product',
+      query ? `/product?${query}` : '/product',
     );
     await sleep(10);
     return data.payload.data;
   },
   getProductBySlug: async (slug: string): Promise<ProductDetailType> => {
     const res = await httpServer.get<ResponseApi<ProductDetailType>>(
-      `api/product/${slug}?type=name`,
+      `/product/${slug}?type=name`,
       undefined,
       false,
     );

@@ -23,8 +23,8 @@ const GET = async (request: NextRequest) => {
 
   const accessTokenUrl = 'https://graph.facebook.com/v22.0/oauth/access_token';
   const params = new URLSearchParams();
-  params.append('client_id', envConfig.NEXT_PUBLIC_FACEBOOK_CLIENT_ID);
-  params.append('client_secret', envConfig.NEXT_PUBLIC_FACEBOOK_CLIENT_SECRET);
+  params.append('client_id', envConfig.FACEBOOK_CLIENT_ID);
+  params.append('client_secret', envConfig.FACEBOOK_CLIENT_SECRET);
   params.append('code', code);
   params.append('redirect_uri', `${origin}/api/auth/callback/facebook`);
   console.log(`${origin}/api/auth/callback/facebook`);

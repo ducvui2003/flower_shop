@@ -9,13 +9,10 @@ const oauth2Api = {
     accessToken: string,
     provider: 'google' | 'facebook',
   ): Promise<User> => {
-    const res = await httpServer.post<ResponseApi<LoginResType>>(
-      '/api/oauth2',
-      {
-        accessToken,
-        provider,
-      },
-    );
+    const res = await httpServer.post<ResponseApi<LoginResType>>('/oauth2', {
+      accessToken,
+      provider,
+    });
     const body = res.payload.data;
 
     const userInfo = await userServerService.getInfo(body.accessToken);

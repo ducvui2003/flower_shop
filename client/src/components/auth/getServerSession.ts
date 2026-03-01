@@ -11,9 +11,9 @@ const getServerSession = async (): Promise<Session | null> => {
   if (!currentSession) return null;
   // access token not expired
 
-  if (!isSessionExpired(currentSession)) return currentSession;
+  if (isSessionExpired(currentSession)) return null;
 
-  return null;
+  return currentSession;
 };
 
 export default getServerSession;

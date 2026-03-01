@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import getServerSession from '@/components/auth/getServerSession';
 import envConfig from '@/config/env.config';
 import { HTTP_STATUS_CODE } from '@/utils/const.util';
+import { headers } from 'next/headers';
 
 type CustomOptions = RequestInit & {
   baseUrl?: string | undefined;
@@ -56,14 +58,29 @@ const request = async <Response>(
   auth: boolean = true,
 ) => {
   const body = options?.body ? JSON.stringify(options.body) : undefined;
-  const baseHeaders = {
+
+  // FORWARDING HEADERS (The "Secret Sauce")
+  // We grab the headers from the current incoming user request
+  const nextHeaders = await headers();
+  const cookie = nextHeaders.get('cookie') ?? '';
+  const xForwardedFor = nextHeaders.get('x-forwarded-for') ?? '';
+
+  const baseHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
-    Authorization: auth ? `Bearer ${await getAccessToken()}` : '',
+    cookie: cookie, // Forward session cookies
+    'x-forwarded-for': xForwardedFor, // Forward real User IP
   };
+
+  if (auth) {
+    const session = await getServerSession();
+    if (session?.accessToken) {
+      baseHeaders['Authorization'] = `Bearer ${session.accessToken}`;
+    }
+  }
 
   const baseUrl =
     options?.baseUrl === undefined
-      ? envConfig.NEXT_PUBLIC_SERVER_CONTAINER
+      ? envConfig.SERVER_INTERNAL
       : options?.baseUrl;
 
   const fullUrl = url.startsWith('/')

@@ -10,12 +10,12 @@ import {
 const pageService = {
   getHomeStructure: async (): Promise<HomePageResponse> => {
     const data =
-      await httpServer.get<ResponseApi<HomePageResponse>>('/api/page/home');
+      await httpServer.get<ResponseApi<HomePageResponse>>('/page/home');
     return data.payload.data;
   },
   getNavigateStructure: async (): Promise<NavigateResponse> => {
     const data =
-      await httpServer.get<ResponseApi<NavigateResponse>>('/api/page/navigate');
+      await httpServer.get<ResponseApi<NavigateResponse>>('/page/navigate');
     return data.payload.data;
   },
   getCategoryPage: async (
@@ -23,7 +23,7 @@ const pageService = {
   ): Promise<CategoryPageResponse | null> => {
     try {
       const data = await http.get<ResponseApi<CategoryPageResponse>>(
-        `/api/page/category?name=${slug}`,
+        `/page/category?name=${slug}`,
         {},
         false,
       );
@@ -44,7 +44,7 @@ const pageService = {
             metaDescription: string;
           } | null;
         }>
-      >(`/api/page/${page}`, {}, false);
+      >(`/page/${page}`, {}, false);
       return data.payload.data;
     } catch (_) {
       return null;

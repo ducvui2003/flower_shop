@@ -1,5 +1,5 @@
 import { getDeviceServer } from '@/lib/server.helper';
-import pageService from '@/service/page.service';
+import pageService from '@/service/page.server.service';
 import HeaderPc from '@/components/common/HeaderPc';
 import HeaderMobile from '@/components/common/HeaderMobile';
 

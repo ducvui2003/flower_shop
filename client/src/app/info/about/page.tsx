@@ -1,5 +1,5 @@
 import { PUBLIC_ROUTES } from '@/config/route.config';
-import pageService from '@/service/page.service';
+import pageService from '@/service/page.server.service';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import parseEdjsToHtml from '@/lib/edjs-parser';
