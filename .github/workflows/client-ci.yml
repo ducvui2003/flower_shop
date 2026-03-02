@@ -41,10 +41,17 @@ jobs:
         run: npm run build
         working-directory: client
 
+      - name: Prepare standalone bundle
+        run: |
+          cp -r public .next/standalone/
+          mkdir -p .next/standalone/.next
+          cp -r .next/static .next/standalone/.next/
+        working-directory: client
+
       - name: Deploy to VPS
         uses: burnett01/rsync-deployments@v8
         with:
-          switches: -avzr --delete --include=.env --include=ecosystem.config.js --include=.next/ --include=.next/standalone/*** --include=.next/static/*** --include=public/ --include=public/*** --exclude=*
+          switches: -avzr --delete --include=.env --include=ecosystem.config.js --include=.next/standalone/*** --exclude=*
           path: client/
           remote_path: ${{ secrets.REMOTE_PATH }}/client/
           remote_host: ${{ secrets.REMOTE_HOST }}
