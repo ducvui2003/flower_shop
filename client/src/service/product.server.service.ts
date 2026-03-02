@@ -116,7 +116,7 @@ const productService = {
   > => {
     const res = await httpServer.get<
       ResponseApi<{ id: number; slug: string; updatedAt: Date }[]>
-    >(`api/product/sitemap`, undefined, false);
+    >(`/product/sitemap`, undefined, false);
     return res.payload.data;
   },
 };
