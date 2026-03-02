@@ -235,15 +235,17 @@
   @apply outline-primary;
 }
 @utility container {
-  margin-inline: auto;
   @media (width <= --theme(--breakpoint-tl)) {
+    margin-inline: auto;
     max-width: 600px;
   }
   @media (width > --theme(--breakpoint-tl) and (width <= --theme(--breakpoint-lp))) {
+    margin-inline: auto;
     max-width: 1000px;
   }
   @media (width > --theme(--breakpoint-lp)) {
     max-width: 1200px;
+    margin-inline: auto;
   }
 }
 
