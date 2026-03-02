@@ -8,6 +8,7 @@ import Header from '@/components/common/Header';
 import HeaderSticky from '@/components/common/HeaderSticky';
 import Footer from '@/components/common/Footer';
 import { Separator } from '@/components/ui/separator';
+import Script from 'next/script';
 
 const playfair = Playfair_Display({
   subsets: ['vietnamese'],
@@ -66,6 +67,20 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="vi" className={`${inter.className} ${playfair.className}`}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-T71V57CPPH"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-T71V57CPPH');
+          `}
+        </Script>
+      </head>
       <body>
         <Providers>
           <Header />
