@@ -53,6 +53,10 @@ export const metadata = {
   other: {
     'fb:app_id': envConfig.FACEBOOK_CLIENT_ID,
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default async function RootLayout({
