@@ -19,11 +19,9 @@ import {
 } from '@/shared/utils/common.util';
 import { AppResponse, Page } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
-import {
-  ProductModelType,
-  ProductWithoutDescriptionModelType,
-} from '@/modules/product/product.model';
+import { ProductWithoutDescriptionModelType } from '@/modules/product/product.model';
 import { createUrl } from '@/shared/utils/media.util';
+import logger from '@/shared/utils/logger.util';
 
 interface ProductService {
   createProduct: (
@@ -103,6 +101,8 @@ const productService: ProductService = {
     const thumbnails = await productRepository.getProductThumbnailsById(
       page.items.map((i) => i.id),
     );
+    logger.info('thumbnail');
+    logger.info(thumbnails);
     const newPage = mapperItemsForPage<
       ProductWithoutDescriptionModelType,
       ProductGetResponseType
@@ -212,6 +212,8 @@ const productService: ProductService = {
           metadata: productEtt.metadata,
           categoryIds: productEtt.categories.map((item) => item.categoryId),
           imageIds: productEtt.productMedias.map((item) => item.mediaId),
+          thumbnailId: productEtt.productMedias.find((i) => i.isThumbnail)
+            ?.mediaId,
         },
       };
     } catch (e) {

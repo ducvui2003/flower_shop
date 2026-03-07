@@ -60,6 +60,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 's3.leanhduc.id.vn',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.hoatuoinhatnam.com',
+      },
     ],
   },
   eslint: {

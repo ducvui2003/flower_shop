@@ -32,7 +32,7 @@ export default async function ProductList({
       <ListView<ProductType>
         display="grid"
         data={items}
-        className="product pc:grid-cols-4 grid-cols-2 gap-5"
+        className="product pc:grid-cols-4 mt-4 grid-cols-2 gap-5"
         emptyComponent={null}
         render={(item, index) => (
           <ProductCard

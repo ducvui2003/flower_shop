@@ -43,7 +43,7 @@ mediaRouters
   )
   .put(
     '/media/:id',
-    validateQueryMiddleware(MediaMetadataUpdateRequest),
+    validationBodyMiddleware(MediaMetadataUpdateRequest),
     mediaController.updateMediaMetadata,
   )
   .delete('/media/:id', mediaController.deleteMediaById);

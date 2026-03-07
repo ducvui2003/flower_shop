@@ -14,8 +14,8 @@ const Logo = ({ className }: LogoProps) => {
         width={100}
         height={100}
         priority
-        placeholder="blur"
-        blurDataURL={'/blur.jpg'}
+        // placeholder="blur"
+        // blurDataURL={'/blur.jpg'}
         className="overflow-hidden rounded-full"
       />
     </Link>

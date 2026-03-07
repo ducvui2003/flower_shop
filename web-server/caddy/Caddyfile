@@ -1,0 +1,6 @@
+hoatuoinhatnam.com {
+    reverse_proxy localhost:3000
+}
+api.hoatuoinhatnam.com {
+    reverse_proxy localhost:8081
+}

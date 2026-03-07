@@ -47,6 +47,7 @@ const ProductWithMediaIdModel = MetadataModel.extend({
   productMedias: z.array(
     z.object({
       mediaId: z.number(),
+      isThumbnail: z.boolean().nullable().default(false),
     }),
   ),
 });

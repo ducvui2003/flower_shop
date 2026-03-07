@@ -1,7 +1,8 @@
 import ProductImagesInteract from '@/app/product/[slug]/ProductImages.client';
+import CfImage from '@/components/CfImage';
 import { cn } from '@/lib/utils';
 import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
-import Image from 'next/image';
+import { sizes } from '@/utils/format.util';
 
 type ProductImagesProps = {
   images: { src: string; alt: string }[];
@@ -20,11 +21,16 @@ export default function ProductImages({ images }: ProductImagesProps) {
                 `product-image`,
               )}
             >
-              <Image
+              <CfImage
                 src={img.src}
                 alt={img.alt}
                 fill
-                sizes="(max-width: 640px) 25w, (max-width: 1280px) 10vw"
+                loading="lazy"
+                sizes={sizes({
+                  mobile: '20vw',
+                  tablet: '10',
+                  pc: '10vw',
+                })}
                 className={cn(
                   'pointer-events-none absolute inset-0 rounded bg-cover bg-center object-contain select-none',
                 )}
@@ -34,7 +40,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
         </div>
 
         <div className="relative aspect-square flex-1">
-          <Image
+          <CfImage
             id="product-thumbnail"
             src={images?.[0]?.src ?? DEFAULT_IMAGE_PRODUCT.src}
             alt={images?.[0]?.alt ?? DEFAULT_IMAGE_PRODUCT.alt}

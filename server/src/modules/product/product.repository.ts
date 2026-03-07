@@ -66,6 +66,7 @@ const productRepository: ProductRepository = {
             data: data.images.map((mediaId) => ({
               productId: product.id,
               mediaId: mediaId,
+              isThumbnail: mediaId === data.thumbnail ? true : false,
             })),
           });
         } catch (e) {
@@ -89,8 +90,9 @@ const productRepository: ProductRepository = {
     await prismaService.$transaction(async (tx) => {
       const {
         slug,
-        images: thumbnailIds,
+        images,
         categories: categoryIds,
+        thumbnailId,
         ...dataProduct
       } = data;
       try {
@@ -119,7 +121,7 @@ const productRepository: ProductRepository = {
         }
         throw e;
       }
-      if (thumbnailIds) {
+      if (images) {
         try {
           await tx.productMedia.deleteMany({
             where: {
@@ -127,9 +129,10 @@ const productRepository: ProductRepository = {
             },
           });
           await tx.productMedia.createMany({
-            data: thumbnailIds.map((mediaId) => ({
+            data: images.map((mediaId) => ({
               productId: productId,
               mediaId: mediaId,
+              isThumbnail: mediaId === data.thumbnailId ? true : false,
             })),
           });
         } catch (e) {
@@ -141,6 +144,40 @@ const productRepository: ProductRepository = {
               .build();
           }
           throw e;
+        }
+      } else {
+        if (thumbnailId) {
+          try {
+            await tx.productMedia.updateMany({
+              where: {
+                productId: productId,
+                mediaId: thumbnailId,
+              },
+              data: {
+                isThumbnail: true,
+              },
+            });
+            await tx.productMedia.updateMany({
+              where: {
+                productId: productId,
+                mediaId: {
+                  not: thumbnailId,
+                },
+              },
+              data: {
+                isThumbnail: false,
+              },
+            });
+          } catch (e) {
+            if (isForeignKeyNotFound(e)) {
+              throw new AppErrorBuilder()
+                .withStatusCode(StatusCodes.CONFLICT)
+                .withError(e)
+                .withMessage('Thumbnail entity not exist in database')
+                .build();
+            }
+            throw e;
+          }
         }
       }
       if (categoryIds && categoryIds.length > 0) {
@@ -312,6 +349,7 @@ const productRepository: ProductRepository = {
         productMedias: {
           select: {
             mediaId: true,
+            isThumbnail: true,
           },
         },
       },

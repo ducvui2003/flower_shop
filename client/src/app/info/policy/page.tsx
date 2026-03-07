@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import parseEdjsToHtml from '@/lib/edjs-parser';
 
+export const revalidate = 3600;
+
 const getPolicyData = cache(async () => {
   const res = await pageService.getPageCommonStructure('policy');
   return res ?? notFound();

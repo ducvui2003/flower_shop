@@ -2,6 +2,7 @@
 import ListView from '@/components/ListView';
 import ProductCard from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import productService from '@/service/product.service';
 import { ProductType } from '@/types/product.type';
 import TEXT from '@/utils/text.util';
@@ -36,7 +37,7 @@ const PaginationProduct = ({
       <ListView<ProductType>
         display="grid"
         data={extraProducts}
-        className="pc:grid-cols-4 mt-5 grid-cols-2 gap-5"
+        className={cn('pc:grid-cols-4 grid-cols-2 gap-5', hasMore ?? 'mt-5')}
         emptyComponent={null}
         render={(item, index) => (
           <ProductCard
