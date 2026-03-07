@@ -11,7 +11,7 @@ const userService = {
   getInfo: async (accessToken: string): Promise<UserInfoResType> => {
     try {
       const res = await fetch(
-        `${envConfig.NEXT_PUBLIC_SERVER_EXTERNAL}/api/v1/user/info`,
+        `${envConfig.NEXT_PUBLIC_SERVER_EXTERNAL}/user/info`,
         {
           method: 'GET',
           headers: {

@@ -1,30 +1,16 @@
 import httpServer from '@/lib/http.server';
-import { ResponseApi } from '@/types/api.type';
-import {
-  CategoryPageType,
-  SubCategoryPageType,
-} from '@/types/page/category.page.type';
-import {
-  FilterDataType,
-  ProductPageType,
-} from '@/types/page/product.page.type';
-import { ProductCardType, ProductDetailRespType } from '@/types/product.type';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { Page, ResponseApi } from '@/types/api.type';
+import { FilterDataType } from '@/types/page/product.page.type';
+import { ProductDetailType, ProductType } from '@/types/product.type';
+import { sleep } from '@/utils/server.util';
 
 const productService = {
-  getProductById: async (id: number): Promise<ProductDetailRespType> => {
-    const res = await httpServer.get<ResponseApi<ProductDetailRespType>>(
+  getProductById: async (id: number): Promise<ProductDetailType> => {
+    const res = await httpServer.get<ResponseApi<ProductDetailType>>(
       `api/v1/products/${id}`,
       undefined,
       false,
     );
-    return res.payload.data;
-  },
-
-  getSitemap: async (): Promise<{ id: number; createdAt: Date }[]> => {
-    const res = await httpServer.get<
-      ResponseApi<{ id: number; createdAt: Date }[]>
-    >(`api/v1/products/metadata/sitemap`, undefined, false);
     return res.payload.data;
   },
 
@@ -67,104 +53,71 @@ const productService = {
     });
   },
 
-  getProducts: ({
-    category,
-    categoryId,
+  getProducts: async ({
+    categoriesName,
+    categoryIds,
+    categoriesSlug,
     price,
-    paging,
+    sort = 'asc',
   }: {
-    category?: string[];
-    categoryId?: number[];
+    categoriesName?: string[];
+    categoryIds?: number[];
+    categoriesSlug?: string[];
     price?: [
       {
         from: number;
         to: number;
       },
     ];
-    paging?: {
-      page: number;
-      size: number;
-    };
-  }): Promise<{
-    items: ProductCardType[];
-    paging: {
-      page: number;
-      total: number;
-    };
-  }> => {
-    const products = {
-      items: Array(8)
-        .fill(null)
-        .map((_, i) => ({
-          id: i,
-          basePrice: 10000,
-          salePrice: 8000,
-          name: 'hello123',
-          slug: '/123',
-          thumbnail: DEFAULT_IMAGE,
-          link: '/hoa-tot-nghiep/tot-nghiep/hoa-hong',
-        })),
-      paging: {
-        page: 1,
-        total: 3,
-      },
-    };
-    return new Promise((resolve) => {
-      resolve(products);
-    });
-  },
+    sort?: 'asc' | 'desc';
+  }): Promise<Page<ProductType>> => {
+    const params = new URLSearchParams();
 
-  getCategoryPage: (category: string): Promise<CategoryPageType | null> => {
-    if (category === 'sinh-nhat') {
-      return Promise.resolve({
-        title: 'Hoa sinh nhật',
-        thumbnail: DEFAULT_IMAGE,
-      });
+    if (categoriesName?.[0]) {
+      params.set('name', categoriesName[0].trim().toLowerCase());
     }
-    if (category !== 'hoa-tuoi') return Promise.resolve(null);
-    return new Promise((resolve) => {
-      resolve({
-        title: 'Hoa tươi',
-        thumbnail: DEFAULT_IMAGE,
-      });
+
+    categoryIds?.forEach((id) => {
+      params.append('categories', String(id));
     });
+
+    categoriesSlug?.forEach((slug) => {
+      params.append('categoriesSlug', slug);
+    });
+
+    if (price?.[0]) {
+      params.set('minPrice', String(price[0].from));
+      params.set('maxPrice', String(price[0].to));
+    }
+
+    params.set('sort', sort === 'desc' ? 'price_desc' : 'price_asc');
+
+    const query = params.toString();
+    const data = await httpServer.get<ResponseApi<Page<ProductType>>>(
+      query ? `/product?${query}` : '/product',
+    );
+    await sleep(10);
+    return data.payload.data;
+  },
+  getProductBySlug: async (slug: string): Promise<ProductDetailType> => {
+    const res = await httpServer.get<ResponseApi<ProductDetailType>>(
+      `/product/${slug}?type=name`,
+      undefined,
+      false,
+    );
+    return {
+      ...res.payload.data,
+      views: 36,
+    };
   },
 
-  getProductBySlug: (slug: string): Promise<ProductPageType> => {
-    const data: ProductPageType = {
-      id: 1,
-      name: 'Say Ánh Mắt',
-      priceOld: 200000,
-      priceNew: 190000,
-      images: [
-        {
-          url: 'https://flowercorner.b-cdn.net/image/cache/catalog/products/Winter_2024/say-anh-mat.jpg',
-          alt: 'say-anh-mat',
-        },
-        {
-          url: 'https://flowercorner.b-cdn.net/image/cache/catalog/products/August%202023/bo-hoa-hong-pastel-khoe-sac.jpg',
-          alt: 'say-anh-mat1',
-        },
-      ],
-      description:
-        '<p><strong>Bó hoa Say Ánh Mắt được thiết kế từ:</strong></p>\n<ul>\n<li>Hoa thạch thảo trắng: 1 bó</li>\n<li>Hoa hồng kem: 1 cành</li>\n<li>Các loại hoa lá phụ trang trí khác: Cỏ đồng tiền</li>\n</ul>\n<p>Lưu ý:</p>\n<p>**Do được làm thủ công, nên sản phẩm ngoài thực tế sẽ có đôi chút khác biệt so với hình ảnh trên website. Tuy nhiên, Flowercorner cam kết hoa sẽ giống khoảng 80% so với hình ảnh.</p>\n<p>** Vì các loại hoa lá phụ sẽ có tùy vào thời điểm trong năm, Flowercorner đảm bảo các loại hoa chính, các loại hoa lá phụ sẽ thay đổi phù hợp giá cả và thiết kế sản phẩm.</p>',
-      avgRate: 5,
-      views: 36,
-      tag: [
-        {
-          id: 1,
-          name: 'Hoa tuoi dam cuoi',
-          href: '/hoa-tuoi-dam-cuoi',
-        },
-        {
-          id: 2,
-          name: 'Hoa tuoi dam cuoi',
-          href: '/hoa-tuoi-dam-cuoi',
-        },
-      ],
-    };
-
-    return Promise.resolve(data);
+  getSitemap: async (): Promise<
+    { id: number; slug: string; updatedAt: Date }[]
+  > => {
+    const res = await httpServer.get<
+      ResponseApi<{ id: number; slug: string; updatedAt: Date }[]>
+    >(`/product/sitemap`, undefined, false);
+    return res.payload.data;
   },
 };
 

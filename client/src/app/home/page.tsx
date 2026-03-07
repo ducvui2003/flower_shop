@@ -1,82 +1,110 @@
 import Banner from '@/app/home/Banner';
+import FeatureSection from '@/app/home/FeatureSection';
 import CategorySection from '@/components/event/CategorySection';
 import SectionGeneric from '@/components/event/SectionGeneric';
-import FeatureSection from '@/app/home/FeatureSection';
-import pageService from '@/service/page.service';
-import { CategoryProduct, CategorySlider } from '@/types/page.type';
-import React from 'react';
+import { uuid } from '@/lib/utils';
+import pageService from '@/service/page.server.service';
+import {
+  HomePageResponse,
+  SectionBanner,
+  SectionCategoryProduct,
+  SectionCategorySlider,
+} from '@/types/page.type';
+import {
+  APP_INFO,
+  DEFAULT_IMAGE_CATEGORY,
+  DEFAULT_IMAGE_PRODUCT,
+} from '@/utils/const.util';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import React, { cache } from 'react';
 
-const getData = async () => {
+const getData = cache(async () => {
   try {
     const data = await pageService.getHomeStructure();
-    const {
-      content: { banners, sections },
-    } = data;
-    const categorySliderData = sections.filter(
-      (item) => item.type === 'slider',
-    )[0];
-    const categoryProductData = sections.filter(
-      (item) => item.type === 'category-product',
-    );
-    const categories = (categorySliderData.content as CategorySlider).items.map(
-      (item) => ({
-        id: item.id,
-        name: item.name,
-        thumbnail: item.thumbnail.href,
-        href: item.link,
-      }),
-    );
     return {
-      banners,
-      categorySliderData,
-      categoryProductData,
-      categories,
+      title: data.title,
+      content: data.content,
     };
-  } catch (e) {
-    console.log(e);
+  } catch (_) {
     return null;
   }
-};
+});
+
+export async function generateMetadata() {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = headersList.get('x-forwarded-proto') || 'https';
+  const fullUrl = `${protocol}://${host}`;
+  return {
+    title: APP_INFO.NAME,
+    url: fullUrl,
+    openGraph: {
+      images: ['/logo.jpg'],
+    },
+  };
+}
 
 export default async function HomePage() {
-  const response = await getData();
-  if (response == null) notFound();
-  const { banners, categories, categoryProductData, categorySliderData } =
-    response;
-
+  const data: Omit<HomePageResponse, 'slug'> | null = await getData();
+  if (data == null) notFound();
   return (
     <>
-      <Banner data={banners} />
-      <Spacing />
-      <div className="container-p container my-4">
-        <CategorySection
-          title={categorySliderData.title}
-          categories={categories}
-        />
-      </div>
-      <Spacing />
-      {categoryProductData.map((item, i) => (
-        <React.Fragment key={i}>
-          <div className="container-p container">
-            <SectionGeneric
-              title={item.title}
-              products={(item.content as CategoryProduct).items.map((item) => ({
-                id: item.id,
-                name: item.title,
-                basePrice: item.price,
-                salePrice: item.salePrice,
-                link: item.link,
-                thumbnails: item?.thumbnail?.href ?? DEFAULT_IMAGE,
-              }))}
-              link={(item.content as CategoryProduct).link}
-            />
-          </div>
-          {i < categoryProductData.length - 1 && <Spacing />}
-        </React.Fragment>
-      ))}
-      <Spacing />
+      {data.content.map((section) => {
+        switch (section.type) {
+          case 'banner': {
+            const data = section as SectionBanner;
+            return (
+              <React.Fragment key={uuid()}>
+                <Banner data={data.content} />
+                <Spacing />
+              </React.Fragment>
+            );
+          }
+          case 'categorySlider': {
+            const data = section as SectionCategorySlider;
+            return (
+              <React.Fragment key={uuid()}>
+                <div className="container-p container my-4">
+                  <CategorySection
+                    title={data.title}
+                    categories={data.content.map((i) => ({
+                      id: i.id,
+                      name: i.name,
+                      link: i.href,
+                      thumbnail: i?.thumbnail ?? DEFAULT_IMAGE_CATEGORY,
+                    }))}
+                  />
+                </div>
+                <Spacing />
+              </React.Fragment>
+            );
+          }
+          case 'categoryProduct': {
+            const data = section as SectionCategoryProduct;
+            return (
+              <React.Fragment key={uuid()}>
+                <div className="container-p container">
+                  <SectionGeneric
+                    title={data.title}
+                    products={data.content.items.map((item) => ({
+                      id: item.id,
+                      name: item.title,
+                      price: item.price,
+                      priceSale: item.priceSale,
+                      href: item.href,
+                      thumbnails: item?.thumbnail ?? DEFAULT_IMAGE_PRODUCT,
+                    }))}
+                    link={data.content.href}
+                  />
+                </div>
+                <Spacing />
+              </React.Fragment>
+            );
+          }
+        }
+      })}
+
       <FeatureSection />
     </>
   );

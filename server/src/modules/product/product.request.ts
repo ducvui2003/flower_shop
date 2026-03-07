@@ -6,11 +6,13 @@ const ProductCreateRequestSchema = ProductModel.pick({
   description: true,
   price: true,
   priceSale: true,
+  metadata: true,
 }).extend({
   slug: z.object({
     name: z.string(),
   }),
-  thumbnailIds: z.array(z.number()).optional(),
+  categories: z.array(z.int()),
+  images: z.array(z.int()).optional(),
 });
 
 const ProductUpdateRequestSchema = z.object({
@@ -23,7 +25,14 @@ const ProductUpdateRequestSchema = z.object({
       name: z.string(),
     })
     .optional(),
-  thumbnailIds: z.array(z.number()).optional(),
+  images: z.array(z.int()).optional(),
+  metadata: z
+    .object({
+      title: z.string(),
+      metaDescription: z.string(),
+    })
+    .optional(),
+  categories: z.array(z.int()).optional(),
 });
 
 const ProductGetParamsSchema = z.object({
@@ -34,7 +43,13 @@ const ProductSearchGetQuerySchema = z.object({
   name: z.string().trim().toLowerCase().optional(),
   categories: z.preprocess((v) => {
     if (v === undefined) return []; // no category → empty array
-    if (Array.isArray(v)) return v; // already an array
+    if (Array.isArray(v)) return v.map(Number); // already an array
+    return [Number(v)]; // single value → wrap in array
+  }, z.array(z.number())),
+  categoriesSlug: z.preprocess((v) => {
+    if (v === undefined) return []; // no category → empty array
+    if (Array.isArray(v)) return v.map(String);
+    if (typeof v === 'string') return [v]; // already an array
     return [v]; // single value → wrap in array
   }, z.array(z.string())),
   minPrice: z.preprocess(
@@ -46,7 +61,6 @@ const ProductSearchGetQuerySchema = z.object({
     z.number().optional(),
   ),
   sort: z.enum(['price_asc', 'price_desc']).default('price_asc'),
-
   page: z.preprocess(
     (v) => (v === undefined ? undefined : Number(v)),
     z.number().int().min(1).default(1),

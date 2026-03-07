@@ -1,9 +1,57 @@
+import { OutputData } from "@editorjs/editorjs";
+
 type Product = {
   id: number;
   name: string;
-  basePrice: number;
-  salePrice: number;
+  price: number;
+  priceSale: number;
+  href: string;
   createdAt: Date;
   updatedAt: Date;
 };
-export type { Product };
+
+type Image = {
+  id: number;
+  key: string;
+  href: string;
+  alt: string;
+};
+
+type ProductEditing = {
+  id: number;
+  name: string;
+  description: OutputData;
+  price: number;
+  priceSale: number;
+  slugRegistryId: number;
+  slugPlaceholder: string;
+  createdBy: string | null;
+  createdAt: Date | null;
+  updatedBy: string | null;
+  updatedAt: Date | null;
+  isDeleted: boolean;
+  deletedBy: string | null;
+  deletedAt: Date | null;
+  slug: {
+    id: number;
+    slug: string;
+  };
+  categoryIds: Array<number>;
+  metadata: {
+    title: string;
+    metaDescription: string;
+  } | null;
+  imageIds: Array<number>;
+};
+
+type PageContentResponse = {
+  title: string;
+  slug: string;
+  content: string;
+  metadata: {
+    title: string;
+    metaDescription: string;
+  } | null;
+};
+
+export type { Product, ProductEditing, Image, PageContentResponse };

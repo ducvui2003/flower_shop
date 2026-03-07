@@ -1,20 +1,33 @@
 import Link from '@/components/Link';
 import { Button } from '@/components/ui/button';
 import { cn, currency } from '@/lib/utils';
-import { ProductCardType } from '@/types/product.type';
-import { DEFAULT_IMAGE } from '@/utils/const.util';
+import { Link as LinkType, Source } from '@/types/common.type';
+import { DEFAULT_IMAGE_PRODUCT } from '@/utils/const.util';
 import TEXT from '@/utils/text.util';
 import Image from 'next/image';
 
+type ProductCardType = {
+  id: number;
+  name: string;
+  price: number;
+  priceSale: number;
+  href: LinkType;
+  thumbnails?: Source;
+};
+
 type ProductCardProps = ProductCardType & {
+  view?: number;
+  className?: string;
+  numSell?: number;
+  avgStar?: number;
   clickButton?: boolean;
 };
 
 const ProductCard = ({
   name,
-  basePrice,
-  salePrice,
-  link: href,
+  price: basePrice,
+  priceSale: salePrice,
+  href,
   thumbnails,
   className,
   clickButton = false,
@@ -32,8 +45,8 @@ const ProductCard = ({
         <div className="pc:h-[250px] relative h-[150px] overflow-hidden rounded-t-lg">
           {!Array.isArray(thumbnails) && (
             <Image
-              src={thumbnails ?? DEFAULT_IMAGE}
-              alt={name}
+              src={thumbnails?.src ?? DEFAULT_IMAGE_PRODUCT.src}
+              alt={thumbnails?.alt ?? DEFAULT_IMAGE_PRODUCT.alt}
               fill
               className="object-cover transition-all group-hover:scale-110"
             />
@@ -69,5 +82,5 @@ const ProductCard = ({
     </article>
   );
 };
-
+export type { ProductCardType };
 export default ProductCard;

@@ -1,4 +1,4 @@
-.PHONY: up down server container
+.PHONY: up down server container client admin
 up: 
 	( \
 		cd ~ && \
@@ -13,11 +13,24 @@ down:
 		make redis_stop \
 	)
 
+client:
+	( \
+		cd client && \
+		npm run dev \
+	)
+
 server:
 	( \
 		cd server && \
 		npm run dev \
 	)
+
+admin:
+	( \
+		cd admin && \
+		npm run dev \
+	)
+
 
 container:
 	( \

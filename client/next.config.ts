@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
         destination: '/info/policy',
       },
       {
-        source: '/trang-chu',
+        source: '/',
         destination: '/home',
       },
       {
@@ -65,6 +65,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  output: 'standalone',
 };
 
 export default nextConfig;

@@ -5,16 +5,13 @@ import { UserInfoResType } from '@/types/user.type';
 const userServerService = {
   getInfo: async (accessToken: string): Promise<UserInfoResType> => {
     try {
-      const res = await fetch(
-        `${envConfig.NEXT_PUBLIC_SERVER_CONTAINER}/api/v1/user/info`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
+      const res = await fetch(`${envConfig.SERVER_INTERNAL}/user/info`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
-      );
+      });
       const body: ResponseApi<UserInfoResType> = await res.json();
 
       return body.data;

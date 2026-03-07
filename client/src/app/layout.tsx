@@ -4,12 +4,11 @@ import '@/app/globals.css';
 import { Inter, Playfair_Display } from 'next/font/google';
 import envConfig from '@/config/env.config';
 import { APP_INFO, DESCRIPTION } from '@/utils/const.util';
-import { headers } from 'next/headers';
-import Head from 'next/head';
 import Header from '@/components/common/Header';
 import HeaderSticky from '@/components/common/HeaderSticky';
 import Footer from '@/components/common/Footer';
 import { Separator } from '@/components/ui/separator';
+import Script from 'next/script';
 
 const playfair = Playfair_Display({
   subsets: ['vietnamese'],
@@ -23,36 +22,43 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-export async function generateMetadata() {
-  const headersList = await headers();
-  const host = headersList.get('host');
-  const protocol = headersList.get('x-forwarded-proto') || 'https';
-  const baseUrl = `${protocol}://${host}`;
+export const metadata = {
+  metadataBase: new URL(envConfig.DOMAIN),
+  title: {
+    default: APP_INFO.NAME,
+    template: `%s | ${APP_INFO.NAME}`,
+  },
 
-  return {
+  description: DESCRIPTION,
+
+  icons: {
+    icon: '/favicon/favicon.ico',
+    shortcut: '/favicon/favicon.ico',
+    apple: '/favicon/apple-touch-icon.png',
+  },
+
+  openGraph: {
     title: APP_INFO.NAME,
     description: DESCRIPTION,
-    icons: {
-      icon: '/favicon/favicon.ico',
-      shortcut: '/favicon/favicon.ico',
-      apple: '/favicon/apple-touch-icon.png',
-    },
-    openGraph: {
-      title: APP_INFO.NAME,
-      description: DESCRIPTION,
-      url: baseUrl,
-      type: 'website',
-      siteName: APP_INFO.NAME,
-      images: [
-        {
-          url: `${baseUrl}/images/logo-transparent.png`,
-          width: 800,
-          height: 600,
-        },
-      ],
-    },
-  };
-}
+    type: 'website',
+    siteName: APP_INFO.NAME,
+    images: [
+      {
+        url: '/images/logo-transparent.png',
+        width: 800,
+        height: 600,
+      },
+    ],
+  },
+
+  other: {
+    'fb:app_id': envConfig.FACEBOOK_CLIENT_ID,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default async function RootLayout({
   children,
@@ -61,12 +67,20 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="vi" className={`${inter.className} ${playfair.className}`}>
-      <Head>
-        <meta
-          property="fb:app_id"
-          content={envConfig.NEXT_PUBLIC_FACEBOOK_CLIENT_ID}
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-T71V57CPPH"
+          strategy="afterInteractive"
         />
-      </Head>
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-T71V57CPPH');
+          `}
+        </Script>
+      </head>
       <body>
         <Providers>
           <Header />

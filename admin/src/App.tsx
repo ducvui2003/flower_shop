@@ -1,6 +1,12 @@
+import { Toaster } from "@/components/ui/sonner";
 import AppRouter from "@/providers/AppRouter";
 function App() {
-  return <AppRouter />;
+  return (
+    <>
+      <Toaster richColors />
+      <AppRouter />
+    </>
+  );
 }
 
 export default App;

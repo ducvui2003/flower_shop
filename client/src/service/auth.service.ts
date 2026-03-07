@@ -20,7 +20,7 @@ import { User } from '@/types/user.type';
 const authService = {
   login: async (data: LoginReqType): Promise<User> => {
     const res = await http.post<ResponseApi<LoginResType>>(
-      '/api/v1/auth/login',
+      '/auth/login',
       data,
       undefined,
       false,
@@ -41,16 +41,13 @@ const authService = {
   },
 
   register: (data: RegisterReqType) => {
-    return http.post<ResponseApi<RegisterFormType>>(
-      '/api/v1/auth/register',
-      data,
-    );
+    return http.post<ResponseApi<RegisterFormType>>('/auth/register', data);
   },
 
   sendOTPVerify: async (data: OTPReqType): Promise<OTPResType> => {
     try {
       const response = await http.post<ResponseApi<OTPResType>>(
-        '/api/v1/auth/send-otp',
+        '/auth/send-otp',
         {
           email: data.email,
           type: 'REGISTER',
@@ -78,7 +75,7 @@ const authService = {
       refreshToken: refreshToken,
     };
     const res = await fetch(
-      `${envConfig.NEXT_PUBLIC_SERVER_EXTERNAL}/api/v1/auth/refresh-token`,
+      `${envConfig.NEXT_PUBLIC_SERVER_EXTERNAL}/auth/refresh-token`,
       {
         method: 'POST',
         body: JSON.stringify(body),
@@ -111,26 +108,23 @@ const authService = {
       const body = {
         refreshToken: refreshToken,
       };
-      await fetch(
-        `${envConfig.NEXT_PUBLIC_SERVER_EXTERNAL}/api/v1/auth/logout`,
-        {
-          method: 'POST',
-          body: JSON.stringify(body),
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
+      await fetch(`${envConfig.NEXT_PUBLIC_SERVER_EXTERNAL}/auth/logout`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
-      );
+      });
       console.log('✅ Successfully logged out from external API');
     } catch (error) {
       console.error('⚠️ Error calling logout API:', error);
     }
   },
 
-  sendOTPForgetPassword: (email: string): Promise<any> => {
+  sendOTPForgetPassword: (email: string): Promise<unknown> => {
     return http.post<ResponseApi<void>>(
-      '/api/v1/auth/send-otp',
+      '/auth/send-otp',
       {
         email: email,
         type: 'FORGOT_PASSWORD',
@@ -142,7 +136,7 @@ const authService = {
 
   verifyOTPForgetPassword: (data: VerifyOTPReqType) => {
     return http.post<ResponseApi<void>>(
-      '/api/v1/auth/verify-otp',
+      '/auth/verify-otp',
       {
         email: data.email,
         type: 'FORGOT_PASSWORD',
@@ -155,7 +149,7 @@ const authService = {
 
   resetPassword: (data: ResetPasswordReqType) => {
     return http.post<ResponseApi<void>>(
-      '/api/v1/auth/forget-password',
+      '/auth/forget-password',
       {
         email: data.email,
         otp: data.otp,

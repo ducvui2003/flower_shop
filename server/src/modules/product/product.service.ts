@@ -7,6 +7,7 @@ import {
 import {
   ProductCreateResponseType,
   ProductDetailGetResponseType,
+  ProductEditingGetResponseType,
   ProductGetResponseType,
 } from '@/modules/product/product.response';
 import { AppErrorBuilder } from '@/shared/errors/app-error';
@@ -18,7 +19,11 @@ import {
 } from '@/shared/utils/common.util';
 import { AppResponse, Page } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
-import { ProductModelType } from '@/modules/product/product.model';
+import {
+  ProductModelType,
+  ProductWithoutDescriptionModelType,
+} from '@/modules/product/product.model';
+import { createUrl } from '@/shared/utils/media.util';
 
 interface ProductService {
   createProduct: (
@@ -28,16 +33,31 @@ interface ProductService {
     id: number,
     body: ProductUpdateRequestType,
   ) => Promise<AppResponse>;
-  searchProduct: (
+  searchProducts: (
     data: ProductSearchGetQueryType,
   ) => Promise<AppResponse<Page<ProductGetResponseType>>>;
+  getProductsById: (
+    ids: Array<number>,
+  ) => Promise<Array<ProductGetResponseType>>;
   getProductById: (
     id: number,
   ) => Promise<AppResponse<ProductDetailGetResponseType>>;
+  getProductEditingById: (
+    id: number,
+  ) => Promise<AppResponse<ProductEditingGetResponseType>>;
   getProductBySlug: (
     slug: string,
   ) => Promise<AppResponse<ProductDetailGetResponseType>>;
   deleteProductById: (id: number) => Promise<AppResponse<void>>;
+  getSitemap: () => Promise<
+    AppResponse<
+      Array<{
+        id: number;
+        slug: string;
+        updatedAt: Date;
+      }>
+    >
+  >;
 }
 const productService: ProductService = {
   createProduct: async (body: ProductCreateRequestType) => {
@@ -76,36 +96,75 @@ const productService: ProductService = {
       message: 'Update product',
     };
   },
-  searchProduct: async (
+  searchProducts: async (
     data: ProductSearchGetQueryType,
   ): Promise<AppResponse<Page<ProductGetResponseType>>> => {
     const page = await productRepository.searchProducts(data);
+    const thumbnails = await productRepository.getProductThumbnailsById(
+      page.items.map((i) => i.id),
+    );
     const newPage = mapperItemsForPage<
-      ProductModelType,
+      ProductWithoutDescriptionModelType,
       ProductGetResponseType
-    >(page, (item) => ({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      priceSale: item.priceSale,
-      description: item.description,
-      href: applyPlaceholders(item.slug.slug, {
-        name: item.slugPlaceholder,
-      }),
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    }));
+    >(page, (item) => {
+      const thumbnail = thumbnails.find((i) => i.id === item.id);
+      return {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        priceSale: item.priceSale,
+        href: applyPlaceholders(item.slug.slug, {
+          name: item.slugPlaceholder,
+        }),
+        thumbnail: thumbnail && {
+          src: createUrl(thumbnail.key),
+          alt: thumbnail.alt,
+        },
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+    });
     return {
       code: StatusCodes.OK,
       message: 'Search products',
       data: newPage,
     };
   },
+  getProductsById: async (
+    ids: Array<number>,
+  ): Promise<Array<ProductGetResponseType>> => {
+    const product = await productRepository.getProductsById(ids);
+    const thumbnails = await productRepository.getProductThumbnailsById(
+      product.map((i) => i.id),
+    );
+    const result: Array<ProductGetResponseType> = product.map((item) => {
+      const thumbnail = thumbnails.find((i) => i.id === item.id);
+      return {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        priceSale: item.priceSale,
+        description: item.description,
+        href: applyPlaceholders(item.slug.slug, {
+          name: item.slugPlaceholder,
+        }),
+        thumbnail: thumbnail && {
+          src: createUrl(thumbnail.key),
+          alt: thumbnail.alt,
+        },
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+    });
+
+    return result;
+  },
   getProductById: async (
     id: number,
   ): Promise<AppResponse<ProductDetailGetResponseType>> => {
     try {
       const productEtt = await productRepository.getProductById(id);
+      const mediaEtt = await productRepository.getProductMediaById(id);
       return {
         code: StatusCodes.OK,
         message: 'Get product by id',
@@ -118,8 +177,41 @@ const productService: ProductService = {
           href: applyPlaceholders(productEtt.slug.slug, {
             name: productEtt.slugPlaceholder,
           }),
+          images: mediaEtt.map((i) => ({
+            src: createUrl(i.key),
+            alt: i.alt,
+          })),
           createdAt: productEtt.createdAt,
           updatedAt: productEtt.updatedAt,
+          metadata: productEtt.metadata,
+        },
+      };
+    } catch (e) {
+      throw AppErrorBuilder.conflict('Not has product with id ' + id);
+    }
+  },
+  getProductEditingById: async (
+    id: number,
+  ): Promise<AppResponse<ProductEditingGetResponseType>> => {
+    try {
+      const productEtt = await productRepository.getProductEditingById(id);
+      return {
+        code: StatusCodes.OK,
+        message: 'Get product editing by id',
+        data: {
+          id: productEtt.id,
+          name: productEtt.name,
+          price: productEtt.price,
+          priceSale: productEtt.priceSale,
+          slug: productEtt.slug,
+          description: productEtt.description,
+          createdAt: productEtt.createdAt,
+          isDeleted: productEtt.isDeleted,
+          slugPlaceholder: productEtt.slugPlaceholder,
+          updatedAt: productEtt.updatedAt,
+          metadata: productEtt.metadata,
+          categoryIds: productEtt.categories.map((item) => item.categoryId),
+          imageIds: productEtt.productMedias.map((item) => item.mediaId),
         },
       };
     } catch (e) {
@@ -131,6 +223,9 @@ const productService: ProductService = {
   ): Promise<AppResponse<ProductDetailGetResponseType>> => {
     try {
       const productEtt = await productRepository.getProductBySlug(slug);
+      const mediaEtt = await productRepository.getProductMediaById(
+        productEtt.id,
+      );
       return {
         code: StatusCodes.OK,
         message: 'Get product by slug',
@@ -143,8 +238,13 @@ const productService: ProductService = {
           href: applyPlaceholders(productEtt.slug.slug, {
             name: productEtt.slugPlaceholder,
           }),
+          images: mediaEtt.map((i) => ({
+            src: createUrl(i.key),
+            alt: i.alt,
+          })),
           createdAt: productEtt.createdAt,
           updatedAt: productEtt.updatedAt,
+          metadata: productEtt.metadata,
         },
       };
     } catch (e) {
@@ -161,6 +261,41 @@ const productService: ProductService = {
     } catch (_) {
       throw AppErrorBuilder.conflict('Not has product with id ' + id);
     }
+  },
+  getSitemap: async (): Promise<
+    AppResponse<
+      Array<{
+        id: number;
+        slug: string;
+        updatedAt: Date;
+      }>
+    >
+  > => {
+    const products = await productRepository.searchProducts({
+      categories: [],
+      categoriesSlug: [],
+      limit: 1000,
+      page: 1,
+      sort: 'price_asc',
+    });
+
+    if (products.totalItems === 0) {
+      return {
+        code: StatusCodes.NOT_FOUND,
+        message: 'Sitemap not define',
+      };
+    }
+    return {
+      code: StatusCodes.OK,
+      message: 'Get Sitemap products',
+      data: products.items.map((product) => ({
+        id: product.id,
+        slug: applyPlaceholders(product.slug.slug, {
+          name: product.slugPlaceholder,
+        }),
+        updatedAt: new Date(),
+      })),
+    };
   },
 };
 export default productService;

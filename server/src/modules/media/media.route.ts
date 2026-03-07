@@ -2,9 +2,14 @@ import mediaController from '@/modules/media/media.controller';
 import uploadMiddleware from '@/modules/media/media.middleware';
 import {
   MediaCreateWithFile,
+  MediaGetQuerySchema,
+  MediaMetadataUpdateRequest,
+  MediaSearchGetQuerySchema,
   MediaSignUrlRequest,
 } from '@/modules/media/media.request';
-import validationBodyMiddleware from '@/shared/middlewares/validate.middleware';
+import validationBodyMiddleware, {
+  validateQueryMiddleware,
+} from '@/shared/middlewares/validate.middleware';
 import { Router } from 'express';
 
 const mediaRouters = Router();
@@ -19,11 +24,27 @@ mediaRouters
   .post(
     '/media',
     validationBodyMiddleware(MediaSignUrlRequest),
-    mediaController.createMediaWithFile,
+    mediaController.createMedia,
   )
   .get(
+    '/media',
+    validateQueryMiddleware(MediaSearchGetQuerySchema),
+    mediaController.getMedias,
+  )
+  .get(
+    '/media-id',
+    validateQueryMiddleware(MediaGetQuerySchema),
+    mediaController.getMediasByIds,
+  )
+  .post(
     '/media/sign-url',
     validationBodyMiddleware(MediaSignUrlRequest),
     mediaController.getSignUrl,
-  );
+  )
+  .put(
+    '/media/:id',
+    validateQueryMiddleware(MediaMetadataUpdateRequest),
+    mediaController.updateMediaMetadata,
+  )
+  .delete('/media/:id', mediaController.deleteMediaById);
 export default mediaRouters;

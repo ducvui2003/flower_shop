@@ -25,8 +25,9 @@ const Banner = ({ data }: BannerProps) => {
           <CarouselItem key={i}>
             <AspectRatio ratio={640 / 178}>
               <Image
-                src={item.href}
-                alt={item.alt || ALT}
+                src={item.src}
+                alt={item?.alt ?? ALT}
+                sizes="100vw"
                 fill
                 className="h-full w-auto object-contain object-top"
                 loading="lazy"

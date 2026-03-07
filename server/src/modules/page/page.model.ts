@@ -7,30 +7,62 @@ enum PageType {
   ABOUT,
 }
 
+enum NavigatorType {
+  page,
+  category,
+}
+
+const NavigatorModel = z.object({
+  id: z.number(),
+  parent: z.number().nullable(),
+  label: z.string(),
+  ref: z.number(),
+  tableRef: z.enum(Object.keys(NavigatorType)),
+});
+
+type NavigatorModelType = z.infer<typeof NavigatorModel>;
+
+type NavigatorAggregateType = {
+  title: string;
+  href: string;
+  child: Array<{
+    title: string;
+    href: string;
+  }>;
+};
+
+type BannerPageSectionType = {
+  mediaIds: Array<number>;
+};
+
+type CategorySliderPageSectionType = {
+  title: string;
+  categoryIds: Array<number>;
+};
+
+type CategoryProductPageSectionType = {
+  categories: Array<{
+    id: number;
+    title: string;
+    productIds: Array<number>;
+  }>;
+};
+
 const HomePageContent = z.object({
-  banners: z.array(z.int()),
-  navigator: z.array(
-    z.object({
-      title: z.string(),
-      link: z.string(),
-      child: z
-        .array(
-          z.object({
-            title: z.string(),
-            link: z.string(),
-          }),
-        )
-        .optional(),
-    }),
-  ),
-  categories: z.object({
-    ids: z.array(z.int()),
-    showItems: z.int(),
+  banners: z.object({
+    mediaIds: z.array(z.int()),
   }),
   sliders: z.object({
     title: z.string(),
     categoryIds: z.array(z.number()),
   }),
+  categories: z.array(
+    z.object({
+      id: z.int(),
+      title: z.string(),
+      productIds: z.array(z.int()),
+    }),
+  ),
 });
 type HomePageContentType = z.infer<typeof HomePageContent>;
 
@@ -43,9 +75,21 @@ const PageModel = z.object({
   updatedAt: z.date().nullable(),
 });
 
+type PageModelType = z.infer<typeof PageModel>;
+
 type PageContent = HomePageContentType;
 
-const HomePageModel = PageModel.extend({
+const PageContentMetadataModel = z.object({
+  title: z.string(),
+  metaDescription: z.string(),
+});
+
+type PageContentMetadataType = z.infer<typeof PageContentMetadataModel>;
+
+const HomePageModel = PageModel.omit({
+  createdAt: true,
+  updatedAt: true,
+}).extend({
   content: HomePageContent,
 });
 
@@ -58,24 +102,48 @@ const MediaModel = z.object({
   metadata: z.unknown().nullable(),
 });
 
+const PageSectionModel = z.object({
+  id: z.number(),
+  type: z.enum(['banner', 'category_slider', 'category_product_section']),
+  config: z.json(),
+  position: z.number(),
+  isActive: z.boolean(),
+  pageId: z.number(),
+});
+
+type PageSectionModelType = z.infer<typeof PageSectionModel>;
 type MediaModelType = z.infer<typeof MediaModel>;
 
 const CategoryModel = z.object({
   id: z.int(),
   name: z.string(),
-  parentId: z.int().nullable(),
   slugRegistry: SlugRegistry,
+  slugPlaceholder: z.string(),
   thumbnail: MediaModel.nullable(),
 });
 
 type CategoryModelType = z.infer<typeof CategoryModel>;
 
-export { PageModel, HomePageContent };
+export {
+  PageModel,
+  HomePageContent,
+  NavigatorModel,
+  PageContentMetadataModel,
+  PageSectionModel,
+};
 
 export type {
   PageContent,
   HomePageModelType,
+  PageModelType,
   HomePageContentType,
   MediaModelType,
   CategoryModelType,
+  NavigatorModelType,
+  NavigatorAggregateType,
+  BannerPageSectionType,
+  CategorySliderPageSectionType,
+  CategoryProductPageSectionType,
+  PageContentMetadataType,
+  PageSectionModelType,
 };

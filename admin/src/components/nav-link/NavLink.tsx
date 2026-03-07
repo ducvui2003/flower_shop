@@ -1,8 +1,7 @@
 import { NavLink as RRNavLink } from "react-router-dom";
-import type { RoutePath } from "./routes";
 
 type NavLinkProps = {
-  to: RoutePath; // only valid paths allowed
+  to: string; // only valid paths allowed
   children: React.ReactNode;
   className?: string;
 };

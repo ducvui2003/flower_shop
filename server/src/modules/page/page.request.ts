@@ -1,11 +1,26 @@
-import { PageContent } from '@/modules/page/page.model';
 import z from 'zod';
+
+const PageSectionTypeSchema = z.enum([
+  'banner',
+  'category_slider',
+  'category_product_section',
+]);
+
+const PageSectionCreateSchema = z.object({
+  id: z.number().optional(),
+  type: PageSectionTypeSchema,
+  config: z.json(),
+  position: z.number(),
+  pageId: z.number().optional(),
+  isActive: z.boolean().optional(),
+});
+
+const PageSectionUpdateSchema = PageSectionCreateSchema.extend({
+  id: z.number(),
+});
 
 type CategoryPageRequest = {
   name?: string;
-};
-type HomePageRequest = {
-  content: PageContent;
 };
 
 const NavigateItemSchema = z.object({
@@ -28,12 +43,13 @@ const HomePageContentUpdateRequestSchema = z.object({
   ),
 });
 
-type HomePageContentUpdateRequestType = z.infer<
-  typeof HomePageContentUpdateRequestSchema
+const PageSectionUpdateRequestSchema = z.object({
+  new: z.array(PageSectionCreateSchema),
+  update: z.array(PageSectionUpdateSchema),
+  delete: z.array(z.int()),
+});
+type PageSectionUpdateRequestType = z.infer<
+  typeof PageSectionUpdateRequestSchema
 >;
-export { HomePageContentUpdateRequestSchema };
-export type {
-  CategoryPageRequest,
-  HomePageRequest,
-  HomePageContentUpdateRequestType,
-};
+export { HomePageContentUpdateRequestSchema, PageSectionUpdateRequestSchema };
+export type { CategoryPageRequest, PageSectionUpdateRequestType };

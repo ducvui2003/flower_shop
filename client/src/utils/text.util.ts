@@ -4,20 +4,6 @@ const TEXT = {
   HEADER: {
     TOP: 'SDT: 0965809127',
   },
-  FOOTER: [
-    {
-      title: APP_INFO.NAME,
-      li: [APP_INFO.ADDRESS, `SĐT: ${APP_INFO.PHONE}`],
-    },
-    {
-      title: 'Chính sách',
-      li: [
-        'Giới thiệu annhien.vn',
-        'Điều khoản dịch vụ',
-        'Chính sách vận chuyển',
-      ],
-    },
-  ],
   HOTLINE: 'Hotline đặt hàng nhanh 0965809127',
   SHOP: {
     NAME: 'Hoa tuoi Nhat Nam',
@@ -60,4 +46,37 @@ const TEXT = {
   },
 };
 
+const FOOTER_TEXT = [
+  {
+    title: APP_INFO.NAME,
+    li: [
+      {
+        title: APP_INFO.ADDRESS,
+        link: undefined,
+      },
+      {
+        title: `SĐT: ${APP_INFO.PHONE}`,
+        link: undefined,
+      },
+    ],
+  },
+  {
+    title: 'Thông tin',
+    li: [
+      {
+        title: 'Giới thiệu',
+        link: '/thong-tin/ve-chung-toi',
+      },
+      {
+        title: 'Chính sách',
+        link: '/thong-tin/chinh-sach',
+      },
+      {
+        title: 'Liên hệ',
+        link: '/thong-tin/lien-he',
+      },
+    ],
+  },
+];
+export { FOOTER_TEXT };
 export default TEXT;

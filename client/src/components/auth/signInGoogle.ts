@@ -9,7 +9,7 @@ const signInGoogle = ({
   redirectUrl?: string;
 } = {}) => {
   const params = new URLSearchParams({
-    client_id: envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    client_id: envConfig.GOOGLE_CLIENT_ID,
     redirect_uri: redirectUri,
     response_type: 'code',
     scope: 'openid email profile',

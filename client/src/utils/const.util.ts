@@ -1,3 +1,5 @@
+import { Source } from '@/types/common.type';
+
 export const HOME_PAGE: string = '/';
 export const LOGIN_PAGE: string = '/login';
 export const HTTP_STATUS_CODE = {
@@ -13,8 +15,18 @@ export const LOCAL_STORAGE = {
 
 export const ALT = 'Hoa Tươi Nhật Nam';
 export const DESCRIPTION = '';
-export const DEFAULT_IMAGE = '/images/product.jpg';
-export const DEFAULT_CATEGORY = '/images/category.jpg';
+export const DEFAULT_IMAGE_PRODUCT: Source & {
+  alt: string;
+} = {
+  src: '/images/product.jpg',
+  alt: 'DEFAULT_IMAGE_PRODUCT',
+};
+export const DEFAULT_IMAGE_CATEGORY: Source & {
+  alt: string;
+} = {
+  src: '/images/category.jpg',
+  alt: 'DEFAULT_IMAGE_CATEGORY',
+};
 export const PAYMENT_COOKIE = 'payment';
 
 export type StatusOrderType =

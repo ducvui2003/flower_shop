@@ -23,6 +23,8 @@ productRouters
     productController.createProduct,
   );
 
+productRouters.route('/product/sitemap').get(productController.getSitemap);
+
 productRouters
   .route('/product/:slug')
   .get(
@@ -37,4 +39,8 @@ productRouters
     productController.updateProduct,
   )
   .delete(productController.deleteProduct);
+
+productRouters
+  .route('/admin/product/:id')
+  .get(productController.getProductEditing);
 export default productRouters;

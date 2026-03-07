@@ -5,13 +5,14 @@ import {
   ProductUpdateRequestType,
 } from '@/modules/product/product.request';
 import productService from '@/modules/product/product.service';
+import logger from '@/shared/utils/logger.util';
 import { NextFunction, Request, Response } from 'express';
 
 const productController = {
   getProducts: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: ProductSearchGetQueryType = req.locals.query;
-      const response = await productService.searchProduct(query);
+      const response = await productService.searchProducts(query);
       res.status(response.code).json(response);
     } catch (e) {
       next(e);
@@ -41,6 +42,26 @@ const productController = {
         response = await productService.getProductBySlug(slug);
         res.status(response.code).json(response);
       }
+    } catch (e) {
+      next(e);
+    }
+  },
+  getProductEditing: async (
+    req: Request<
+      {
+        id: string;
+      },
+      object,
+      object,
+      ProductGetQueryType
+    >,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const id = req.params.id;
+    try {
+      const response = await productService.getProductEditingById(parseInt(id));
+      res.status(response.code).json(response);
     } catch (e) {
       next(e);
     }
@@ -90,6 +111,15 @@ const productController = {
     try {
       const id = req.params.id;
       const response = await productService.deleteProductById(parseInt(id));
+      res.status(response.code).json(response);
+    } catch (e) {
+      next(e);
+    }
+  },
+  getSitemap: async (_: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log('sitemap');
+      const response = await productService.getSitemap();
       res.status(response.code).json(response);
     } catch (e) {
       next(e);

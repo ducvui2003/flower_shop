@@ -1,15 +1,15 @@
 import Link from '@/components/Link';
-import ProductCard from '@/components/product/ProductCard';
+import ProductCard, { ProductCardType } from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { ProductCardType } from '@/types/product.type';
+import { Link as LinkType } from '@/types/common.type';
 import TEXT from '@/utils/text.util';
 import Image from 'next/image';
 
 type SectionGenericProps = {
   title: string;
   products: ProductCardType[];
-  link?: string;
+  link: LinkType;
 };
 
 const SectionGeneric = ({ title, products, link }: SectionGenericProps) => {

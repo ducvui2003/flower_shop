@@ -10,16 +10,16 @@ import productService from '@/service/product.server.service';
 
 type ProductRelatedProps = {
   categoryId?: number[];
-  category?: string[];
+  categoriesName?: string[];
 };
 
 const ProductRelated = async ({
   categoryId,
-  category,
+  categoriesName,
 }: ProductRelatedProps) => {
   const response = await productService.getProducts({
-    categoryId: categoryId,
-    category: category,
+    categoryIds: categoryId,
+    categoriesName: categoriesName,
   });
   if (response.items.length == 0) return null;
   return (
@@ -30,7 +30,13 @@ const ProductRelated = async ({
           {response.items.splice(4, 4).map((item, index) => {
             return (
               <CarouselItem key={index} className="pc:basis-1/4 basis-1/2">
-                <ProductCard {...item} />
+                <ProductCard
+                  id={item.id}
+                  name={item.title}
+                  price={item.price}
+                  priceSale={item.priceSale}
+                  href={item.href}
+                />
               </CarouselItem>
             );
           })}

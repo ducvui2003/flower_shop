@@ -1,0 +1,30 @@
+# .github/actions/setup-node/action.yml
+name: "Setup Node.js"
+description: "Reusable Node.js setup for workflows"
+inputs:
+  node_version:
+    required: false
+    default: "18"
+    description: "Node.js version to use"
+  cache:
+    required: false
+    default: "npm"
+    description: "Cache type (npm, yarn, or pnpm)"
+  working-directory:
+    required: false
+    default: "."
+    description: "Working directory for installing dependencies"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js ${{ inputs.node_version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node_version }}
+        cache: ${{ inputs.cache }}
+        cache-dependency-path: "${{ inputs.working-directory }}/package-lock.json"
+
+    - name: Install Dependencies
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: npm install --force

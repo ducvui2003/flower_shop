@@ -1,0 +1,73 @@
+name: client-ci
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "client/**"
+      - ".github/actions/setup-node/**"
+      - ".github/workflows/client-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "client/**"
+      - ".github/actions/setup-node/**"
+      - ".github/workflows/client-ci.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node
+        with:
+          node_version: 22.13.1
+          cache: npm
+          working-directory: client
+
+      - name: Create .env file
+        run: |
+          echo "${{ secrets.ENV_CLIENT_FILE }}" > .env
+        working-directory: client
+
+      - name: Build Nextjs
+        run: npm run build
+        working-directory: client
+
+      - name: Prepare standalone bundle
+        run: |
+          cp -r public .next/standalone/
+          mkdir -p .next/standalone/.next
+          cp -r .next/static .next/standalone/.next/
+        working-directory: client
+
+      - name: Deploy to VPS
+        uses: burnett01/rsync-deployments@v8
+        with:
+          switches: -avzr --delete --include=.env --include=ecosystem.config.js --include=.next/ --include=.next/standalone/*** --include=.next/static/*** --exclude=*
+          path: client/
+          remote_path: ${{ secrets.REMOTE_PATH }}/client/
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_port: ${{ secrets.REMOTE_PORT }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+
+      - name: Restart client
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: |
+            cd ${{ secrets.REMOTE_PATH }}/client
+            pm2 describe client > /dev/null 2>&1 \
+              && pm2 reload client \
+              || pm2 start ecosystem.config.js

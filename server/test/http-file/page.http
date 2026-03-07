@@ -2,7 +2,7 @@
 GET http://localhost:8081/api/page/home
 
 ### Get category page
-GET http://localhost:8081/api/page/category?name=hoa-tuoi
+GET http://localhost:8081/api/page/category?name=hoa-sinh-nhat
 
 ### Get navigate
 GET http://localhost:8081/api/page/navigate
@@ -54,3 +54,15 @@ Content-Type: application/json
         }
     ]
 }
+
+### Get About Page
+GET  http://localhost:8081/api/page/about
+Content-Type: application/json
+
+### Get Contact Page
+GET  http://localhost:8081/api/page/policy
+Content-Type: application/json
+
+### Get Home Page Section
+GET  http://localhost:8081/api/page/home/config
+Content-Type: application/json

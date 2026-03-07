@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 class PrismaService extends PrismaClient {
   constructor() {
     super({
-      log: ['query', 'error', 'warn'],
+      log: ['query'],
     });
     // this.$extends({
     //   query: {

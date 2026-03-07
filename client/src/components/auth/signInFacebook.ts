@@ -9,7 +9,7 @@ const signInFacebook = ({
   redirectUrl?: string;
 } = {}) => {
   const params = new URLSearchParams({
-    client_id: envConfig.NEXT_PUBLIC_FACEBOOK_CLIENT_ID,
+    client_id: envConfig.FACEBOOK_CLIENT_ID,
     redirect_uri: redirectUri,
     state: encodeURIComponent(redirectUrl),
     scope: 'email,public_profile',

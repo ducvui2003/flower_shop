@@ -1,24 +1,34 @@
-import prismaService from '@/shared/services/db.service';
-import { ID_HOME_PAGE } from '@/shared/config/database.config';
 import {
   CategoryModelType,
-  HomePageModelType,
   MediaModelType,
+  NavigatorModelType,
   PageContent,
+  PageModelType,
 } from '@/modules/page/page.model';
+import { PageSectionUpdateRequestType } from '@/modules/page/page.request';
+import prismaService from '@/shared/services/db.service';
+import { PageSection } from '@prisma/client';
 
 interface PageRepository {
-  getPageHome: () => Promise<HomePageModelType>;
-  updatePageContent: (id: number, content: PageContent) => Promise<void>;
+  getPage: (id: number) => Promise<PageModelType>;
+  getPageSection: (pageId: number) => Promise<Array<PageSection>>;
+  updatePageSection: (
+    data: PageSectionUpdateRequestType,
+    pageId: number,
+  ) => Promise<void>;
   getMedias: (ids: Array<number>) => Promise<Array<MediaModelType>>;
   getCategories: (ids: Array<number>) => Promise<Array<CategoryModelType>>;
+  getCategoryBySlug: (slug: string) => Promise<CategoryModelType | null>;
+  getNavigators: () => Promise<Array<NavigatorModelType>>;
 }
 
 const pageRepository: PageRepository = {
-  getPageHome: async () => {
-    return await prismaService.page.findFirstOrThrow({
+  getPage: async (id: number): Promise<PageModelType> => {
+    return prismaService.page.findFirstOrThrow({
+      where: {
+        id: id,
+      },
       select: {
-        content: true,
         createdAt: true,
         id: true,
         isDeleted: true,
@@ -33,19 +43,59 @@ const pageRepository: PageRepository = {
           },
         },
       },
+    });
+  },
+  getPageSection: async (pageId: number): Promise<Array<PageSection>> => {
+    return await prismaService.pageSection.findMany({
       where: {
-        slugRegistryId: ID_HOME_PAGE,
+        pageId: pageId,
       },
     });
   },
-  updatePageContent: async (id: number, content: PageContent) => {
-    await prismaService.page.update({
-      data: {
-        content: content,
-      },
-      where: {
-        id: id,
-      },
+  updatePageSection: async (
+    data: PageSectionUpdateRequestType,
+    pageId: number,
+  ) => {
+    await prismaService.$transaction(async (tx) => {
+      const newPageSections = data.new;
+      if (newPageSections.length > 0)
+        await tx.pageSection.createMany({
+          data: newPageSections.map((i) => ({
+            id: i.id,
+            config: i.config as any,
+            position: i.position,
+            pageId: pageId,
+            type: i.type as any,
+          })),
+        });
+      const updatePageSections = data.update;
+      if (updatePageSections.length > 0)
+        await Promise.all(
+          updatePageSections.map((i) =>
+            tx.pageSection.update({
+              where: {
+                id: i.id,
+              },
+              data: {
+                config: i.config as any,
+                position: i.position,
+                pageId: pageId,
+                type: i.type as any,
+              },
+            }),
+          ),
+        );
+
+      const deletePageSectionIds = data.delete;
+      if (deletePageSectionIds.length > 0) {
+        await tx.pageSection.deleteMany({
+          where: {
+            id: {
+              in: deletePageSectionIds,
+            },
+          },
+        });
+      }
     });
   },
   getMedias: (ids) => {
@@ -57,13 +107,15 @@ const pageRepository: PageRepository = {
       },
     });
   },
-
+  getNavigators: async (): Promise<Array<NavigatorModelType>> => {
+    const navigators = await prismaService.navigator.findMany();
+    return navigators;
+  },
   getCategories: async (ids) => {
     return await prismaService.category.findMany({
       select: {
         id: true,
         name: true,
-        parentId: true,
         slugRegistry: {
           select: {
             id: true,
@@ -78,11 +130,38 @@ const pageRepository: PageRepository = {
             metadata: true,
           },
         },
+        slugPlaceholder: true,
       },
       where: {
         id: {
           in: ids,
         },
+      },
+    });
+  },
+  getCategoryBySlug: async (slug: string) => {
+    return await prismaService.category.findFirst({
+      select: {
+        id: true,
+        name: true,
+        slugRegistry: {
+          select: {
+            id: true,
+            slug: true,
+          },
+        },
+        thumbnail: {
+          select: {
+            id: true,
+            key: true,
+            alt: true,
+            metadata: true,
+          },
+        },
+        slugPlaceholder: true,
+      },
+      where: {
+        slugPlaceholder: slug,
       },
     });
   },

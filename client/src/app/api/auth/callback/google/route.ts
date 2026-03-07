@@ -28,8 +28,8 @@ const GET = async (request: NextRequest) => {
   const { origin } = await getServerSideProps(request);
 
   const body = new URLSearchParams();
-  body.append('client_id', envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
-  body.append('client_secret', envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET);
+  body.append('client_id', envConfig.GOOGLE_CLIENT_ID);
+  body.append('client_secret', envConfig.GOOGLE_CLIENT_SECRET);
   body.append('code', code);
   body.append('grant_type', 'authorization_code');
   body.append('redirect_uri', `${origin}/api/auth/callback/google`);

@@ -41,3 +41,4 @@ Dockerfile.prod
 build-and-push.sh
 deploy.env
 .env.local
+.env.prod

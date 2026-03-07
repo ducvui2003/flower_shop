@@ -1,0 +1,44 @@
+### Get all categories
+GET http://localhost:8081/api/category
+Content-Type: application/json
+
+###  Get categories with search
+GET http://localhost:8081/api/category?page=1&limit=50
+Content-Type: application/json
+
+### Get category by ID
+GET http://localhost:8081/api/category/1?type=id
+Content-Type: application/json
+
+### Get category by slug
+GET http://localhost:8081/api/category/hoa-sinh-nhat?type=name
+Content-Type: application/json
+
+### Get category for editing
+GET http://localhost:8081/api/admin/category/1
+Content-Type: application/json
+
+### Create new category
+POST http://localhost:8081/api/category
+Content-Type: application/json
+
+{
+  "name": "Hoa Valentine",
+  "slug": {
+    "name": "hoa-valentine"
+  },
+  "thumbnailId": 1
+}
+
+### Update category
+PATCH http://localhost:8081/api/category/1
+Content-Type: application/json
+
+{
+  "name": "Hoa Sinh Nhật Updated",
+  "thumbnailId": 2
+}
+
+### Delete category
+DELETE http://localhost:8081/api/category/1
+Content-Type: application/json

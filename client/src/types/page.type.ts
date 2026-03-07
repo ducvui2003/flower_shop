@@ -1,39 +1,20 @@
-import { Link, Source } from '@/types/common.type';
+import { ProductType } from '@/types/product.type';
 
+type Link = string;
+type Source = {
+  src: string;
+  alt: string | null;
+};
 type PageResponse<T = string> = {
   title: string;
   slug: string;
   content: T;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-type Product = {
-  id: number;
-  title: string;
-  price: number;
-  salePrice: number;
-  thumbnail?: Source;
-  link: Link;
 };
 
 type ContentMap = {
-  slider: CategorySlider;
-  'category-product': CategoryProduct;
-};
-
-type CategorySlider = {
-  items: Array<{
-    id: number;
-    name: string;
-    thumbnail: Source;
-    link: Link;
-  }>;
-};
-
-type CategoryProduct = {
-  items: Array<Product>;
-  link: Link;
+  banner: Array<Source>;
+  categorySlider: CategorySlider;
+  categoryProduct: CategoryProduct;
 };
 
 type SectionGeneric<T extends keyof ContentMap> = {
@@ -42,27 +23,51 @@ type SectionGeneric<T extends keyof ContentMap> = {
   content: ContentMap[T];
 };
 
-type HomePageContent = {
-  banners: Array<Source>;
-  sections: Array<SectionGeneric<keyof ContentMap>>;
+type SectionBanner = SectionGeneric<'banner'>;
+type SectionCategorySlider = SectionGeneric<'categorySlider'>;
+type SectionCategoryProduct = SectionGeneric<'categoryProduct'>;
+
+type CategorySlider = Array<{
+  id: number;
+  name: string;
+  thumbnail?: Source;
+  href: Link;
+}>;
+
+type CategoryProduct = {
+  items: Array<ProductType>;
+  href: Link;
 };
 
-type PageHomeResponse = PageResponse<HomePageContent>;
+type HomePageResponse = PageResponse<Array<SectionGeneric<keyof ContentMap>>>;
 
 type NavigateItem = {
   title: string;
-  link: Link;
+  href: Link;
 };
 
 type NavigateResponse = Array<{
   title: string;
-  link: Link;
+  href: Link;
   child?: Array<NavigateItem>;
 }>;
 
+type CategoryPageContent = {
+  id: number;
+  thumbnail?: Source;
+};
+
+type CategoryPageResponse = PageResponse<CategoryPageContent>;
+
 export type {
-  PageHomeResponse,
-  CategorySlider,
-  CategoryProduct,
+  HomePageResponse,
+  CategoryPageResponse,
   NavigateResponse,
+  CategorySlider,
+  //Sections
+  SectionGeneric,
+  SectionBanner,
+  SectionCategorySlider,
+  SectionCategoryProduct,
+  ProductType,
 };
