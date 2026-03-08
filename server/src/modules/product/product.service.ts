@@ -21,7 +21,6 @@ import { AppResponse, Page } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
 import { ProductWithoutDescriptionModelType } from '@/modules/product/product.model';
 import { createUrl } from '@/shared/utils/media.util';
-import logger from '@/shared/utils/logger.util';
 
 interface ProductService {
   createProduct: (
@@ -101,13 +100,11 @@ const productService: ProductService = {
     const thumbnails = await productRepository.getProductThumbnailsById(
       page.items.map((i) => i.id),
     );
-    logger.info('thumbnail');
-    logger.info(thumbnails);
     const newPage = mapperItemsForPage<
       ProductWithoutDescriptionModelType,
       ProductGetResponseType
     >(page, (item) => {
-      const thumbnail = thumbnails.find((i) => i.id === item.id);
+      const thumbnail = thumbnails.find((i) => i.productId === item.id)?.media;
       return {
         id: item.id,
         name: item.name,
@@ -138,7 +135,7 @@ const productService: ProductService = {
       product.map((i) => i.id),
     );
     const result: Array<ProductGetResponseType> = product.map((item) => {
-      const thumbnail = thumbnails.find((i) => i.id === item.id);
+      const thumbnail = thumbnails.find((i) => i.productId === item.id)?.media;
       return {
         id: item.id,
         name: item.name,

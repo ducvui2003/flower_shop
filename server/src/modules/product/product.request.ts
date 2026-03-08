@@ -15,7 +15,7 @@ const ProductCreateRequestSchema = ProductModel.pick({
   images: z
     .array(z.int())
     .min(1, { message: 'At least one image is required' }),
-  thumbnail: z.number().optional(),
+  thumbnailId: z.number().optional(),
 });
 
 const ProductUpdateRequestSchema = z.object({

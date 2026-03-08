@@ -1,4 +1,5 @@
 import {
+  ProductMediaModelType,
   ProductModelType,
   ProductWithMediaIdModelType,
   ProductWithoutDescriptionModelType,
@@ -32,7 +33,7 @@ interface ProductRepository {
   getProductById: (id: number) => Promise<ProductModelType>;
   getProductThumbnailsById: (
     ids: Array<number>,
-  ) => Promise<Array<MediaModelType>>;
+  ) => Promise<Array<ProductMediaModelType>>;
   getProductMediaById: (id: number) => Promise<Array<MediaModelType>>;
   getProductEditingById: (id: number) => Promise<ProductWithMediaIdModelType>;
   getProductBySlug: (name: string) => Promise<ProductModelType>;
@@ -66,7 +67,7 @@ const productRepository: ProductRepository = {
             data: data.images.map((mediaId) => ({
               productId: product.id,
               mediaId: mediaId,
-              isThumbnail: mediaId === data.thumbnail ? true : false,
+              isThumbnail: mediaId === data.thumbnailId ? true : false,
             })),
           });
         } catch (e) {
@@ -132,7 +133,7 @@ const productRepository: ProductRepository = {
             data: images.map((mediaId) => ({
               productId: productId,
               mediaId: mediaId,
-              isThumbnail: mediaId === data.thumbnailId ? true : false,
+              isThumbnail: mediaId === thumbnailId ? true : false,
             })),
           });
         } catch (e) {
@@ -230,7 +231,7 @@ const productRepository: ProductRepository = {
   },
   getProductThumbnailsById: async (
     ids: Array<number>,
-  ): Promise<Array<MediaModelType>> => {
+  ): Promise<Array<ProductMediaModelType>> => {
     const data = await prismaService.productMedia.findMany({
       where: {
         productId: {
@@ -240,10 +241,18 @@ const productRepository: ProductRepository = {
       },
       select: {
         media: true,
+        isThumbnail: true,
+        mediaId: true,
+        productId: true,
       },
     });
 
-    return data.map((i) => i.media);
+    return data.map((i) => ({
+      isThumbnail: i.isThumbnail,
+      mediaId: i.mediaId,
+      productId: i.productId,
+      media: i.media,
+    }));
   },
   getProductMediaById: async (id: number): Promise<Array<MediaModelType>> => {
     const data = await prismaService.productMedia.findMany({

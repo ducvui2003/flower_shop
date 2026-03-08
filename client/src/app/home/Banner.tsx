@@ -27,11 +27,7 @@ const Banner = ({ data }: BannerProps) => {
               <CfImage
                 src={item.src}
                 alt={item?.alt ?? ALT}
-                sizes={sizes({
-                  mobile: '100vw',
-                  tablet: '50vw',
-                  pc: '33vw',
-                })}
+                sizes="100vw"
                 fill
                 className="h-full w-auto object-contain object-top"
                 loading="lazy"

@@ -14,7 +14,6 @@ const envConfig = createEnv({
   client: {
     NEXT_PUBLIC_CLOUDFLARE_SITE_KEY: z.string(),
     NEXT_PUBLIC_SERVER_EXTERNAL: z.string(),
-    NEXT_PUBLIC_CLOUDFLARE_DOMAIN: z.string(),
   },
   runtimeEnv: {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
@@ -23,7 +22,6 @@ const envConfig = createEnv({
     FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
     DOMAIN: process.env.DOMAIN,
     CLOUDFLARE_SECRET_KEY: process.env.CLOUDFLARE_SECRET_KEY,
-    NEXT_PUBLIC_CLOUDFLARE_DOMAIN: process.env.NEXT_PUBLIC_CLOUDFLARE_DOMAIN,
     NEXT_PUBLIC_CLOUDFLARE_SITE_KEY:
       process.env.NEXT_PUBLIC_CLOUDFLARE_SITE_KEY,
     NEXT_PUBLIC_SERVER_EXTERNAL: process.env.NEXT_PUBLIC_SERVER_EXTERNAL,

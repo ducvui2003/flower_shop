@@ -214,7 +214,7 @@ const ProductCreatePage = () => {
                           />
                           <img
                             src={item.href}
-                            className="aspect-square object-contain min-w-[100px] min-h-[100px]:"
+                            className="aspect-square object-contain min-w-[100px] min-h-[100px]"
                             alt={item.alt}
                             loading="lazy"
                           />
