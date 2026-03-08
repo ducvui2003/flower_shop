@@ -12,7 +12,10 @@ const ProductCreateRequestSchema = ProductModel.pick({
     name: z.string(),
   }),
   categories: z.array(z.int()),
-  images: z.array(z.int()).optional(),
+  images: z
+    .array(z.int())
+    .min(1, { message: 'At least one image is required' }),
+  thumbnailId: z.number().optional(),
 });
 
 const ProductUpdateRequestSchema = z.object({
@@ -33,6 +36,7 @@ const ProductUpdateRequestSchema = z.object({
     })
     .optional(),
   categories: z.array(z.int()).optional(),
+  thumbnailId: z.number().optional(),
 });
 
 const ProductGetParamsSchema = z.object({

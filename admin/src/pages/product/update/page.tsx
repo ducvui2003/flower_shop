@@ -2,6 +2,7 @@ import { Image, ProductEditing } from "@/components/data-table/product/type";
 import DialogGetImage from "@/components/dialog/dialog-get-image";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldError,
@@ -22,10 +23,11 @@ import { Textarea } from "@/components/ui/textarea";
 import logger from "@/config/logger.util";
 import httpService from "@/lib/http/http.service";
 import { cn, diffObjects } from "@/lib/utils";
+import { Category } from "@/pages/product/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
 import { X } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -83,17 +85,21 @@ const formSchema = z.object({
       }),
     )
     .optional(),
+  thumbnailId: z.number().nullable(),
 });
 type FormInput = z.input<typeof formSchema>;
 type FormOutput = z.output<typeof formSchema>;
 
 const ProductUpdatePage = () => {
   const navigate = useNavigate();
-  const product = useLoaderData<
-    ProductEditing & {
+  const data = useLoaderData<{
+    product: ProductEditing & {
       images?: Array<Image>;
-    }
-  >();
+    };
+    categories: Array<Category>;
+  }>();
+
+  const product = data.product;
   const formInitialize: FormInput = {
     name: product.name,
     description: product.description ?? {
@@ -106,6 +112,7 @@ const ProductUpdatePage = () => {
     slug: { name: product.slugPlaceholder },
     metadata: product.metadata,
     images: product.images,
+    thumbnailId: product.thumbnailId,
   };
 
   const form = useForm<FormInput>({
@@ -124,7 +131,13 @@ const ProductUpdatePage = () => {
           }
         : null,
       images: product.images,
+      thumbnailId: product.thumbnailId,
     },
+  });
+
+  const thumbnail = useWatch({
+    control: form.control,
+    name: "thumbnailId",
   });
 
   const handleSubmit = async (value: FormInput) => {
@@ -218,6 +231,16 @@ const ProductUpdatePage = () => {
                         className={cn(i === 0 && "row-span-1")}
                       >
                         <div className="p-4 relative rounded shadow w-fit bg-gray-50">
+                          <Checkbox
+                            className="absolute top-2 left-2 bg-gray-300"
+                            checked={item.id === thumbnail}
+                            onCheckedChange={() =>
+                              form.setValue("thumbnailId", item.id, {
+                                shouldDirty: true,
+                                shouldValidate: true,
+                              })
+                            }
+                          />
                           <X
                             className="absolute top-0 right-0 text-sm hover:opacity-70 text-red-500 cursor-pointer"
                             onClick={() =>

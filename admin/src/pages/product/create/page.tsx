@@ -1,6 +1,7 @@
 import DialogGetImage from "@/components/dialog/dialog-get-image";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldError,
@@ -24,7 +25,7 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
 import { X } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -43,7 +44,7 @@ const OutputDataSchema = z.object({
       id: z.string().optional(),
       type: z.string(),
       data: z.unknown(),
-    })
+    }),
   ),
 });
 
@@ -77,9 +78,10 @@ const formSchema = z.object({
         key: z.string(),
         href: z.string(),
         alt: z.string(),
-      })
+      }),
     )
-    .optional(),
+    .min(1),
+  thumbnailId: z.number().nullable(),
 });
 type FormInput = z.input<typeof formSchema>;
 type FormOutput = z.output<typeof formSchema>;
@@ -106,14 +108,17 @@ const ProductCreatePage = () => {
     },
   });
 
+  const thumbnail = useWatch({
+    control: form.control,
+    name: "thumbnailId",
+  });
+
   const handleSubmit = async (value: FormInput) => {
     const result = formSchema.safeParse(value);
 
     if (!result.success) {
       logger.error(result.error.flatten());
-
       toast.error("Invalid form data");
-
       return;
     }
 
@@ -182,7 +187,6 @@ const ProductCreatePage = () => {
                       </Button>
                     </div>
                   </DialogGetImage>
-
                   <div className="grid mt-4 grid-cols-6 gap-4">
                     {field.value?.map((item, i) => (
                       <div
@@ -190,18 +194,29 @@ const ProductCreatePage = () => {
                         className={cn(i === 0 && "row-span-1")}
                       >
                         <div className="p-4 relative rounded shadow w-fit bg-gray-50">
+                          <Checkbox
+                            className="absolute top-2 left-2 bg-gray-300"
+                            checked={item.id === thumbnail}
+                            onCheckedChange={() =>
+                              form.setValue("thumbnailId", item.id, {
+                                shouldDirty: true,
+                                shouldValidate: true,
+                              })
+                            }
+                          />
                           <X
                             className="absolute top-0 right-0 text-sm hover:opacity-70 text-red-500 cursor-pointer"
                             onClick={() =>
                               field.onChange(
-                                field.value?.filter((i) => item.id !== i.id)
+                                field.value?.filter((i) => item.id !== i.id),
                               )
                             }
                           />
                           <img
                             src={item.href}
-                            className="aspect-square object-contain"
+                            className="aspect-square object-contain min-w-[100px] min-h-[100px]"
                             alt={item.alt}
+                            loading="lazy"
                           />
                         </div>
                       </div>

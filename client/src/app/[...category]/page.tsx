@@ -5,14 +5,14 @@ import {
   SearchParamsValueType,
   SORT_MAPPING,
 } from '@/app/[...category]/type-const';
+import CfImage from '@/components/CfImage';
 
 import ClientIcon from '@/components/ClientIcon';
 import Link from '@/components/Link';
 import pageService from '@/service/page.server.service';
-import { ALT, DEFAULT_IMAGE_CATEGORY } from '@/utils/const.util';
+import { DEFAULT_IMAGE_CATEGORY } from '@/utils/const.util';
 import { normalizeParam, normalizeSingleParam } from '@/utils/http.util';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
@@ -74,7 +74,7 @@ const CategoryPage = async ({
   return (
     <section>
       <AspectRatio ratio={640 / 178}>
-        <Image
+        <CfImage
           src={data.content.thumbnail?.src ?? DEFAULT_IMAGE_CATEGORY.src}
           alt={data.content.thumbnail?.alt ?? DEFAULT_IMAGE_CATEGORY.alt}
           sizes="100vw"

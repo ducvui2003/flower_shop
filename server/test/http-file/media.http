@@ -28,3 +28,17 @@ Content-Type: application/json
 ###
 GET http://localhost:8081/api/media-id?ids=1
 Content-Type: application/json
+
+### Update metadata
+PUT  http://localhost:8081/api/media/1
+Content-Type: application/json
+
+{
+    
+    "metadata":{
+        "name":"123.png",
+        "size":"123",
+        "type":"image/png",
+        "url":"https://example.com/123.png"
+    }
+}

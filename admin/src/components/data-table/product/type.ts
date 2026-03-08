@@ -42,6 +42,7 @@ type ProductEditing = {
     metaDescription: string;
   } | null;
   imageIds: Array<number>;
+  thumbnailId: number | null;
 };
 
 type PageContentResponse = {

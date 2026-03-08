@@ -19,10 +19,7 @@ import {
 } from '@/shared/utils/common.util';
 import { AppResponse, Page } from '@/types/app';
 import { StatusCodes } from 'http-status-codes';
-import {
-  ProductModelType,
-  ProductWithoutDescriptionModelType,
-} from '@/modules/product/product.model';
+import { ProductWithoutDescriptionModelType } from '@/modules/product/product.model';
 import { createUrl } from '@/shared/utils/media.util';
 
 interface ProductService {
@@ -107,7 +104,7 @@ const productService: ProductService = {
       ProductWithoutDescriptionModelType,
       ProductGetResponseType
     >(page, (item) => {
-      const thumbnail = thumbnails.find((i) => i.id === item.id);
+      const thumbnail = thumbnails.find((i) => i.productId === item.id)?.media;
       return {
         id: item.id,
         name: item.name,
@@ -138,7 +135,7 @@ const productService: ProductService = {
       product.map((i) => i.id),
     );
     const result: Array<ProductGetResponseType> = product.map((item) => {
-      const thumbnail = thumbnails.find((i) => i.id === item.id);
+      const thumbnail = thumbnails.find((i) => i.productId === item.id)?.media;
       return {
         id: item.id,
         name: item.name,
@@ -212,6 +209,8 @@ const productService: ProductService = {
           metadata: productEtt.metadata,
           categoryIds: productEtt.categories.map((item) => item.categoryId),
           imageIds: productEtt.productMedias.map((item) => item.mediaId),
+          thumbnailId: productEtt.productMedias.find((i) => i.isThumbnail)
+            ?.mediaId,
         },
       };
     } catch (e) {

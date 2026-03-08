@@ -35,7 +35,7 @@ export const columns: ColumnDef<Media>[] = [
     accessorKey: "metadata",
     header: "Metadata",
     cell: ({ row }) => {
-      const data: string = row.getValue("metadata");
+      const data: Record<string, unknown> = row.getValue("metadata");
       return <pre>{JSON.stringify(data, null, 2)}</pre>;
     },
   },
@@ -46,7 +46,11 @@ export const columns: ColumnDef<Media>[] = [
       const id: number = row.getValue("id");
       return (
         <div className="flex gap-2">
-          <DialogUpdateMedia id={id} />
+          <DialogUpdateMedia
+            id={id}
+            metadata={row.getValue("metadata")}
+            onSuccess={updateReload}
+          />
           <DialogDeleteMedia id={id} callback={updateReload} />
         </div>
       );

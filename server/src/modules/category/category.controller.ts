@@ -5,14 +5,12 @@ import {
   CategoryUpdateRequestType,
 } from '@/modules/category/category.request';
 import categoryService from '@/modules/category/category.service';
-import logger from '@/shared/utils/logger.util';
 import { NextFunction, Request, Response } from 'express';
 
 const categoryController = {
   getCategories: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: CategorySearchGetQueryType = req.locals.query;
-      logger.info(query);
       const response = await categoryService.searchCategories(query);
       res.status(response.code).json(response);
     } catch (e) {

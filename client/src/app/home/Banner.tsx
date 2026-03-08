@@ -1,8 +1,7 @@
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ALT } from '@/utils/const.util';
-import Image from 'next/image';
-import React from 'react';
 
+import CfImage from '@/components/CfImage';
 import {
   Carousel,
   CarouselContent,
@@ -12,6 +11,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Source } from '@/types/common.type';
+import { sizes } from '@/utils/format.util';
 
 type BannerProps = {
   data: Array<Source>;
@@ -19,12 +19,12 @@ type BannerProps = {
 
 const Banner = ({ data }: BannerProps) => {
   return (
-    <Carousel className="relative">
+    <Carousel id="banner" className="relative">
       <CarouselContent>
         {data.map((item, i) => (
           <CarouselItem key={i}>
             <AspectRatio ratio={640 / 178}>
-              <Image
+              <CfImage
                 src={item.src}
                 alt={item?.alt ?? ALT}
                 sizes="100vw"

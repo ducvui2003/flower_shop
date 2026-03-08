@@ -1,3 +1,4 @@
+import CfImage from '@/components/CfImage';
 import Link from '@/components/Link';
 import { Button } from '@/components/ui/button';
 import { cn, currency } from '@/lib/utils';
@@ -44,7 +45,7 @@ const ProductCard = ({
       <Link href={href}>
         <div className="pc:h-[250px] relative h-[150px] overflow-hidden rounded-t-lg">
           {!Array.isArray(thumbnails) && (
-            <Image
+            <CfImage
               src={thumbnails?.src ?? DEFAULT_IMAGE_PRODUCT.src}
               alt={thumbnails?.alt ?? DEFAULT_IMAGE_PRODUCT.alt}
               fill

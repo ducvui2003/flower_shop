@@ -47,6 +47,7 @@ const ProductWithMediaIdModel = MetadataModel.extend({
   productMedias: z.array(
     z.object({
       mediaId: z.number(),
+      isThumbnail: z.boolean().nullable().default(false),
     }),
   ),
 });
@@ -72,7 +73,6 @@ const ProductCategoryModel = z.object({
 const ProductMediaModel = z.object({
   productId: z.number(),
   mediaId: z.number(),
-  product: ProductModel,
   media: MediaModel,
   isThumbnail: z.boolean().nullable().default(false),
 });

@@ -61,6 +61,7 @@ const ProductEditingGetResponseSchema = ProductModel.pick({
   metadata: true,
 }).extend({
   imageIds: z.array(z.number()).optional(),
+  thumbnailId: z.number().optional(),
   categoryIds: z.array(z.number()).optional(),
 });
 
