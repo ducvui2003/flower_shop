@@ -148,7 +148,7 @@ const productRepository: ProductRepository = {
       } else {
         if (thumbnailId) {
           try {
-            await tx.productMedia.updateMany({
+            const { count } = await tx.productMedia.updateMany({
               where: {
                 productId: productId,
                 mediaId: thumbnailId,
@@ -157,6 +157,14 @@ const productRepository: ProductRepository = {
                 isThumbnail: true,
               },
             });
+            if (count === 0) {
+              throw new AppErrorBuilder()
+                .withStatusCode(StatusCodes.NOT_FOUND)
+                .withMessage(
+                  `Thumbnail media with id ${thumbnailId} is not attached to product ${productId}`,
+                )
+                .build();
+            }
             await tx.productMedia.updateMany({
               where: {
                 productId: productId,
