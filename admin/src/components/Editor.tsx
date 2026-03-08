@@ -40,7 +40,7 @@ const Editor = ({ value, onChange, className }: Props) => {
                   const presignRes = await httpService.post<
                     ResponseApi<{ url: string; key: string }>,
                     { key: string }
-                  >("/media/sign-url", { key: file.name });
+                  >("/admin/media/sign-url", { key: file.name });
 
                   const { url, key } = presignRes.data.data;
                   const uploadRes = await httpService.manual().put(url, file, {
@@ -55,7 +55,7 @@ const Editor = ({ value, onChange, className }: Props) => {
                   const response = await httpService.post<
                     ResponseApi<{ url: string }>,
                     { key: string; metadata: object }
-                  >("/media", {
+                  >("/admin/media", {
                     key: key,
                     metadata: { place: "description" },
                   });

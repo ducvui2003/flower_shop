@@ -71,6 +71,7 @@ const authService: AuthService = {
       email: model.email,
       name: model.name,
     });
+    await saveAToken(model.id, accessToken.token, accessToken.exp);
     return {
       code: StatusCodes.OK,
       message: AUTH_CONST.HTTP.LOGIN,
@@ -117,7 +118,7 @@ const authService: AuthService = {
     if (!accessTokenPayload) throw AUTH_CONST.ERROR.TOKEN;
     const refreshTokenPayload = await refreshTokenService.verify(refreshToken);
     if (!refreshTokenPayload) throw AUTH_CONST.ERROR.TOKEN;
-    await saveRToken(
+    await saveAToken(
       accessTokenPayload.id,
       accessToken,
       accessTokenPayload.exp,
@@ -137,21 +138,21 @@ const authService: AuthService = {
 
 const saveRToken = async (id: number, token: string, exp: number) => {
   const ttl = Math.floor(Math.max(0, exp - Date.now() / 1000));
-  const event = await redisService.set(`refreshToken:${id}`, token, ttl);
-  logger.info(event);
+  await redisService.set(`refreshToken:${id}`, token, ttl);
+  logger.info('Save refresh token');
 };
 
 const saveAToken = async (id: number, token: string, exp: number) => {
   const ttl = Math.floor(Math.max(0, exp - Date.now() / 1000));
-  const event = await redisService.set(`accessToken:${id}`, token, ttl);
-  logger.info(event);
+  await redisService.set(`accessToken:${id}`, token, ttl);
+  logger.info('Save access token');
 };
 
 const verifyRTokenValid = async (token: string) => {
   const payload = await refreshTokenService.verify(token);
   if (!payload) return null;
-  if (!(await redisService.get<string>(`refreshToken:${payload.id}`)))
-    return null;
+  const refreshToken = await redisService.get(`refreshToken:${payload.id}`);
+  if (refreshToken !== token) return null;
   return payload;
 };
 export default authService;

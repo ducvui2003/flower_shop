@@ -19,79 +19,37 @@ import {
 } from "@/components/ui/multi-select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import logger from "@/config/logger.util";
 import httpService from "@/lib/http/http.service";
 import { cn } from "@/lib/utils";
+import {
+  Category,
+  ProductFormInput,
+  ProductFormOutput,
+  ProductFormSchema,
+} from "@/pages/product/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
-import { X } from "lucide-react";
+import { Info, X } from "lucide-react";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
-import { z } from "zod";
-
-const categories = [
-  { value: "1", label: "Hoa Sinh Nhật" },
-  { value: "2", label: "Hoa Khai Trương" },
-  { value: "3", label: "Hoa Chúc Mừng" },
-];
-
-const OutputDataSchema = z.object({
-  time: z.number().optional(),
-  version: z.string().optional(),
-  blocks: z.array(
-    z.object({
-      id: z.string().optional(),
-      type: z.string(),
-      data: z.unknown(),
-    }),
-  ),
-});
-
-const formSchema = z.object({
-  name: z.string(),
-  description: OutputDataSchema,
-  price: z.preprocess((val) => {
-    if (val === "" || val === null || val === undefined) {
-      return undefined;
-    }
-    return Number(val);
-  }, z.number().positive("Price must be greater than 0")),
-  priceSale: z.preprocess((val) => {
-    if (val === "" || val === null || val === undefined) {
-      return undefined;
-    }
-    return Number(val);
-  }, z.number().positive("Price must be greater than 0")),
-  categories: z.array(z.number().int().positive()),
-  slug: z.object({
-    name: z.string().nonempty(),
-  }),
-  metadata: z.object({
-    title: z.string(),
-    metaDescription: z.string(),
-  }),
-  images: z
-    .array(
-      z.object({
-        id: z.number(),
-        key: z.string(),
-        href: z.string(),
-        alt: z.string(),
-      }),
-    )
-    .min(1),
-  thumbnailId: z.number().nullable(),
-});
-type FormInput = z.input<typeof formSchema>;
-type FormOutput = z.output<typeof formSchema>;
 
 const ProductCreatePage = () => {
   const navigate = useNavigate();
-  const form = useForm<FormInput>({
-    resolver: zodResolver(formSchema),
+  const data = useLoaderData<{
+    categories: Array<Category>;
+  }>();
+  const categories = data.categories;
+  const form = useForm<ProductFormInput>({
+    resolver: zodResolver(ProductFormSchema),
     defaultValues: {
-      name: "",
+      name: undefined,
       description: {
         time: Date.now(),
         blocks: [],
@@ -104,7 +62,7 @@ const ProductCreatePage = () => {
         title: "",
         metaDescription: "",
       },
-      images: [],
+      images: undefined,
     },
   });
 
@@ -113,8 +71,8 @@ const ProductCreatePage = () => {
     name: "thumbnailId",
   });
 
-  const handleSubmit = async (value: FormInput) => {
-    const result = formSchema.safeParse(value);
+  const handleSubmit = async (value: ProductFormInput) => {
+    const result = ProductFormSchema.safeParse(value);
 
     if (!result.success) {
       logger.error(result.error.flatten());
@@ -122,9 +80,9 @@ const ProductCreatePage = () => {
       return;
     }
 
-    const data: FormOutput = result.data;
+    const data: ProductFormOutput = result.data;
     try {
-      await httpService.post("/product", {
+      await httpService.post("/admin/product", {
         ...data,
         description: JSON.stringify(data.description),
       });
@@ -150,7 +108,11 @@ const ProductCreatePage = () => {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel>Name</FieldLabel>
-              <Input {...field} aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                value={field.value as string}
+                aria-invalid={fieldState.invalid}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -222,6 +184,9 @@ const ProductCreatePage = () => {
                       </div>
                     ))}
                   </div>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
                 </Field>
               )}
             />
@@ -233,7 +198,17 @@ const ProductCreatePage = () => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel>Title page</FieldLabel>
+                    <FieldLabel>
+                      Title page
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info size={20} />
+                        </TooltipTrigger>
+                        <TooltipContent side="right">
+                          <p>If this field empty, name will be title page</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </FieldLabel>
                     <Input
                       {...field}
                       aria-invalid={fieldState.invalid}
@@ -355,10 +330,10 @@ const ProductCreatePage = () => {
                         <MultiSelectGroup>
                           {categories.map((item) => (
                             <MultiSelectItem
-                              key={item.value}
-                              value={item.value}
+                              key={item.id}
+                              value={item.id.toString()}
                             >
-                              {item.label}
+                              #{item.id} {item.name}
                             </MultiSelectItem>
                           ))}
                         </MultiSelectGroup>

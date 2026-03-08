@@ -314,7 +314,7 @@ const HomePage = () => {
 
       logger.info(pageUpdate);
       // ENABLE
-      // await httpService.put("/page/home", pageUpdate);
+      await httpService.put("/admin/page/home", pageUpdate);
       toast.success("Update home page success");
     } catch (e) {
       if (isAxiosError(e)) {

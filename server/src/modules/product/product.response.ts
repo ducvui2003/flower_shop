@@ -62,7 +62,7 @@ const ProductEditingGetResponseSchema = ProductModel.pick({
 }).extend({
   imageIds: z.array(z.number()).optional(),
   thumbnailId: z.number().optional(),
-  categoryIds: z.array(z.number()).optional(),
+  categoryIds: z.array(z.number()),
 });
 
 type ProductCreateResponseType = z.infer<typeof ProductCreateResponseSchema>;

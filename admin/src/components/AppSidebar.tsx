@@ -2,6 +2,7 @@ import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -12,6 +13,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { authUtil } from "@/lib/auth.util";
 import { CollapsibleContent } from "@radix-ui/react-collapsible";
 import {
   BookImage,
@@ -19,6 +21,7 @@ import {
   Flower,
   Home,
   Image,
+  LogOut,
   Navigation,
   Rss,
 } from "lucide-react";
@@ -127,6 +130,16 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={() => authUtil.logout()}>
+              <LogOut />
+              <span>Logout</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

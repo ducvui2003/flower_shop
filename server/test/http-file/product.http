@@ -42,8 +42,9 @@ DELETE  http://localhost:8081/api/product/3
 Content-Type: application/json
 
 ### Get Product Editing By Id
-GET  http://localhost:8081/api/admin/product/1
+GET  http://localhost:8081/api/admin/product/3
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZW1haWwiOiJkdWN2dWkyMDAzQGdtYWlsLmNvbSIsIm5hbWUiOiJMZSBBbmggRHVjIiwiaWF0IjoxNzcyOTU2ODMxLCJleHAiOjE3NzI5OTI4MzF9.6Ddzh6FmMEY69Yn3dvTtP4ncKJO4Vi6kLbgJnCPOCpk
 
 ### Get Sitemap
 GET  http://localhost:8081/api/product/sitemap

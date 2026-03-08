@@ -22,7 +22,7 @@ const ButtonUploadFile = ({ callback }: { callback?: () => void }) => {
           {
             key: string;
           }
-        >("/media/sign-url", {
+        >("/admin/media/sign-url", {
           key: file.name,
         });
 
@@ -36,7 +36,7 @@ const ButtonUploadFile = ({ callback }: { callback?: () => void }) => {
 
         if (uploadRes.status === 200 || uploadRes.status === 204) {
           // 3️⃣ Notify backend
-          await httpService.post("/media", {
+          await httpService.post("/admin/media", {
             key: key,
             metadata: {},
           });

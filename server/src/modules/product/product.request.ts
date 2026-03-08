@@ -11,10 +11,8 @@ const ProductCreateRequestSchema = ProductModel.pick({
   slug: z.object({
     name: z.string(),
   }),
-  categories: z.array(z.int()),
-  images: z
-    .array(z.int())
-    .min(1, { message: 'At least one image is required' }),
+  categories: z.array(z.int()).min(1, 'Please choose at least 1 category'),
+  images: z.array(z.int()).optional(),
   thumbnailId: z.number().optional(),
 });
 

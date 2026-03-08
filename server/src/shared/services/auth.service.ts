@@ -12,8 +12,8 @@ const authService: AuthService = {
   async verifyATokenValid(token: string): Promise<AccessTokenPayload | null> {
     const payload = await accessTokenService.verify(token);
     if (!payload) return null;
-    if (!(await redisService.get<string>(`accessToken:${payload.id}`)))
-      return null;
+    const accessToken = await redisService.get(`accessToken:${payload.id}`);
+    if (accessToken !== token) return null;
     return payload;
   },
 };

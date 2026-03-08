@@ -96,7 +96,7 @@ const DialogUpdateMedia = ({
 
     const data = { metadata };
     try {
-      await httpService.put(`/media/${id}`, data);
+      await httpService.put(`/admin/media/${id}`, data);
       toast.success("Update media metadata success");
       setOpen(false);
       form.reset({ metadataEntries: initialMetadataEntries });

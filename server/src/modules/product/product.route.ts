@@ -11,13 +11,17 @@ import validationBodyMiddleware, {
 import { Router } from 'express';
 
 const productRouters = Router();
+const productAdminRouters = Router();
 
 productRouters
   .route('/product')
   .get(
     validateQueryMiddleware(ProductSearchGetQuerySchema),
     productController.getProducts,
-  )
+  );
+
+productAdminRouters
+  .route('/product')
   .post(
     validationBodyMiddleware(ProductCreateRequestSchema),
     productController.createProduct,
@@ -32,15 +36,14 @@ productRouters
     productController.getProduct,
   );
 
-productRouters
+productAdminRouters
   .route('/product/:id')
+  .get(productController.getProductEditing)
   .patch(
     validationBodyMiddleware(ProductUpdateRequestSchema),
     productController.updateProduct,
   )
   .delete(productController.deleteProduct);
 
-productRouters
-  .route('/admin/product/:id')
-  .get(productController.getProductEditing);
+export { productAdminRouters };
 export default productRouters;

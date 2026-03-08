@@ -1,11 +1,15 @@
 import { Image, ProductEditing } from "@/components/data-table/product/type";
+import { authUtil } from "@/lib/auth.util";
 import httpService from "@/lib/http/http.service";
 import { Page, ResponseApi } from "@/lib/http/http.type";
 import { Category } from "@/pages/product/type";
 import { isAxiosError } from "axios";
 import { LoaderFunctionArgs } from "react-router";
 
-export async function productLoader({ params }: LoaderFunctionArgs) {
+export async function productUpdateLoader({ params }: LoaderFunctionArgs) {
+  // Check authentication first
+  authUtil.requireAuth();
+
   const { id } = params;
 
   if (!id) {
@@ -40,10 +44,15 @@ export async function productLoader({ params }: LoaderFunctionArgs) {
     };
   } catch (e) {
     if (isAxiosError(e)) {
-      // 3. Handle non-existing resource
-      if (e.code === "404") {
+      // Handle different error status codes
+      if (e.response?.status === 404) {
         throw new Response("Product Not Found", { status: 404 });
       }
+      if (e.response?.status === 401) {
+        authUtil.logout();
+        throw new Response("Unauthorized", { status: 401 });
+      }
     }
+    throw e;
   }
 }

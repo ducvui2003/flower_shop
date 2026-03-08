@@ -23,72 +23,18 @@ import { Textarea } from "@/components/ui/textarea";
 import logger from "@/config/logger.util";
 import httpService from "@/lib/http/http.service";
 import { cn, diffObjects } from "@/lib/utils";
-import { Category } from "@/pages/product/type";
+import {
+  Category,
+  ProductFormInput,
+  ProductFormOutput,
+  ProductFormSchema,
+} from "@/pages/product/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
 import { X } from "lucide-react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "sonner";
-import { z } from "zod";
-
-const categories = [
-  { value: "1", label: "Hoa Sinh Nhật" },
-  { value: "2", label: "Hoa Khai Trương" },
-  { value: "3", label: "Hoa Chúc Mừng" },
-];
-
-const OutputDataSchema = z.object({
-  time: z.number().optional(),
-  version: z.string().optional(),
-  blocks: z.array(
-    z.object({
-      id: z.string().optional(),
-      type: z.string(),
-      data: z.unknown(),
-    }),
-  ),
-});
-
-const formSchema = z.object({
-  name: z.string(),
-  description: OutputDataSchema.optional(),
-  price: z.preprocess((val) => {
-    if (val === "" || val === null || val === undefined) {
-      return undefined;
-    }
-    return Number(val);
-  }, z.number().positive("Price must be greater than 0")),
-  priceSale: z.preprocess((val) => {
-    if (val === "" || val === null || val === undefined) {
-      return undefined;
-    }
-    return Number(val);
-  }, z.number().positive("Price must be greater than 0")),
-  categories: z.array(z.number().int().positive()),
-  slug: z.object({
-    name: z.string(),
-  }),
-  metadata: z
-    .object({
-      title: z.string(),
-      metaDescription: z.string(),
-    })
-    .nullable(),
-  images: z
-    .array(
-      z.object({
-        id: z.number(),
-        key: z.string(),
-        href: z.string(),
-        alt: z.string(),
-      }),
-    )
-    .optional(),
-  thumbnailId: z.number().nullable(),
-});
-type FormInput = z.input<typeof formSchema>;
-type FormOutput = z.output<typeof formSchema>;
 
 const ProductUpdatePage = () => {
   const navigate = useNavigate();
@@ -100,7 +46,9 @@ const ProductUpdatePage = () => {
   }>();
 
   const product = data.product;
-  const formInitialize: FormInput = {
+  const categories = data.categories;
+
+  const formInitialize: ProductFormInput = {
     name: product.name,
     description: product.description ?? {
       time: Date.now(),
@@ -115,8 +63,8 @@ const ProductUpdatePage = () => {
     thumbnailId: product.thumbnailId,
   };
 
-  const form = useForm<FormInput>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ProductFormInput>({
+    resolver: zodResolver(ProductFormSchema),
     defaultValues: {
       name: product.name,
       description: product.description,
@@ -140,15 +88,16 @@ const ProductUpdatePage = () => {
     name: "thumbnailId",
   });
 
-  const handleSubmit = async (value: FormInput) => {
-    const result = formSchema.safeParse(value);
+  const handleSubmit = async (value: ProductFormInput) => {
+    console.log("submit");
+    const result = ProductFormSchema.safeParse(value);
     if (!result.success) {
       logger.error(result.error.flatten());
       toast.error("Invalid form data");
       return;
     }
 
-    const data: FormOutput = result.data;
+    const data: ProductFormOutput = result.data;
     let diffData = diffObjects(data, formInitialize);
     if (Object.keys(diffData).length === 0) {
       toast.warning("No values changed");
@@ -164,7 +113,7 @@ const ProductUpdatePage = () => {
     };
     logger.info(diffData);
     try {
-      await httpService.patch(`/product/${product.id}`, diffData);
+      await httpService.patch(`/admin/product/${product.id}`, diffData);
       toast.success("Update product success");
       navigate("/product", { replace: true });
     } catch (e) {
@@ -187,7 +136,11 @@ const ProductUpdatePage = () => {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel>Name</FieldLabel>
-              <Input {...field} aria-invalid={fieldState.invalid} />
+              <Input
+                {...field}
+                value={field.value as string}
+                aria-invalid={fieldState.invalid}
+              />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -383,10 +336,10 @@ const ProductUpdatePage = () => {
                         <MultiSelectGroup>
                           {categories.map((item) => (
                             <MultiSelectItem
-                              key={item.value}
-                              value={item.value}
+                              key={item.id}
+                              value={item.id.toString()}
                             >
-                              {item.label}
+                              #{item.id} {item.name}
                             </MultiSelectItem>
                           ))}
                         </MultiSelectGroup>
