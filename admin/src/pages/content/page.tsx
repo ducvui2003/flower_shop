@@ -101,7 +101,7 @@ const ContentPage = () => {
     diffData["content"] = JSON.stringify(diffData["content"]);
     logger.debug(diffData);
     try {
-      await httpService.patch(`/page/${page}`, diffData);
+      await httpService.patch(`/admin/page/${page}`, diffData);
       toast.success(`Update ${page} success`);
       // navigate("/content", { replace: true });
     } catch (e) {

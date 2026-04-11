@@ -6,8 +6,8 @@ POST http://localhost:8081/api/auth/register
 Content-Type: application/json
 
 {
-  "name": "alice",
-  "email": "alice123@example.com",
+  "name": "Le Anh",
+  "email": "ducvui2003@gmail.com",
   "password":"123456Duc@."
 }
 
@@ -16,9 +16,22 @@ POST http://localhost:8081/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "alice123@example.com",
+  "email": "ducvui2003@gmail.com",
   "password":"123456Duc@."
 }
+
+### Login
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ducvui2003@gmail.com",
+  "password":"123456Duc@."
+}
+
+> {% 
+    console.log("Access token and refresh token will be returned in the response body. You can use the access token for authenticated requests and the refresh token to obtain a new access token when the current one expires.")
+%}
 
 ### Renew
 POST http://localhost:8081/api/auth/renew

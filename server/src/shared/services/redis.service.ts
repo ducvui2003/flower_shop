@@ -34,10 +34,9 @@ class RedisService {
     return this.client.set(key, JSON.stringify(value));
   }
 
-  public async get<T = any>(key: string): Promise<T | null> {
+  public async get(key: string): Promise<string | null> {
     if (!this.client.isOpen) await this.connect();
-    const val = await this.client.get(key);
-    return val ? (JSON.parse(val) as T) : null;
+    return await this.client.get(key);
   }
 
   public async del(key: string) {

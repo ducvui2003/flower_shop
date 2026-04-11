@@ -13,8 +13,21 @@ import validationBodyMiddleware, {
 import { Router } from 'express';
 
 const mediaRouters = Router();
+const mediaAdminRouters = Router();
 
 mediaRouters
+  .get(
+    '/media',
+    validateQueryMiddleware(MediaSearchGetQuerySchema),
+    mediaController.getMedias,
+  )
+  .get(
+    '/media-id',
+    validateQueryMiddleware(MediaGetQuerySchema),
+    mediaController.getMediasByIds,
+  );
+
+mediaAdminRouters
   .post(
     '/media/upload',
     validationBodyMiddleware(MediaCreateWithFile),
@@ -25,16 +38,6 @@ mediaRouters
     '/media',
     validationBodyMiddleware(MediaSignUrlRequest),
     mediaController.createMedia,
-  )
-  .get(
-    '/media',
-    validateQueryMiddleware(MediaSearchGetQuerySchema),
-    mediaController.getMedias,
-  )
-  .get(
-    '/media-id',
-    validateQueryMiddleware(MediaGetQuerySchema),
-    mediaController.getMediasByIds,
   )
   .post(
     '/media/sign-url',
@@ -47,4 +50,6 @@ mediaRouters
     mediaController.updateMediaMetadata,
   )
   .delete('/media/:id', mediaController.deleteMediaById);
+
+export { mediaAdminRouters };
 export default mediaRouters;

@@ -41,7 +41,6 @@ const mediaController = {
     try {
       const body: MediaSignUrlRequestType = req.body;
       const data = await mediaService.createSignUrl(body.key, 'update');
-      logger.debug(data);
 
       res.status(data.code).json(data);
     } catch (e) {

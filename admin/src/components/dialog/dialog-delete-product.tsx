@@ -22,7 +22,7 @@ type DialogDeleteProductProps = {
 const DialogDeleteProduct = ({ id }: DialogDeleteProductProps) => {
   const handleClick = async () => {
     try {
-      await httpService.delete(`/product/${id}`);
+      await httpService.delete(`/admin/product/${id}`);
     } catch (e) {
       if (isAxiosError(e)) {
         toast.error(e.code, {

@@ -41,8 +41,8 @@ type ProductEditing = {
     title: string;
     metaDescription: string;
   } | null;
-  imageIds: Array<number>;
-  thumbnailId: number | null;
+  imageIds?: Array<number>;
+  thumbnailId?: number;
 };
 
 type PageContentResponse = {

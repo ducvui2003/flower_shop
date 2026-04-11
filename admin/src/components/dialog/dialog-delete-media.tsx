@@ -25,7 +25,7 @@ type DialogDeleteMediaProps = {
 const DialogDeleteMedia = ({ id, callback }: DialogDeleteMediaProps) => {
   const handleClick = async () => {
     try {
-      await httpService.delete(`/media/${id}`);
+      await httpService.delete(`/admin/media/${id}`);
       toast.success("Delete media success");
       callback?.();
     } catch (e) {

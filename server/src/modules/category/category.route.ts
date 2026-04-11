@@ -11,13 +11,17 @@ import validationBodyMiddleware, {
 import { Router } from 'express';
 
 const categoryRouters = Router();
+const categoryAdminRouters = Router();
 
 categoryRouters
   .route('/category')
   .get(
     validateQueryMiddleware(CategorySearchGetQuerySchema),
     categoryController.getCategories,
-  )
+  );
+
+categoryAdminRouters
+  .route('/category')
   .post(
     validationBodyMiddleware(CategoryCreateRequestSchema),
     categoryController.createCategory,
@@ -30,16 +34,14 @@ categoryRouters
     categoryController.getCategory,
   );
 
-categoryRouters
+categoryAdminRouters
   .route('/category/:id')
+  .get(categoryController.getCategoryEditing)
   .patch(
     validationBodyMiddleware(CategoryUpdateRequestSchema),
     categoryController.updateCategory,
   )
   .delete(categoryController.deleteCategory);
 
-categoryRouters
-  .route('/admin/category/:id')
-  .get(categoryController.getCategoryEditing);
-
+export { categoryAdminRouters };
 export default categoryRouters;
